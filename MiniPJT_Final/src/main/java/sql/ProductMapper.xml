@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductMapper">
+	
+	<resultMap id="selectProduct" type="product">
+		<result property="prodNo" column="prod_no" />
+		<result property="prodName" column="prod_name" />
+		<result property="fileName" column="image_file" />
+		<result property="prodDetail" column="prod_detail" />
+		<result property="manuDate" column="manufacture_day" />
+		<result property="price" column="price" />
+		<result property="regDate" column="reg_date" />
+		<result property="prodTotal" column="prod_total" />
+		<result property="proTranCode" column="tran_status_code" />
+		<result property="tranNo" column="tran_no"/>
+	</resultMap>
+
+	<insert id="insertProduct" parameterType="product">
+		INSERT INTO
+		product(prod_no, prod_name, prod_total, prod_detail, manufacture_day, price, image_file, reg_date)
+		VALUES (seq_product_prod_no.nextval, #{prodName}, #{prodTotal}, #{prodDetail}, #{manuDate}, #{price}, #{fileName}, SYSDATE)	
+	</insert>
+	
+	<select id="findProduct" parameterType="int" resultMap="selectProduct">
+		SELECT *
+		FROM product
+		WHERE prod_no = #{value}
+	</select>
+	
+	<select id="getProductListUser" parameterType="search" resultMap="selectProduct">
+		SELECT * 
+		FROM (		SELECT inner_table. * ,  ROWNUM AS row_seq
+					FROM (	SELECT prod_no, prod_name, prod_total, price, reg_date, image_file, prod_detail
+							FROM product 
+							<trim prefix="WHERE" prefixOverrides="AND">
+								<if test="searchCondition != null">
+									<if test="searchCondition.equals('0')">
+										AND prod_no LIKE '%'||#{searchKeyword}||'%'
+									</if>
+									<if test='searchCondition.equals("1")'>
+										AND prod_name LIKE '%'||#{searchKeyword}||'%'
+									</if>
+									<if test='searchCondition.equals("2")'>
+										AND price LIKE '%'||#{searchKeyword}||'%'
+									</if>
+								</if>
+								</trim>
+								<trim prefix="ORDER BY">
+									<if test="sortCondition != null ">
+										<if test='sortCondition.equals("높은 가격 순")'>
+											price DESC
+										</if>
+										<if test='sortCondition.equals("낮은 가격 순")'>
+											price ASC
+										</if>
+										<if test='sortCondition.equals("최신 순")'>
+											reg_date DESC
+										</if>
+										<if test='sortCondition.equals("오래된 순")'>
+											reg_date ASC
+										</if>
+									</if>
+									<if test="sortCondition == null">
+										prod_no ASC			
+									</if>
+								</trim>
+							 ) inner_table
+				WHERE ROWNUM &lt;= #{endRowNum} )WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum} 
+		
+	</select>
+	
+	<select id="getProductListAdmin" parameterType="search" resultMap="selectProduct">
+		SELECT * 
+		FROM (		SELECT inner_table. * ,  ROWNUM AS row_seq
+					FROM (	SELECT p.prod_no, p.prod_total, p.prod_name, p.price, p.reg_date, t.tran_no, t.tran_status_code
+							FROM product p, transaction t
+							WHERE p.prod_no = t.prod_no(+)
+								<if test="searchCondition != null">
+									<if test='searchKeyword != null and !searchKeyword.equals("") and searchCondition.equals("0")'>
+										AND p.prod_no LIKE '%'||#{searchKeyword}||'%'
+									</if>
+									<if test='searchCondition.equals("1")'>
+										AND prod_name LIKE '%'||#{searchKeyword}||'%'
+									</if>
+									<if test='searchCondition.equals("2")'>
+										AND price LIKE '%'||#{searchKeyword}||'%'
+									</if>
+								</if>
+								<trim prefix="ORDER BY">
+									<if test="sortCondition != null">
+										<if test='sortCondition.equals("높은 가격 순")'>
+											price DESC
+										</if>
+										<if test='sortCondition.equals("낮은 가격 순")'>
+											price ASC
+										</if>
+										<if test='sortCondition.equals("최신 순")'>
+											reg_date DESC
+										</if>
+										<if test='sortCondition.equals("오래된 순")'>
+											reg_date ASC
+										</if>
+									</if>
+									<if test="sortCondition == null">
+										t.tran_status_code DESC
+									</if>
+								</trim>
+							 ) inner_table
+					WHERE ROWNUM &lt;= #{endRowNum} )WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum} 
+		
+	</select>
+	
+	<update id="updateProduct" parameterType="product">
+		UPDATE product
+		SET prod_name = #{prodName},
+			prod_total = #{prodTotal},
+			prod_detail = #{prodDetail},
+			manufacture_day = #{manuDate},
+			price = #{price},
+			image_file=#{fileName}
+		WHERE prod_no = #{prodNo}
+	</update>
+	
+	<update id="updateProduct2" parameterType="product">
+		UPDATE product
+		SET	prod_total = #{prodTotal}
+		WHERE prod_no = #{prodNo}
+	</update>
+	
+	<select id="getTotalCountUser" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+		FROM (	SELECT prod_no, prod_name, prod_total, price, reg_date
+							FROM product 
+							<trim prefix="WHERE" prefixOverrides="AND">
+								<if test="searchCondition != null">
+									<if test='searchCondition.equals("0") and searchKeyword != null'>
+										AND prod_no LIKE '%'||#{searchKeyword}||'%'
+									</if>
+									<if test='searchCondition.equals("1")'>
+										AND prod_name LIKE '%'||#{searchKeyword}||'%'
+									</if>
+									<if test='searchCondition.equals("2")'>
+										AND price LIKE '%'||#{searchKeyword}||'%'
+									</if>
+								</if>
+								</trim>
+								<trim prefix="ORDER BY">
+									<if test="sortCondition != null">
+										<if test='sortCondition.equals("높은 가격 순")'>
+											price DESC
+										</if>
+										<if test='sortCondition.equals("낮은 가격 순")'>
+											price ASC
+										</if>
+										<if test='sortCondition.equals("최신 순")'>
+											reg_date DESC
+										</if>
+										<if test='sortCondition.equals("오래된 순")'>
+											reg_date ASC
+										</if>
+										<if test='sortCondition == null'>
+											prod_no DESC
+										</if>
+									</if>
+								</trim>
+				) countTable
+	</select>
+	
+	<select id="getTotalCountAdmin" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+		FROM (	SELECT p.prod_no, p.prod_total, p.prod_name, p.price, p.reg_date, t.tran_no, t.tran_status_code
+							FROM product p, transaction t
+							WHERE p.prod_no = t.prod_no(+)
+								<if test="searchCondition != null">
+									<if test='searchCondition.equals("0") and searchKeyword != null'>
+										AND p.prod_no LIKE '%'||#{searchKeyword}||'%'
+									</if>
+									<if test='searchCondition.equals("1")'>
+										AND prod_name LIKE '%'||#{searchKeyword}||'%'
+									</if>
+									<if test='searchCondition.equals("2")'>
+										AND price LIKE '%'||#{searchKeyword}||'%'
+									</if>
+								</if>
+								<trim prefix="ORDER BY">
+									<if test="sortCondition != null">
+										<if test='sortCondition.equals("높은 가격 순")'>
+											price DESC
+										</if>
+										<if test='sortCondition.equals("낮은 가격 순")'>
+											price ASC
+										</if>
+										<if test='sortCondition.equals("최신 순")'>
+											reg_date DESC
+										</if>
+										<if test='sortCondition.equals("오래된 순")'>
+											reg_date ASC
+										</if>
+										<if test='sortCondition == null'>
+											p.prod_no DESC
+										</if>
+									</if>
+								</trim>
+				) countTable
+	</select>
+	
+	<select id="productAutoComplete" parameterType="search" resultType="String">
+		<if test='searchCondition.equals("0")'>
+			SELECT prod_no
+			FROM product
+			WHERE prod_no LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test='searchCondition.equals("1")'>
+			SELECT prod_name
+			FROM product
+			WHERE prod_name LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test='searchCondition.equals("2")'>
+			SELECT price
+			FROM product
+			WHERE price LIKE '%'||#{searchKeyword}||'%'
+		</if>
+	</select>
+	
+	<select id="restListProduct" resultMap="selectProduct">
+		SELECT prod_name, price, prod_detail, image_file
+		FROM product
+	</select>
+</mapper>

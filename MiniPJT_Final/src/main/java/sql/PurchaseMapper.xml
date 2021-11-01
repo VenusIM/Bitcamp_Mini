@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="PurchaseMapper">
+	<resultMap id="purchaseMap" type="purchase">
+		<result property="tranNo" column="tran_no" />
+		<result property="paymentOption" column="payment_option" />
+		<result property="receiverName" column="receiver_name"/>
+		<result property="receiverPhone" column="receiver_phone"/>
+		<result property="divyAddr" column="demailaddr" />
+		<result property="divyRequest" column="dlvy_request" />
+		<result property="tranCode" column="tran_status_code" />
+		<result property="orderDate" column="order_data" />
+		<result property="divyDate" column="dlvy_date" />
+		<result property="buyer.userId" column="buyer_id" />
+		<result property="purchaseQuantity" column="purchase_quantity" />
+		<association property="purchaseProd" javaType="product">
+			<id jdbcType="NUMERIC" column="prod_no" property="prodNo"/>
+			<result jdbcType="VARCHAR" column="prod_name" property="prodName"/>
+			<result column="prod_total" property="prodTotal"/>
+			<result jdbcType="VARCHAR" column="prod_detail" property="prodDetail"/>
+			<result jdbcType="VARCHAR" column="manufacture_day" property="manuDate"/>
+			<result jdbcType="NUMERIC" column="price" property="price"/>
+			<result jdbcType="VARCHAR" column="image_file" property="fileName"/>
+			<result jdbcType="DATE" column="prod_reg_date" property="regDate"/>
+			<result jdbcType="VARCHAR" column="tran_status_code" property="proTranCode"/>
+		</association>
+	</resultMap>
+
+	<insert id="insertPurchase" parameterType="purchase">
+		INSERT INTO transaction
+		VALUES	(	seq_transaction_tran_no.nextval,
+					#{purchaseProd.prodNo},
+					#{purchaseQuantity},
+					#{buyer.userId},
+					#{paymentOption},
+					#{receiverName},
+					#{receiverPhone},
+					#{divyAddr},
+					#{divyRequest},
+					#{tranCode},
+					SYSDATE,
+					#{divyDate}	)
+	</insert>
+	
+	<select id="findPurchase" parameterType="int" resultMap="purchaseMap">
+		SELECT *
+		FROM transaction
+		WHERE tran_no = #{value}
+	</select>
+	
+	<select id="findPurchase2" parameterType="int" resultMap="purchaseMap">
+		SELECT *
+		FROM transaction
+		WHERE prod_no = #{value}
+	</select>
+	
+	<select id="getPurchaseList" parameterType="map" resultMap="purchaseMap">
+		SELECT * 
+		FROM (		SELECT inner_table. * ,  ROWNUM AS row_seq
+					FROM (	SELECT t.*, p.prod_name
+							FROM transaction t, product p
+							WHERE p.prod_no = t.prod_no
+								<if test="buyerId != null">
+									AND t.buyer_id = #{buyerId}
+								</if>
+						) inner_table
+					WHERE ROWNUM &lt;= #{search.endRowNum} )WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum} 
+	</select>
+	
+	<update id="updatePurchase" parameterType="purchase">
+		UPDATE transaction
+		SET payment_option 	= #{paymentOption},
+			receiver_name	= #{receiverName},
+			receiver_phone	= #{receiverPhone},
+			demailaddr		= #{divyAddr},
+			dlvy_request	= #{divyRequest},
+			dlvy_date		= #{divyDate}
+		WHERE prod_no = #{purchaseProd.prodNo}
+			AND tran_no = #{tranNo}	
+	</update>
+	
+	<update id="updateTranCode" parameterType="purchase">
+		UPDATE transaction
+		SET tran_status_code = #{tranCode}
+		WHERE tran_no = #{tranNo}
+	</update>
+	
+	<select id="getTotalCount" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM	(	SELECT t.*, p.prod_name
+					FROM transaction t, product p
+					WHERE p.prod_no = t.prod_no
+							AND t.buyer_Id = #{value}	)
+	</select>
+	
+	<insert id="insertPurchaseCart" parameterType="purchase">
+		INSERT INTO cart
+		VALUES(#{purchaseProd.prodNo}, #{buyer.userId}	)
+	</insert> 
+	
+	<select id="getCart" parameterType="purchase" resultMap="purchaseMap">
+		SELECT prod_no, user_id
+		FROM cart
+		WHERE prod_no = #{purchaseProd.prodNo} AND user_id = #{buyer.userId}
+		
+	</select>
+	
+	<select id="getCartList" parameterType="map" resultMap="purchaseMap">
+		SELECT * 
+		FROM (		SELECT inner_table. * ,  ROWNUM AS row_seq
+					FROM (	SELECT p.*
+							FROM product p, cart c
+							WHERE 	c.prod_no = p.prod_no 
+							AND c.user_id = #{userId}
+						)inner_table
+					WHERE ROWNUM &lt;= #{search.endRowNum} )WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum} 
+	</select>
+	
+	<select id="getTotalCart" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM	(	SELECT p.*
+					FROM product p, cart c
+					WHERE 	c.prod_no = p.prod_no 
+					AND c.user_id = #{value}	)
+	</select>
+	
+	<delete id="deleteCart" parameterType="map">
+		DELETE cart
+		WHERE user_id = #{userId}
+			AND prod_no = #{prodNo}
+	</delete>
+</mapper>	
+
