@@ -116,22 +116,6 @@
 			
 			$('.thumbnail-container').css('margin','90px');
 			
-			$('#loginButton').click(function(){
-				var id = $($('.input-group-addon')[0]).next().val();
-				var pwd = $('.input-group-addon:contains("PWD")').next().val();
-				
-				if(id.length == 0){
-					alert("아이디를 입력해 주세요.");
-					return;
-				}
-				
-				if(pwd.length == 0){
-					alert("패스워드를 입력해 주세요.");
-					return;
-				}
-				
-				$('form').attr('method','post').attr('action','/user/login').submit();
-			});
 		});
 		
 		var page = 2;
@@ -191,45 +175,6 @@
 		    
 		});
 		
-		$(function(){
-			$('a:contains("회원가입")').click(function(){
-				console.log('실행');
-				$('form').attr('method','get').attr('action','/user/addUser').submit();
-			});
-			
-			$('.btn-default:contains("장바구니")').click(function(){
-				var href = $(this).attr('href');
-				console.log(href);
-				
-				
-				if(${empty user.role}){
-					alert('로그인을 해주세요');
-					$(this).attr('href',"/user/loginView.jsp");
-				}else{
-					if(confirm('상품이 담겼습니다. 장바구니로 이동하시겠습니까?') == true){
-						$(this).attr('href',href);
-
-					}else{
-						$(this).attr('href','/index.jsp');
-					}					
-				}
-			});
-			
-			$("#kakao-png").on("click",function(){
-				Kakao.init('b3bed223fd618abc07f64c2103ca9659');
-				console.log(Kakao.isInitialized());
-				Kakao.Auth.login({
-				      success: function(authObj) {
-				        console.log(JSON.stringify(authObj))
-				        $(window.parent.frames.document.location).attr("href","/user/login/pass");
-				      },
-				      fail: function(err) {
-				        console.log(JSON.stringify(err))
-				      },
-				    })
-			});
-		});
-		
 	</script>
 	
 	<style>
@@ -240,134 +185,7 @@
 </head>
 <body>
 <form>
-	<div class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container-fluid">
-			<a class="navbar-brand" href="/">
-				<span class="glyphicon glyphicon-gift"></span>
-				<span> Model2 MVC SHOP </span>
-				<span class="glyphicon glyphicon-gift"></span>
-			</a>
-			
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#target">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-			</div>	
-			
-			<div class="collapse navbar-collapse" id="target">
-				<ul class="nav navbar-nav">
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							<span>BEST</span>
-							<span class="caret"></span>
-						</a>
-						<ul class="dropdown-menu">
-							<li><a href="#">1</a></li>
-							<li><a href="#">2</a></li>					
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							<span>CATEGORY</span>
-							<span class="caret"></span>
-						</a>
-						<ul class="dropdown-menu">
-							<li><a href="#">1</a></li>
-							<li><a href="#">2</a></li>			
-						</ul>
-					</li>
-					<li><a>최근 본 상품</a></li>
-				</ul>
-				
-				<ul class="nav navbar-nav navbar-right">
-
-				<c:if test="${empty user.role }">
-					<li><a>회원가입</a></li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							<span>로그인</span>
-							<span class="caret"></span>
-						</a>
-						<ul class="dropdown-menu">
-							<li class="dropdown-header">로그인</li>
-							<li>
-								<div class="input-group input-group-sm">
-								  <span class="input-group-addon" id="sizing-addon3">I&emsp;&nbsp;D</span>
-								  <input type="text" class="form-control" name="userId" placeholder="id" aria-describedby="sizing-addon3">
-								</div>
-							</li>
-							<li>
-								<div class="input-group input-group-sm">
-								  <span class="input-group-addon" id="sizing-addon3">PWD</span>
-								  <input type="password" class="form-control" name="password" placeholder="password" aria-describedby="sizing-addon3">
-								</div>
-							</li>
-							<li>	
-								<button type="button" id="loginButton" class="btn btn-success btn-xs btn-block">login</button>
-							</li>
-							<li>
-								<img id="kakao-png" src="/images/RestApi/Kakao/kakaolink_btn_small.png"/>
-							</li>
-						</ul>
-					</li>
-				</c:if>
-					
-				<c:if test="${!empty user.role && user.role eq 'admin' }">
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							<span>${user.userName}님</span>
-							<span class="caret"></span>
-						</a>
-						<ul class="dropdown-menu">
-							<li class="dropdown-header">사용자</li>
-							<li><a>사용자 관리</a></li>
-							<li class="divider"></li>
-							<li class="dropdown-header">판매</li>
-							<li><a>상품 관리</a></li>
-							<li><a>배송 관리</a></li>				
-						</ul>
-					</li>
-					<li>
-						<a href="/purchase/findCartList">
-							<span class="glyphicon glyphicon-shopping-cart"></span>
-							<span>장바구니</span>
-						</a>
-					</li>
-					<li>
-						<a href="/user/logout">로그아웃</a>
-					</li>					
-					
-				</c:if>
-				<c:if test="${!empty user.role && user.role eq 'user' }">
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							<span>${user.userName}님</span>
-							<span class="caret"></span>
-						</a>
-						<ul class="dropdown-menu">
-							<li class="dropdown-header">정보</li>
-							<li><a href="">내정보보기</a></li>
-							<li><a href="">구매내역조회</a></li>		
-						</ul>
-					</li>
-					<li>
-						<a href="/purchase/findCartList">
-							<span class="glyphicon glyphicon-shopping-cart"></span>
-							<span>장바구니</span>
-						</a>
-					</li>
-					<li>
-						<a href="/user/logout">로그아웃</a>
-					</li>				
-					
-				</c:if>
-				</ul>
-			</div>
-		</div>
-	</div>
+	<jsp:include page="/header.jsp"></jsp:include>
 	
 	<div class="container-fluid searchContainer">
 		<div class="row">
