@@ -18,6 +18,10 @@
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<!-- <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script> -->
+	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+
+	<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 	<script type="text/javascript">
 		$(function(){
 			
@@ -45,7 +49,8 @@
 							$($('.prodName')[i]).text(temp.prodName);
 							$($('.price')[i]).text(temp.price+"원");
 							$($('.prodDetail')[i]).text(temp.prodDetail);
-							$($('.btn-primary:contains("구매")')[i]).attr('href','/purchase/addPurchaseView?prodNo='+temp.prodNo);
+							$($('.btn-success:contains("구매")')[i]).attr('href','/purchase/addPurchaseView?prodNo='+temp.prodNo);
+							$($('.btn-default:contains("장바구니")')[i]).attr('href','/purchase/addPurchaseCart?prodNo='+temp.prodNo);
 						}
 					}
 				});
@@ -74,10 +79,36 @@
 								$($('.prodName')[i]).text(temp.prodName);
 								$($('.price')[i]).text(temp.price+"원");
 								$($('.prodDetail')[i]).text(temp.prodDetail);
-								$($('.btn-primary:contains("구매")')[i]).attr('href','/purchase/addPurchaseView?prodNo='+temp.prodNo);
+								$($('.btn-success:contains("구매")')[i]).attr('href','/purchase/addPurchaseView?prodNo='+temp.prodNo);
+								$($('.btn-default:contains("장바구니")')[i]).attr('href','/purchase/addPurchaseCart?prodNo='+temp.prodNo);
 							}
 						}
-					});
+			});
+			
+			$('input[name="searchKeyword"]').keyup(function(){
+				var searchKeyword = $(this).val();
+		
+				$.ajax(
+					{
+						url : "/product/rest/productAutoComplete/"+searchKeyword+"/1",
+						method : "GET",
+						headers : {
+							"Accept" : "application/json",
+							"Content-Type" : "application/json"
+						},
+						dataType:"json",
+						success : function(JSONData,status){
+							var availableTags = JSONData;
+							console.log(JSONData);
+							$(function(){
+								$('input[name="searchKeyword"]').autocomplete({
+									source: availableTags
+								});							
+							});
+						},
+				});
+				
+			});
 			
 			$('.searchContainer').css('margin','50px');
 			
@@ -140,12 +171,12 @@
 									var stringHtml = 		
 										'<div class="col-sm-6 col-md-4">'
 								    	+'<div class="thumbnail">'
-								    	+'<img class="image" src="/images/uploadFiles/'+temp.fileName+'" width="240px" height="240px">'
+								    	+'<img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="240px" height="180px">'
 								      	+'<div class="caption">'
 								        +'<h3 class="prodName">'+temp.prodName+'</h3>'
 								        +'<h4 class="price">'+temp.price+'</h4>'
 								        +'<p class="prodDetail">'+temp.prodDetail+'</p>'
-								        +'<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" class="btn btn-primary" role="button">구매</a> <a href="#" class="btn btn-default" role="button">장바구니</a></p>'
+								        +'<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" class="btn btn-success" role="button">구매</a> <a href="/purchase/addPurchaseCart?prodNo='+temp.prodNo+'" class="btn btn-default" role="button">장바구니</a></p>'
 								      	+'</div></div></div>';
 								   	str += stringHtml;	
 								   	
@@ -159,13 +190,51 @@
 		    	}
 		    
 		});
-	
+		
+		$(function(){
+			$('a:contains("회원가입")').click(function(){
+				console.log('실행');
+				$('form').attr('method','get').attr('action','/user/addUser').submit();
+			});
+			
+			$('.btn-default:contains("장바구니")').click(function(){
+				var href = $(this).attr('href');
+				console.log(href);
+				
+				
+				if(${empty user.role}){
+					alert('로그인을 해주세요');
+					$(this).attr('href',"/user/loginView.jsp");
+				}else{
+					if(confirm('상품이 담겼습니다. 장바구니로 이동하시겠습니까?') == true){
+						$(this).attr('href',href);
+
+					}else{
+						$(this).attr('href','/index.jsp');
+					}					
+				}
+			});
+			
+			$("#kakao-png").on("click",function(){
+				Kakao.init('b3bed223fd618abc07f64c2103ca9659');
+				console.log(Kakao.isInitialized());
+				Kakao.Auth.login({
+				      success: function(authObj) {
+				        console.log(JSON.stringify(authObj))
+				        $(window.parent.frames.document.location).attr("href","/user/login/pass");
+				      },
+				      fail: function(err) {
+				        console.log(JSON.stringify(err))
+				      },
+				    })
+			});
+		});
+		
 	</script>
 	
 	<style>
 		body{
 			padding-top:70px;
-			overflow:scroll;
 		}
 	</style>
 </head>
@@ -186,7 +255,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-			</div>
+			</div>	
 			
 			<div class="collapse navbar-collapse" id="target">
 				<ul class="nav navbar-nav">
@@ -196,11 +265,8 @@
 							<span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu">
-							<li><a href="#">Web UI</a></li>
-							<li><a href="#">W3C</a></li>
-							<li class="divider"></li>
-							<li class="dropdown-header">Nav header</li>
-							<li><a href="#">Static Contents</a></li>					
+							<li><a href="#">1</a></li>
+							<li><a href="#">2</a></li>					
 						</ul>
 					</li>
 					<li class="dropdown">
@@ -209,20 +275,17 @@
 							<span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu">
-							<li><a href="#">Web UI</a></li>
-							<li><a href="#">W3C</a></li>
-							<li class="divider"></li>
-							<li class="dropdown-header">Nav header</li>
-							<li><a href="#">Static Contents</a></li>					
+							<li><a href="#">1</a></li>
+							<li><a href="#">2</a></li>			
 						</ul>
 					</li>
-					<li><a href="#">최근 본 상품</a></li>
+					<li><a>최근 본 상품</a></li>
 				</ul>
 				
 				<ul class="nav navbar-nav navbar-right">
 
 				<c:if test="${empty user.role }">
-					<li><a href="/user/addUser">회원가입</a></li>
+					<li><a>회원가입</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<span>로그인</span>
@@ -246,15 +309,52 @@
 								<button type="button" id="loginButton" class="btn btn-success btn-xs btn-block">login</button>
 							</li>
 							<li>
-								<img src="/images/RestAPIKaKao/kakaolink_btn_small.png"/>
+								<img id="kakao-png" src="/images/RestApi/Kakao/kakaolink_btn_small.png"/>
 							</li>
 						</ul>
 					</li>
 				</c:if>
 					
-				<c:if test="${!empty user.role }">
+				<c:if test="${!empty user.role && user.role eq 'admin' }">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<span>${user.userName}님</span>
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li class="dropdown-header">사용자</li>
+							<li><a>사용자 관리</a></li>
+							<li class="divider"></li>
+							<li class="dropdown-header">판매</li>
+							<li><a>상품 관리</a></li>
+							<li><a>배송 관리</a></li>				
+						</ul>
+					</li>
 					<li>
-						<a href="/product/listCart">
+						<a href="/purchase/findCartList">
+							<span class="glyphicon glyphicon-shopping-cart"></span>
+							<span>장바구니</span>
+						</a>
+					</li>
+					<li>
+						<a href="/user/logout">로그아웃</a>
+					</li>					
+					
+				</c:if>
+				<c:if test="${!empty user.role && user.role eq 'user' }">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<span>${user.userName}님</span>
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li class="dropdown-header">정보</li>
+							<li><a href="">내정보보기</a></li>
+							<li><a href="">구매내역조회</a></li>		
+						</ul>
+					</li>
+					<li>
+						<a href="/purchase/findCartList">
 							<span class="glyphicon glyphicon-shopping-cart"></span>
 							<span>장바구니</span>
 						</a>
@@ -264,7 +364,6 @@
 					</li>				
 					
 				</c:if>
-
 				</ul>
 			</div>
 		</div>
@@ -275,7 +374,7 @@
 			<div class="col-md-3"></div>
 			<div class="col-md-6">
 				<div class="form-group form-group-lg search">
-					<input class="form-control" type="text" id="formGroupInputLarge" placeholder="SearchKeyword...">
+					<input class="form-control" type="text" id="formGroupInputLarge" name="searchKeyword" placeholder="SearchKeyword...">
 				    <button type="button" class="btn btn-default">
   						<span class="glyphicon glyphicon-search"></span>
 					</button>
@@ -293,12 +392,15 @@
 				<c:forEach begin="0" end="2" step="1">
 				  <div class="col-sm-6 col-md-4">
 				    <div class="thumbnail">
-				      <img class="image" src="" width="240px" height="240px">
+				      <img class="image" src="" border="0px" width="240px" height="240px">
 				      <div class="caption">
 				        <h3 class="prodName"></h3>
 				        <h4 class="price"></h4>
 				        <p class="prodDetail"></p>
-				        <p><a href="#" class="btn btn-primary" role="button">구매</a> <a href="#" class="btn btn-default" role="button">장바구니</a></p>
+				        <p>
+				        	<a href="" class="btn btn-success" role="button">구매</a>
+				         	<a href="" class="btn btn-default" role="button">장바구니</a>
+				         </p>
 				      </div>
 				    </div>
 				  </div>
@@ -317,12 +419,15 @@
 				<c:forEach begin="0" end="2" step="1">
 				  <div class="col-sm-6 col-md-4">
 				    <div class="thumbnail">
-				      <img class="image" src="" width="240px" height="240px">
+				      <img class="image" src="" border="0px" width="240px" height="240px">
 				      <div class="caption">
 				        <h3 class="prodName"></h3>
 				        <h4 class="price"></h4>
 				        <p class="prodDetail"></p>
-				        <p><a href="#" class="btn btn-primary" role="button">구매</a> <a href="#" class="btn btn-default" role="button">장바구니</a></p>
+				        <p>
+				        	<a href="" class="btn btn-success" role="button">구매</a> 
+				        	<a href="" class="btn btn-default" role="button">장바구니</a>
+				        </p>
 				      </div>
 				    </div>
 				  </div>

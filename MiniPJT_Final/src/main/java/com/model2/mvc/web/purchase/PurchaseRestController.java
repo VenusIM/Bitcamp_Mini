@@ -2,11 +2,14 @@ package com.model2.mvc.web.purchase;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -69,7 +72,16 @@ public class PurchaseRestController {
 		return purchaseService.getPurchase(10005);
 	}
 	
-	public void addPurchaseView() throws Exception{
+	@RequestMapping(value="rest/addPurchaseView/{prodNo}", method=RequestMethod.GET)
+	public Product addPurchaseView(	@PathVariable("prodNo") int prodNo,
+									HttpSession session) throws Exception{
+		
+		User user = (User)session.getAttribute("user");
+		if(user != null && user.getRole() != null) {
+			return null;
+		}
+		
+		return productService.getProduct(prodNo);
 		
 	}
 	
