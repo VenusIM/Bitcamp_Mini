@@ -30,18 +30,7 @@ body.bgpopup {
 }
 
 /*링크 속성*/
-A.:link, A.:visited, A.:hover, A.:active {
-	text-decoration: none;
-}
 
-A.:link, A.:visited {
-	color: #333333;
-}
-
-A.:hover, A.:active {
-	color: #347BD9;
-	text-decoration: underline;
-}
 
 #page, #pagediv {
 	color: #cccccc;
@@ -122,15 +111,6 @@ INPUT.INPUT, INPUT.INPUT_L, INPUT.INPUT_R {
 }
 
 /*인스펙션용 임시*/
-INPUT.INPUT, INPUT.INPUT_L, INPUT.INPUT_R { 
-   height: 19px; 
-	border : expression( (this.type=='checkbox'||this.type=='radio')?'1px solid #F5F5F5': '1px solid  #CACACA' );  
-	text-indent: 1px; 
-	background-image: expression( (this.type=='checkbox'||this.type=='radio')?'none':'url"(/synergyweb/images/inputbg.gif)"'); 
-	background-position: 0% 0%; 
-	background-repeat: no-repeat; 
-	padding-top: 3px;
-}
 
 /*필수입력 중앙정렬 - 우측상단 Red삼각형 이미지*/
 INPUT.INPUT {
@@ -983,12 +963,7 @@ TD.InTableDATA {
 
 
 /* 07/05 --  작업버튼이 "sheet의 기능에 따라 비활성화 되어야할 때*/
-.btnDim { 
-	cursor: hand; 
-	margin-left:3px; 
-	vertical-align:middle; 
-	filter: alpha(opacity:45); 
-} 
+
 
 /* --- 7/20 __테이블 내의 가변적인 링크 텍스트에 관한 클래스*/
 INPUT.NOINPUT_Status { 
@@ -1049,22 +1024,7 @@ TD.UNITTITLE2 {
 }
 
 /* --- 12/29 예산/사업팀 요청__drag & drop 대한 클래스*/
-.BTN_dragTxt { 
-                font-family: "굴림", "돋움";
-                color: #4F668D;
-                letter-spacing: -1px;
-                background:#E9F2FC;
-                text-align:center;
-                font-size: 11px;
-                font-style: normal;
-                font-weight: normal; 
-                padding:3 2 2 1;
-                border-left:#C5D2E5 solid 1px;
-                border-right:#9AA8BA solid 1px;
-                border-top:#C5D2E5 solid 1px;
-                border-bottom:#9AA8BA solid 1px;
-                filter=progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#EEF9FC, EndColorStr=#CBDDF7);
-                }
+
 
 
 .top_link {font-family: "Arial";font-size: 11px;color: #808080;font-weight: bold;}
