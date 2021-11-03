@@ -73,9 +73,14 @@ public class PurchaseController {
 //	@RequestMapping("/addPurchaseView.do")
 	@RequestMapping("addPurchaseView")
 	public String addPurchaseView(	@RequestParam("prodNo") String prodNo,
-									Model model) throws Exception{
+									Model model, HttpSession session) throws Exception{
 		
 		model.addAttribute("product",productService.getProduct(Integer.parseInt(prodNo)));
+		
+		User user = (User)session.getAttribute("user");
+		if(user == null) {
+			return "forward:/user/login";
+		}
 		
 		return "forward:/purchase/addPurchaseView.jsp";
 	}
@@ -219,12 +224,18 @@ public class PurchaseController {
 	}
 	//============================================장바구니======================================
 	@RequestMapping("addPurchaseCart")
-	public ModelAndView addPurchaseCart(HttpSession session) throws Exception {
+	public String addPurchaseCart( 	HttpServletRequest request
+									,HttpSession session) throws Exception {
+		
+		User user = (User)session.getAttribute("user");
+	
+		if(user == null) {
+			return "forward:/user/login	";
+		}
 		
 		Purchase purchase = new Purchase();
-		
-		Product product = (Product)session.getAttribute("product");
-		User user = (User)session.getAttribute("user");
+			
+		Product product = productService.getProduct(Integer.parseInt(request.getParameter("prodNo")));
 		purchase.setPurchaseProd(product);
 		purchase.setBuyer(user);
 		
@@ -233,12 +244,7 @@ public class PurchaseController {
 			purchaseService.addPurchaseCart(purchase);				
 		}
 		
-		ModelAndView mav = new ModelAndView();
-		
-		mav.setViewName("forward:/product/getProduct.jsp");
-		mav.addObject("product",product);
-		
-		return mav;
+		return "forward:./findCartList";
 	}
 	
 	@RequestMapping("findCartList")
