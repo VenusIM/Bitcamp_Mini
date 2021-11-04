@@ -255,19 +255,7 @@
 			<div class="col-md-2"></div>
 		</div>
 	</div>
-	
-	<!-- <div class="container-fluid thumbnail-container">
-		<div class="row">
-			<div class="col-md-2"></div>
-			<div class="col-md-8">
-				<div class="row">
-					<div id="enters"></div>					
-				</div>
-			</div>
-			<div class="col-md-2"></div>
-		</div>
-	</div>-->
-	
+
 </form>
 </body>
 </html>

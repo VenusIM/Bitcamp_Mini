@@ -1,291 +1,231 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Hugo 0.88.1">
-    <title>Checkout example Â· Bootstrap v5.1</title>
-
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/checkout/">
-
-    
-
-    <!-- Bootstrap core CSS -->
-<link href="/docs/5.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
-    <!-- Favicons -->
-<link rel="apple-touch-icon" href="/docs/5.1/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
-<link rel="icon" href="/docs/5.1/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
-<link rel="icon" href="/docs/5.1/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
-<link rel="manifest" href="/docs/5.1/assets/img/favicons/manifest.json">
-<link rel="mask-icon" href="/docs/5.1/assets/img/favicons/safari-pinned-tab.svg" color="#7952b3">
-<link rel="icon" href="/docs/5.1/assets/img/favicons/favicon.ico">
-<meta name="theme-color" content="#7952b3">
-<!-- Latest compiled and minified CSS -->
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="EUC-KR">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>Insert title here</title>
+	
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<!-- Optional theme -->
+
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-	<!-- Latest compiled and minified JavaScript -->
+
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<!-- <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script> -->
+
 	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 
 	<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 	<script type="text/javascript">
+	
+$(function(){
+		
+		$('input:button').click(function(){
+			
+			var type = $(this).val();
+			console.log(type);
+			var number =  $('#total').val();
+			console.log(number);
+			 if(type === '+') {
+				number = parseInt(number) + 1;
+				if(number >= parseInt(${product.prodTotal}) ){
+					number = parseInt(${product.prodTotal})
+				}
+			}else if(type === '-')  {
+				number = parseInt(number) - 1;
+				if(number<=0)
+				  	number = 0;
+				}
+			// °á°ú Ãâ·Â
+			console.log(number);
+			 $('#total').val(number);
+		});
+		
+		$('.btn-default:contains("Àå¹Ù±¸´Ï")').attr('href','/purchase/addPurchaseCart?prodNo='+${product.prodNo});
+		
+		$("#datepicker").on("click",function(){			
+			$("#datepicker").datepicker({
+				minDate: "+1D", 
+				maxDate: "+1M +10D",
+				dateFormat : "yy/mm/dd"
+			});
+		});
+});
 	</script>
+	
+	<style>
+		body{
+			padding-top:70px;
+		}
+	</style>
 
-
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-    </style>
-
-    
-    <!-- Custom styles for this template -->
-    <link href="form-validation.css" rel="stylesheet">
-  </head>
-  <body class="bg-light">
-    
-<div class="container">
-  <main>
-    <div class="py-5 text-center">
-      <h2>${product.prodName }</h2>
-      <p class="lead">${product.prodDetail }</p>
-    </div>
-
-    <div class="row g-5">
-      <div class="col-md-5 col-lg-4 order-md-last">
-        <h4 class="d-flex justify-content-between align-items-center mb-3">
-          <span class="text-primary">Your cart</span>
-          <span class="badge bg-primary rounded-pill">3</span>
-        </h4>
-        <ul class="list-group mb-3">
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Product name</h6>
-              <small class="text-muted">Brief description</small>
-            </div>
-            <span class="text-muted">$12</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Second product</h6>
-              <small class="text-muted">Brief description</small>
-            </div>
-            <span class="text-muted">$8</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Third item</h6>
-              <small class="text-muted">Brief description</small>
-            </div>
-            <span class="text-muted">$5</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between bg-light">
-            <div class="text-success">
-              <h6 class="my-0">Promo code</h6>
-              <small>EXAMPLECODE</small>
-            </div>
-            <span class="text-success">âˆ’$5</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between">
-            <span>Total (USD)</span>
-            <strong>$20</strong>
-          </li>
-        </ul>
-
-        <form class="card p-2">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Promo code">
-            <button type="submit" class="btn btn-secondary">Redeem</button>
-          </div>
-        </form>
-      </div>
-      <div class="col-md-7 col-lg-8">
-        <h4 class="mb-3">Billing address</h4>
-        <form class="needs-validation" novalidate>
-          <div class="row g-3">
-            <div class="col-sm-6">
-              <label for="firstName" class="form-label">First name</label>
-              <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
-              <div class="invalid-feedback">
-                Valid first name is required.
-              </div>
-            </div>
-
-            <div class="col-sm-6">
-              <label for="lastName" class="form-label">Last name</label>
-              <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
-              <div class="invalid-feedback">
-                Valid last name is required.
-              </div>
-            </div>
-
-            <div class="col-12">
-              <label for="username" class="form-label">Username</label>
-              <div class="input-group has-validation">
-                <span class="input-group-text">@</span>
-                <input type="text" class="form-control" id="username" placeholder="Username" required>
-              <div class="invalid-feedback">
-                  Your username is required.
-                </div>
-              </div>
-            </div>
-
-            <div class="col-12">
-              <label for="email" class="form-label">Email <span class="text-muted">(Optional)</span></label>
-              <input type="email" class="form-control" id="email" placeholder="you@example.com">
-              <div class="invalid-feedback">
-                Please enter a valid email address for shipping updates.
-              </div>
-            </div>
-
-            <div class="col-12">
-              <label for="address" class="form-label">Address</label>
-              <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
-              <div class="invalid-feedback">
-                Please enter your shipping address.
-              </div>
-            </div>
-
-            <div class="col-12">
-              <label for="address2" class="form-label">Address 2 <span class="text-muted">(Optional)</span></label>
-              <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
-            </div>
-
-            <div class="col-md-5">
-              <label for="country" class="form-label">Country</label>
-              <select class="form-select" id="country" required>
-                <option value="">Choose...</option>
-                <option>United States</option>
-              </select>
-              <div class="invalid-feedback">
-                Please select a valid country.
-              </div>
-            </div>
-
-            <div class="col-md-4">
-              <label for="state" class="form-label">State</label>
-              <select class="form-select" id="state" required>
-                <option value="">Choose...</option>
-                <option>California</option>
-              </select>
-              <div class="invalid-feedback">
-                Please provide a valid state.
-              </div>
-            </div>
-
-            <div class="col-md-3">
-              <label for="zip" class="form-label">Zip</label>
-              <input type="text" class="form-control" id="zip" placeholder="" required>
-              <div class="invalid-feedback">
-                Zip code required.
-              </div>
-            </div>
-          </div>
-
-          <hr class="my-4">
-
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="same-address">
-            <label class="form-check-label" for="same-address">Shipping address is the same as my billing address</label>
-          </div>
-
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="save-info">
-            <label class="form-check-label" for="save-info">Save this information for next time</label>
-          </div>
-
-          <hr class="my-4">
-
-          <h4 class="mb-3">Payment</h4>
-
-          <div class="my-3">
-            <div class="form-check">
-              <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked required>
-              <label class="form-check-label" for="credit">Credit card</label>
-            </div>
-            <div class="form-check">
-              <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required>
-              <label class="form-check-label" for="debit">Debit card</label>
-            </div>
-            <div class="form-check">
-              <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required>
-              <label class="form-check-label" for="paypal">PayPal</label>
-            </div>
-          </div>
-
-          <div class="row gy-3">
-            <div class="col-md-6">
-              <label for="cc-name" class="form-label">Name on card</label>
-              <input type="text" class="form-control" id="cc-name" placeholder="" required>
-              <small class="text-muted">Full name as displayed on card</small>
-              <div class="invalid-feedback">
-                Name on card is required
-              </div>
-            </div>
-
-            <div class="col-md-6">
-              <label for="cc-number" class="form-label">Credit card number</label>
-              <input type="text" class="form-control" id="cc-number" placeholder="" required>
-              <div class="invalid-feedback">
-                Credit card number is required
-              </div>
-            </div>
-
-            <div class="col-md-3">
-              <label for="cc-expiration" class="form-label">Expiration</label>
-              <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
-              <div class="invalid-feedback">
-                Expiration date required
-              </div>
-            </div>
-
-            <div class="col-md-3">
-              <label for="cc-cvv" class="form-label">CVV</label>
-              <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
-              <div class="invalid-feedback">
-                Security code required
-              </div>
-            </div>
-          </div>
-
-          <hr class="my-4">
-
-          <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
-        </form>
-      </div>
-    </div>
-  </main>
-
-  <footer class="my-5 pt-5 text-muted text-center text-small">
-    <p class="mb-1">&copy; 2017â€“2021 Company Name</p>
-    <ul class="list-inline">
-      <li class="list-inline-item"><a href="#">Privacy</a></li>
-      <li class="list-inline-item"><a href="#">Terms</a></li>
-      <li class="list-inline-item"><a href="#">Support</a></li>
-    </ul>
-  </footer>
-</div>
-
-
-    <script src="/docs/5.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-
-      <script src="form-validation.js"></script>
+</head>
+<body>
+	<jsp:include page="../header.jsp"></jsp:include>
+	<div class="container">
+	
+	    <div class="py-5 text-center">
+	      <h2>±¸¸Å ÆäÀÌÁö</h2>
+	      <p class="lead">Á¤º¸¸¦ ÀÔ·ÂÇØ ÁÖ¼¼¿ä.</p>
+	    </div>
+	
+	    <div class="row g-5">
+	      <div class="col-md-5 col-lg-4 order-md-last">
+	        <h4 class="d-flex justify-content-between align-items-center mb-3">
+	          <span class="text-primary">»óÇ° Á¤º¸</span>
+	          <span class="badge bg-primary rounded-pill">1</span>
+	        </h4>
+	        <ul class="list-group mb-3">
+	        	<li class="list-group-item d-flex justify-content-between bg-light">
+	            <div class="text-success">
+	              <h6 class="my-0">Product No</h6>
+	              <small>NO.${product.prodNo }</small>
+	            </div>
+	            <span class="text-success"></span>
+	          </li>
+	          <li class="list-group-item d-flex justify-content-between lh-sm">
+	            <div>
+	              <h6 class="my-0">Product name</h6>
+	              <small class="text-muted">${product.prodName}</small>
+	            </div>
+	            <span class="text-muted"></span>
+	          </li>
+	          <li class="list-group-item d-flex justify-content-between lh-sm">
+	            <div>
+	              <h6 class="my-0">Product Detail</h6>
+	              <small class="text-muted">${product.prodDetail }</small>
+	            </div>
+	            <span class="text-muted"></span>
+	          </li>
+	          <li class="list-group-item d-flex justify-content-between lh-sm">
+	            <div>
+	              <h6 class="my-0">Product Image</h6>
+	              <small class="text-muted">
+	              	<img src="../images/uploadFiles/${product.fileName}" width="300px" height="300px">
+	              </small>
+	            </div>
+	            <span class="text-muted"></span>
+	          </li>
+	          <li class="list-group-item d-flex justify-content-between">
+	            <span>Price (Kor)</span></br>
+	            <c:if test="${product.price >= 30000 }">
+	            	<strong>${product.price} ¿ø</strong>
+	            </c:if>
+	            <c:if test="${product.price < 30000 }">
+	            	<strong>»óÇ°°¡°Ý: ${product.price}</strong></br>
+	            	<strong>¹è¼Ûºñ : &nbsp3000</strong></br>
+	            	<span style="color: red; font-weight: bolder;">ÃÑ¾× : ${product.price+3000} ¿ø</span>
+	            </c:if>
+	          </li>
+	        </ul>
+	
+	        <form class="card p-2">
+	          <div class="input-group">
+	            <a href="" class="btn btn-default" role="button">Àå¹Ù±¸´Ï</a>
+	          </div>
+	        </form>
+	      </div>
+	      <div class="col-md-7 col-lg-8">
+	        <form class="needs-validation" method="POST" action="/purchase/addPurchase">
+	          <div class="my-3">
+				<hr class="my-4">
+	            <div class="col-12">
+	              <label for="username" class="form-label">±¸¸ÅÀÚ¼ºÇÔ</label>
+	              <div class="input-group has-validation">
+	                <input type="text" class="form-control" name="receiverName" value="${user.userId}" >
+	              </div>
+	            </div>
+	
+	            <div class="col-12">
+	              <label for="phone" class="form-label">±¸¸ÅÀÚ¿¬¶ôÃ³<span class="text-muted"></span></label>
+	              <div class="input-group has-validation">
+	             	 <input type="number" class="form-control" name="receiverPhone" value="${ empty user.phone ? '' : user.phone  }">
+	              </div>
+	            </div>
+	
+	            <div class="col-12">
+	              <label for="address" class="form-label">±¸¸ÅÀÚÁÖ¼Ò</label>
+	              <input type="text" class="form-control" name="divyAddr" value="${ empty user.addr || user.addr eq 'null' ? '' : user.addr }">
+	            </div>
+	            
+	            <div class="col-12">
+	              <label for="address" class="form-label">±¸¸Å¿äÃ»»çÇ×</label>
+	              <input type="text" class="form-control" name="divyRequest" value="">
+	            </div>
+		        <div class="col-12">
+		          <label for="address" class="form-label">¹è¼ÛÈñ¸ÁÀÏ</label>
+		          <div class="input-group has-validation">
+		          	<p><input type="text" id="datepicker" class="form-control" name="divyDate" value=""></p>
+		          </div>
+		        </div>
+	          </div>
+	
+	          <hr class="my-4">
+				<label for="address" class="form-label">±¸¸Å¼ö·®</label>
+				<div class="col-12">
+					<input type="button" class="btn btn-default" value='-'>
+					<input type="text" class="text-center" id='total' name="purchaseQuantity" value="0" style = "width:30px; height: 30px; border-style: hidden; font-size: 15px"  readonly="readonly">
+					<input type="button" class="btn btn-default" value='+'>
+				</div>
+				<hr class="my-4">
+				<c:if test="${product.prodTotal eq 0}">
+					<pre style="color: red">»óÇ° Àç°í°¡ ¸ðµÎ ¼ÒÁø µÇ¾ú½À´Ï´Ù.</pre>
+				</c:if>
+				<c:if test="${product.prodTotal ne 0}">
+					<pre style="color: red">ÃÑ ${product.prodTotal}°³ ³²¾Ò½À´Ï´Ù.</pre>
+				</c:if>
+	          <hr class="my-4">
+	
+	          <h4 class="mb-3">°áÁ¦ ¹æ½Ä</h4>
+	
+	          <div class="my-3">
+	            <div class="form-check">
+	              <input id="credit" name="paymentOption" type="radio" value="1" class="form-check-input1" checked required>
+	              <label class="form-check-label" for="credit">½Å¿ëÄ«µå</label>
+	            </div>
+	            <div class="form-check">
+	              <input id="debit" name="paymentOption" type="radio" value="2" class="form-check-input1" required>
+	              <label class="form-check-label" for="debit">°èÁÂÀÌÃ¼</label>
+	            </div>
+	          </div>
+	          <hr class="my-4">
+				
+				<h4 class="mb-3">¼ö·É ¹æ½Ä</h4>
+	
+	          <div class="my-3">
+	            <div class="form-check">
+	              <input id="take" name="tranOption" type="radio" class="form-check-input2" checked required>
+	              <label class="form-check-label" for="take">¹æ¹®¼ö·É</label>
+	            </div>
+	            <div class="form-check">
+	              <input id="give" name="tranOption" type="radio" class="form-check-input2" required>
+	              <label class="form-check-label" for="give">¹è¼Û¹Þ±â</label>
+	            </div>
+	            <div class="_1rGSKv6aq_" style="margin-top: 12px;">
+	            <div class="bd_3Uotb bd_C8Tz1">
+		            <span class="bd_ChMMo">ÅÃ¹è¹è¼Û </span>
+		            <span class="bd_ChMMo">
+			            <span class="bd_3uare">3,000 </span>¿ø
+			            <span class="bd_2XJf1">(ÁÖ¹®½Ã °áÁ¦)</span>
+		            </span>
+	            </div>
+	            <p class="bd_1g_zz" style="margin-top: 3px;">30,000¿ø ÀÌ»ó ±¸¸Å ½Ã ¹«·á / Á¦ÁÖ Ãß°¡ 3,000¿ø, Á¦ÁÖ ¿Ü µµ¼­Áö¿ª Ãß°¡ 4,000¿ø</p></div>
+	          </div>
+				
+	          <hr class="my-4">
+	
+	          <button class="w-100 btn btn-default btn-lg" type="submit">±¸¸ÅÇÏ±â</button>
+			<input type="hidden" name="prodNo" value="${product.prodNo}">
+	        </form>
+	      </div>
+	    </div>
+	</div>
   </body>
+</html>
+
+</body>
 </html>

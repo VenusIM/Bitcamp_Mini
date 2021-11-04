@@ -97,12 +97,12 @@ public class Purchase {
 	
 	@Override
 	public String toString() {
-		return "PurchaseVO [buyer=" + buyer + ", divyAddr=" + divyAddr + ", purchaseQuantity=" +purchaseQuantity
-				+ ", divyDate=" + divyDate + ", divyRequest=" + divyRequest
-				+ ", orderDate=" + orderDate + ", paymentOption="
-				+ paymentOption + ", purchaseProd=" + purchaseProd
-				+ ", receiverName=" + receiverName + ", receiverPhone="
-				+ receiverPhone + ", tranCode=" + tranCode + ", tranNo="
-				+ tranNo + "]";
+		return "PurchaseVO [buyer=" + buyer + " divyAddr= " + divyAddr + " purchaseQuantity= " +purchaseQuantity
+				+ " divyDate= " + divyDate + " divyRequest= " + divyRequest
+				+ " orderDate= " + orderDate + " paymentOption= "
+				+ paymentOption + " purchaseProd= " + purchaseProd
+				+ " receiverName= " + receiverName + " receiverPhone= "
+				+ receiverPhone + " tranCode= " + tranCode + " tranNo= "
+				+ tranNo + " ]";
 	}
 }
