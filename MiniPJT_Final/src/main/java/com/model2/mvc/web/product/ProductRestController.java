@@ -98,10 +98,35 @@ public class ProductRestController {
 		return map;
 	}
 	
-	@RequestMapping(value="rest/listProduct", method=RequestMethod.GET)
-	public List<Product> listProduct() throws Exception{
+	@RequestMapping(value="rest/listProduct/option/{menu}/{searchKeyword}", method=RequestMethod.POST)
+	public Map<String,Object> listProductOption(	@RequestBody Search search,
+													@PathVariable("menu") String menu,
+													@PathVariable("searchKeyword") String searchKeyword,
+													HttpServletRequest request) throws Exception{
 		
-		return null;
+		System.out.println("option ½ÇÇà");
+		System.out.println(search);
+		System.out.println(request);
+		
+		if(menu != null) {
+			request.getSession().setAttribute("menu", menu);
+		}else {
+			menu = (String)request.getSession().getAttribute("menu");
+		}
+		
+		search.setSearchKeyword(searchKeyword);
+		
+		search.setPageSize(pageSize);
+		
+		Map<String , Object> map= null;
+		
+		if(menu.equals("manage")) {
+			map = productService.getProductListAdmin(search);
+		}else {
+			map = productService.getProductListUser(search);
+		}
+		
+		return map;
 	}
 	
 	@RequestMapping(value="rest/listProduct/{menu}", method=RequestMethod.POST)
@@ -130,11 +155,7 @@ public class ProductRestController {
 		}else {
 			map = productService.getProductListUser(search);
 		}
-		
-		//Page resultPage = new Page( currentPage, ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
-		
-		//map.put("resultPage", resultPage);
-		//map.put("search",search);
+
 		return map;
 	}
 	

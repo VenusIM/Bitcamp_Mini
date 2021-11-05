@@ -1,26 +1,28 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<%-- <%@page import="com.model2.mvc.service.domain.User"%>
-<%@page import="com.model2.mvc.service.domain.Product"%>
-<% User user = (User)session.getAttribute("user"); %>
-<% Product product = (Product)request.getAttribute("product"); %> --%>
-
+<!DOCTYPE html>
 <html>
 <head>
+	<meta charset="EUC-KR">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>Insert title here</title>
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
-<title>구매정보입력</title>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-<script type="text/javascript" src="../javascript/calendar.js">
-</script>
-<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script type="text/javascript">
+	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 
-
-	$(function(){
+	<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+	<script type="text/javascript">
+	
+$(function(){
 		
 		$('input:button').click(function(){
 			
@@ -41,359 +43,189 @@
 			// 결과 출력
 			console.log(number);
 			 $('#total').val(number);
-
 		});
 		
-		$('input[name="divyDate"]').click(function(){
-			show_calendar('document.addPurchase.divyDate', document.addPurchase.divyDate.value);
-		});
+		$('.btn-default:contains("장바구니")').attr('href','/purchase/addPurchaseCart?prodNo='+${product.prodNo});
 		
-		$('span[id="add"]:contains("구매")').click(function(){
-			console.log("실행됨");
-			$('form').attr('method','post').attr('action','/purchase/addPurchase').submit();
+		$("#datepicker").on("click",function(){			
+			$("#datepicker").datepicker({
+				minDate: "+1D", 
+				maxDate: "+1M +10D",
+				dateFormat : "yy/mm/dd"
+			});
 		});
-		
-		$('span[id="cart"]:contains("구매")').click(function(){
-			$('form').attr('method','post').attr('action','/purchase/addCartList').submit();
-		});
-		$('span:contains("취소")').click(function(){
-			$(window.parent.frames.document.location).attr('href','/index.jsp');
-		});
-	});
-
-	/*
-function fncAddPurchase(){
+});
+	</script>
 	
-	document.addPurchase.action = '/purchase/addPurchase';
-	document.addPurchase.submit();
-}
+	<style>
+		body{
+			padding-top:70px;
+		}
+	</style>
 
-function fncAddCartPurchase() {
-	
-	document.addPurchase.action = '/purchase/addCartList';
-	document.addPurchase.submit();
-}
-
-function count(type)  {
-	  // 결과를 표시할 element
-	  const resultElement = document.getElementById('total');
-	  
-	  
-	  // 현재 화면에 표시된 값
-	  let number = resultElement.value;
-	  
-	  // 더하기/빼기
-	 if(type === 'plus') {
-	    number = parseInt(number) + 1;
-		  if(number >= ${product.prodTotal}){
-			  number = ${product.prodTotal}
-		  }
-	  }else if(type === 'minus')  {
-	    number = parseInt(number) - 1;
-	    if(number<=0)
-	    	number = 0;
-	  }
-	  // 결과 출력
-	  resultElement.value = number;
-}
-*/
-
-</script>
 </head>
-
-<body bgcolor="#ffffff" text="#000000">
-
-<form name="addPurchase">
-
-<table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
-	<tr>
-		<td width="15" height="37">
-			<img src="/images/ct_ttl_img01.gif" width="15" height="37">
-		</td>
-		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left: 10px;">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="93%" class="ct_ttl01">구매정보입력</td>
-					<td width="20%" align="right">&nbsp;</td>
-				</tr>
-			</table>
-		</td>
-		<td width="12" height="37">
-			<img src="/images/ct_ttl_img03.gif" width="12" height="37"/>
-		</td>
-	</tr>
-</table>
-<c:if test="${product.prodNo != 0}">
-	<input type="hidden" name="prodNo" 
-			<%--<%=product.getProdNo() %>--%>
-			value="${product.prodNo}"/>
-</c:if>
-<c:if test="${!empty product.prodNoList }">
-	<input type="hidden" name="prodName" value="${prodName}">
-	<input type="hidden" name="prodTotal" value="${totals }">
-</c:if>
-
-<input type="hidden" name="buyerId" 
-						<%--<%=user.getUserId() %>--%>
-						value="${user.userId}" />
+<body>
+	<jsp:include page="../header.jsp"></jsp:include>
+	<div class="container">
 	
-<table width="600" border="0" cellspacing="0" cellpadding="0"	align="center" style="margin-top: 13px;">
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="300" class="ct_write">
-			<c:if test="${product.prodNo != 0}">
-				상품번호
-			</c:if>
-			<c:if test="${!empty product.prodNoList }">
-				상품명
-			</c:if>
-			<img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01" width="299">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="105">
-					<%--<%=product.getProdNo() --%>
-					<c:if test="${product.prodNo != 0}">
-						${product.prodNo}
-					</c:if>
-					<c:if test="${!empty product.prodNoList }">
-						${prodName }
-					</c:if>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<c:if test="${product.prodNo != 0}">
-	<tr>
-		<td width="104" class="ct_write">
-			상품명 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-		<%--<%=product.getProdName() --%>
-		${product.prodName}
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">
-			상품상세정보 <img	src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-		<%--<%=product.getProdDetail() --%>
-		${product.prodDetail }
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">제조일자</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-		<%--<%=product.getManuDate() --%>
-		${product.manuDate }
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">가격</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-		<%--<%=product.getPrice() --%>
-		${product.price }
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">등록일자</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-		<%--<%=product.getRegDate() --%>
-		${product.regDate }
-		
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	</c:if>
-	<tr>
-		<td width="104" class="ct_write">
-			구매자아이디 <img 	src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-		<%--<%=user.getUserId() --%>
-		${user.userId}
-		</td>	
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">구매방법</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<select name="paymentOption" class="ct_input_g" style="width: 100px; height: 19px" maxLength="20">
-				<option value="1" selected>현금구매</option>
-				<option value="2">신용구매</option>
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">구매자이름</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<input type="text" name="receiverName" 	class="ct_input_g" 	style="width: 100px; height: 19px" maxLength="20" 
-					<%--<%=user.getUserName() != null ? user.getUserName() : "" %>--%>
-					value="${ empty user.userName ? '' : user.userName }" />
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">구매자연락처</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<input 	type="text" name="receiverPhone" class="ct_input_g" 
-							style="width: 100px; height: 19px" maxLength="20" 
-									<%--<%=user.getPhone() != null ? user.getPhone() : "" %>--%>
-									value="${ empty user.phone ? '' : user.phone  }" />
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">구매자주소</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<input 	type="text" name="divyAddr" class="ct_input_g" 
-							style="width: 100px; height: 19px" maxLength="20" 	
-									<%--<%=user.getAddr()==null ? "" : user.getAddr() %>--%>
-									value="${ empty user.addr || user.addr eq 'null' ? '' : user.addr }" />
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">구매요청사항</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<input type="text" name="divyRequest" class="ct_input_g" 
-							value=""
-							style="width: 100px; height: 19px" maxLength="20" />
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">배송희망일자</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td width="200" class="ct_write01">
-			<input 	type="text" readonly="readonly" name="divyDate" class="ct_input_g" 
-							style="width: 100px; height: 19px" maxLength="20" value=""/>
-			<!-- <img 	src="../images/ct_icon_date.gif" width="15" height="15"	
-						onclick="show_calendar('document.addPurchase.divyDate', document.addPurchase.divyDate.value)"/> -->
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">구매수량</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<c:if test="${product.prodNo != 0}">
-			<td class="ct_write01">
-				<!-- <input type="button" value='-' onclick='count("minus")'> -->
-				<input type="button" value='-'>
-				<input type="number" id='total' name="purchaseQuantity" value="1" style = "width:20px" >
-				<!-- <input type="button" value='+' onclick='count("plus")'> -->
-				<input type="button" value='+'>
-			</td>
-		</c:if>
-		<c:if test="${!empty product.prodNoList }">
-		<td class="ct_write01">
-			${totals}				
-		</td>
-		</c:if>
-		
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
+	    <div class="py-5 text-center">
+	      <h2>구매 페이지</h2>
+	      <p class="lead">정보를 입력해 주세요.</p>
+	    </div>
 	
-</table>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 10px;">
-	<tr>
-		<td width="53%"></td>
-		<td align="center">
-			<table border="0" cellspacing="0" cellpadding="0">
-				<tr>
-				<c:if test="${!empty product.prodNoList }">
-					<td width="17" height="23">
-						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
-					</td>
-					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-						<!-- <a href="javascript:fncAddCartPurchase();">구매</a> -->
-						<span id="cart">구매</span>
-					</td>
-					<td width="14" height="23">
-						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
-					</td>
+	    <div class="row g-5">
+	      <div class="col-md-5 col-lg-4 order-md-last">
+	        <h4 class="d-flex justify-content-between align-items-center mb-3">
+	          <span class="text-primary">상품 정보</span>
+	          <span class="badge bg-primary rounded-pill">1</span>
+	        </h4>
+	        <ul class="list-group mb-3">
+	        	<li class="list-group-item d-flex justify-content-between bg-light">
+	            <div class="text-success">
+	              <h6 class="my-0">Product No</h6>
+	              <small>NO.${product.prodNo }</small>
+	            </div>
+	            <span class="text-success"></span>
+	          </li>
+	          <li class="list-group-item d-flex justify-content-between lh-sm">
+	            <div>
+	              <h6 class="my-0">Product name</h6>
+	              <small class="text-muted">${product.prodName}</small>
+	            </div>
+	            <span class="text-muted"></span>
+	          </li>
+	          <li class="list-group-item d-flex justify-content-between lh-sm">
+	            <div>
+	              <h6 class="my-0">Product Detail</h6>
+	              <small class="text-muted">${product.prodDetail }</small>
+	            </div>
+	            <span class="text-muted"></span>
+	          </li>
+	          <li class="list-group-item d-flex justify-content-between lh-sm">
+	            <div>
+	              <h6 class="my-0">Product Image</h6>
+	              <small class="text-muted">
+	              	<img src="../images/uploadFiles/${product.fileName}" width="300px" height="300px">
+	              </small>
+	            </div>
+	            <span class="text-muted"></span>
+	          </li>
+	          <li class="list-group-item d-flex justify-content-between">
+	            <span>Price (Kor)</span></br>
+	            <c:if test="${product.price >= 30000 }">
+	            	<strong>${product.price} 원</strong>
+	            </c:if>
+	            <c:if test="${product.price < 30000 }">
+	            	<strong>상품가격: ${product.price}</strong></br>
+	            	<strong>배송비 : &nbsp3000</strong></br>
+	            	<span style="color: red; font-weight: bolder;">총액 : ${product.price+3000} 원</span>
+	            </c:if>
+	          </li>
+	        </ul>
+	
+	        <form class="card p-2">
+	          <div class="input-group">
+	            <a href="" class="btn btn-default" role="button">장바구니</a>
+	          </div>
+	        </form>
+	      </div>
+	      <div class="col-md-7 col-lg-8">
+	        <form class="needs-validation" method="POST" action="/purchase/addPurchase">
+	          <div class="my-3">
+				<hr class="my-4">
+	            <div class="col-12">
+	              <label for="username" class="form-label">구매자성함</label>
+	              <div class="input-group has-validation">
+	                <input type="text" class="form-control" name="receiverName" value="${user.userId}" >
+	              </div>
+	            </div>
+	
+	            <div class="col-12">
+	              <label for="phone" class="form-label">구매자연락처<span class="text-muted"></span></label>
+	              <div class="input-group has-validation">
+	             	 <input type="number" class="form-control" name="receiverPhone" value="${ empty user.phone ? '' : user.phone  }">
+	              </div>
+	            </div>
+	
+	            <div class="col-12">
+	              <label for="address" class="form-label">구매자주소</label>
+	              <input type="text" class="form-control" name="divyAddr" value="${ empty user.addr || user.addr eq 'null' ? '' : user.addr }">
+	            </div>
+	            
+	            <div class="col-12">
+	              <label for="address" class="form-label">구매요청사항</label>
+	              <input type="text" class="form-control" name="divyRequest" value="">
+	            </div>
+		        <div class="col-12">
+		          <label for="address" class="form-label">배송희망일</label>
+		          <div class="input-group has-validation">
+		          	<p><input type="text" id="datepicker" class="form-control" name="divyDate" value=""></p>
+		          </div>
+		        </div>
+	          </div>
+	
+	          <hr class="my-4">
+				<label for="address" class="form-label">구매수량</label>
+				<div class="col-12">
+					<input type="button" class="btn btn-default" value='-'>
+					<input type="text" class="text-center" id='total' name="purchaseQuantity" value="0" style = "width:30px; height: 30px; border-style: hidden; font-size: 15px"  readonly="readonly">
+					<input type="button" class="btn btn-default" value='+'>
+				</div>
+				<hr class="my-4">
+				<c:if test="${product.prodTotal eq 0}">
+					<pre style="color: red">상품 재고가 모두 소진 되었습니다.</pre>
 				</c:if>
-				<c:if test="${empty product.prodNoList }">
-					<td width="17" height="23">
-						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
-					</td>
-					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-						<!-- <a href="javascript:fncAddPurchase();">구매</a> -->
-						<span id="add">구매</span>
-					</td>
-					<td width="14" height="23">
-						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
-					</td>
+				<c:if test="${product.prodTotal ne 0}">
+					<pre style="color: red">총 ${product.prodTotal}개 남았습니다.</pre>
 				</c:if>
-					<td width="30"></td>
-					<td width="17" height="23">
-						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
-					</td>
-					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-						<!-- <a href="javascript:history.go(-1)">취소</a> -->
-						<span>취소</span>
-					</td>
-					<td width="14" height="23">
-						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-</table>
-</form>
+	          <hr class="my-4">
+	
+	          <h4 class="mb-3">결제 방식</h4>
+	
+	          <div class="my-3">
+	            <div class="form-check">
+	              <input id="credit" name="paymentOption" type="radio" value="1" class="form-check-input1" checked required>
+	              <label class="form-check-label" for="credit">신용카드</label>
+	            </div>
+	            <div class="form-check">
+	              <input id="debit" name="paymentOption" type="radio" value="2" class="form-check-input1" required>
+	              <label class="form-check-label" for="debit">계좌이체</label>
+	            </div>
+	          </div>
+	          <hr class="my-4">
+				
+				<h4 class="mb-3">수령 방식</h4>
+	
+	          <div class="my-3">
+	            <div class="form-check">
+	              <input id="take" name="tranOption" type="radio" class="form-check-input2" checked required>
+	              <label class="form-check-label" for="take">방문수령</label>
+	            </div>
+	            <div class="form-check">
+	              <input id="give" name="tranOption" type="radio" class="form-check-input2" required>
+	              <label class="form-check-label" for="give">배송받기</label>
+	            </div>
+	            <div class="_1rGSKv6aq_" style="margin-top: 12px;">
+	            <div class="bd_3Uotb bd_C8Tz1">
+		            <span class="bd_ChMMo">택배배송 </span>
+		            <span class="bd_ChMMo">
+			            <span class="bd_3uare">3,000 </span>원
+			            <span class="bd_2XJf1">(주문시 결제)</span>
+		            </span>
+	            </div>
+	            <p class="bd_1g_zz" style="margin-top: 3px;">30,000원 이상 구매 시 무료 / 제주 추가 3,000원, 제주 외 도서지역 추가 4,000원</p></div>
+	          </div>
+				
+	          <hr class="my-4">
+	
+	          <button class="w-100 btn btn-default btn-lg" type="submit">구매하기</button>
+			<input type="hidden" name="prodNo" value="${product.prodNo}">
+	        </form>
+	      </div>
+	    </div>
+	</div>
+  </body>
+</html>
 
 </body>
 </html>

@@ -1,434 +1,158 @@
-<%@ page contentType="text/html; charset=euc-kr" %>
-
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
-<title>회원가입</title>
+	<meta charset="EUC-KR">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>Insert title here</title>
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
-<!-- <script src="/javascript/jquery-2.1.4.js" type="text/javascript"></script> -->
-<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script type="text/javascript">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+
+	<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+	<script type="text/javascript">
+	
 $(function(){
-	
-	$('input').css("border","solid 1px black");
-	
-	$( "span:contains('가입')" ).click( function(){
-	
-		var id= $("input[name='userId']").val();
-		var pw= $('input[name="password"]').val();
-		var pw_confirm= $('input[name="password2"]').val();
-		var name= $('input[name="userName"]').val();
 		
-		if(id == null || id.length <1){
-			alert("아이디는 반드시 입력하셔야 합니다.");
-			$('input').css("border","solid 1px black");
-			$("input[name='userId']").focus();
-			$("input[name='userId']").css("border","solid 1px red");
-			return;
-		}
-		if(pw == null || pw.length <1){
-			alert("패스워드는  반드시 입력하셔야 합니다.");
-			$('input').css("border","solid 1px black");
-			$("input[name='password']").focus();
-			$("input[name='password']").css("border","solid 1px red");
-			return;
-		}
-		if(pw_confirm == null || pw_confirm.length <1){
-			alert("패스워드 확인은  반드시 입력하셔야 합니다.");
-			$('input').css("border","solid 1px black");
-			$("input[name='password2']").focus();
-			$("input[name='password2']").css("border","solid 1px red");
-			return;
-		}
-		if(name == null || name.length <1){
-			alert("이름은  반드시 입력하셔야 합니다.");
-			$('input').css("border","solid 1px black");
-			$("input[name='userName']").focus();
-			$("input[name='userName']").css("border","solid 1px red");
-			return;
-		}
+		$('input:button').click(function(){
+			
+			var type = $(this).val();
+			console.log(type);
+			var number =  $('#total').val();
+			console.log(number);
+			 if(type === '+') {
+				number = parseInt(number) + 1;
+				if(number >= parseInt(${product.prodTotal}) ){
+					number = parseInt(${product.prodTotal})
+				}
+			}else if(type === '-')  {
+				number = parseInt(number) - 1;
+				if(number<=0)
+				  	number = 0;
+				}
+			// 결과 출력
+			console.log(number);
+			 $('#total').val(number);
+		});
 		
-		if(pw != pw_confirm) {
-			alert("비밀번호 확인이 일치하지 않습니다.");
-			$('input').css("border","solid 1px black");
-			$('input[name="password"]').focus();
-			$("input[name='password']").css("border","solid 1px red");
-			return;
-		}
+		$('.btn-default:contains("장바구니")').attr('href','/purchase/addPurchaseCart?prodNo='+${product.prodNo});
 		
-		var phone = $('input[name="phone"]').val();
-		var phone1 = $('input[name="phon1"]').val();
-		var phone2 = $('input[name="phone2"]').val();
-		var phone3 = $('input[name="phone3"]').val();
-		
-		if(phone2 != "" && phone != "") {
-			phone = phone1+ "-" + phone2 + "-" + phone3;
-		} else {
-			phone = "";
-		}
-	
-		$('form').attr("action","/user/addUser").submit()
-	});
-
-	
-	$('input[name=email]').change(function(){		
-		
-		var email = $('input[name=email]').val();
-		
-		if(email != "" && (email.indexOf('@') < 1 || email.indexOf('.') == -1)){
-			alert("이메일 형식이 아닙니다.");
-			$("input[name='email']").css("border","solid 1px black");
-			$('input[name=email]').focus();
-			$('input[name=email]').css("border","solid 1px red");
-			return false;
-		}
-		return true;
-	});
-	
-	
-	$('input[name="ssn"]').change(function(){
-		var ssn1, ssn2; 
-		var nByear, nTyear; 
-		var today; 
-		var ssn = $('input[name="ssn"]').val();
-		
-		if(!PortalJuminCheck(ssn)) {
-			alert("잘못된 주민번호입니다.");
-			return false;
-		}
-	});
-	
-	
-	$("span:contains('ID중복확인')").on("click",function(){
-		window.open("/user/checkDuplication.jsp","popWin", "left=300,top=200,width=300,height=200,marginwidth=0,marginheight=0,scrollbars=no,scrolling=no,menubar=no,resizable=no");	
-	});
-	
-	
-	$('span:contains["취소"]').click(function(){		
-		$('form').reset();
-		$('input').css("border","solid 1px black");
-	});
+		$("#datepicker").on("click",function(){			
+			$("#datepicker").datepicker({
+				minDate: "+1D", 
+				maxDate: "+1M +10D",
+				dateFormat : "yy/mm/dd"
+			});
+		});
 });
-
-
-function PortalJuminCheck(fieldValue) {
-	var pattern = /^([0-9]{6})-?([0-9]{7})$/; 
-	var num = fieldValue;
-	if (!pattern.test(num)) 
-		return false; 
+	</script>
 	
-	num = RegExp.$1 + RegExp.$2;
-	var sum = 0;
-	var last = num.charCodeAt(12) - 0x30;
-	var bases = "234567892345";
-	for (var i=0; i<12; i++) {
-		if (isNaN(num.substring(i,i+1))) 
-			return false;
-		sum += (num.charCodeAt(i) - 0x30) * (bases.charCodeAt(i) - 0x30);
-	}
-	var mod = sum % 11;
-	return ((11 - mod) % 10 == last) ? true : false;
-}
+	<style>
+		body{
+			padding-top:70px;
+		}
+	</style>
 
-
-/*
-function fncAddUser() {
-	// Form 유효성 검증
-	var id=document.detailForm.userId.value;
-	var pw=document.detailForm.password.value;
-	var pw_confirm=document.detailForm.password2.value;
-	var name=document.detailForm.userName.value;
-	
-	if(id == null || id.length <1){
-		alert("아이디는 반드시 입력하셔야 합니다.");
-		return;
-	}
-	if(pw == null || pw.length <1){
-		alert("패스워드는  반드시 입력하셔야 합니다.");
-		return;
-	}
-	if(pw_confirm == null || pw_confirm.length <1){
-		alert("패스워드 확인은  반드시 입력하셔야 합니다.");
-		return;
-	}
-	if(name == null || name.length <1){
-		alert("이름은  반드시 입력하셔야 합니다.");
-		return;
-	}
-	
-	if(document.detailForm.password.value != document.detailForm.password2.value) {
-		alert("비밀번호 확인이 일치하지 않습니다.");
-		document.detailForm.password2.focus();
-		return;
-	}
-		
-	if(document.detailForm.phone2.value != "" && document.detailForm.phone2.value != "") {
-		document.detailForm.phone.value = document.detailForm.phone1.value + "-" + document.detailForm.phone2.value + "-" + document.detailForm.phone3.value;
-	} else {
-		document.detailForm.phone.value = "";
-	}
-	
-	/////////////////////////////////////////////////////////////////////////////////
-	//document.detailForm.action='/addUser.do';
-	/////////////////////////////////////////////////////////////////////////////////
-	document.detailForm.action='/user/addUser';
-	
-	document.detailForm.submit();
-	
-}
-
-function check_email(frm) {
-	alert
-	var email=document.detailForm.email.value;
-    if(email != "" && (email.indexOf('@') < 1 || email.indexOf('.') == -1)){
-    	alert("이메일 형식이 아닙니다.");
-		return false;
-    }
-    return true;
-}
-
-function checkSsn() {
-	var ssn1, ssn2; 
-	var nByear, nTyear; 
-	var today; 
-
-	ssn = document.detailForm.ssn.value;
-	// 유효한 주민번호 형식인 경우만 나이 계산 진행, PortalJuminCheck 함수는 CommonScript.js 의 공통 주민번호 체크 함수임 
-	
-}
-
-function resetData() {
-	document.detailForm.reset();
-}
-
-
-*/
-</script>
 </head>
-
-<body bgcolor="#ffffff" text="#000000">
-
-<form name="detailForm"  method="post" >
-
-<table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
-	<tr>
-		<td width="15" height="37">
-			<img src="/images/ct_ttl_img01.gif" width="15" height="37"/>
-		</td>
-		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left:10px;">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="93%" class="ct_ttl01">회원가입</td>
-					<td width="20%" align="right">&nbsp;</td>
-				</tr>
-			</table>
-		</td>
-		<td width="12" height="37">
-			<img src="/images/ct_ttl_img03.gif" width="12" height="37"/>
-		</td>
-	</tr>
-</table>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:13px;">
+<body>
+	<jsp:include page="../header.jsp"></jsp:include>
 	
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
+	<div class="container">
+	    <div class="py-5 text-center">
+	      <h2>회원가입</h2>
+	      <p class="lead">정보를 입력해 주세요.</p>
+	    </div>
+	</div>
+	<div class="container-fluid">
+	<div class="col-md-4"></div>
+	<div class="col-md-6">
+	    <div class="row">
+	      <div class="col-md-7 col-lg-8">
+	        <form class="needs-validation" method="POST" action="/purchase/addPurchase">
+	          <div class="my-3">
+				<hr class="my-4">
+	            <div class="col-12">
+	              <label for="userId" class="form-label">아이디</label>
+	              <div class="input-group has-validation">
+	                <input type="text" class="form-control" name="userId">
+	              </div>
+	            </div>
 	
-	<tr>
-		<td width="104" class="ct_write">
-			아이디 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="105">
-						<input 	type="text" name="userId" class="ct_input_bg" 
-										style="width:100px; height:19px"  maxLength="20" >
-					</td>
-					<td>
-						<table border="0" cellspacing="0" cellpadding="0">
-							<tr>
-								<td width="4" height="21">
-									<img src="/images/ct_btng01.gif" width="4" height="21"/>
-								</td>
-								<td align="center" background="/images/ct_btng02.gif" class="ct_btn" style="padding-top:3px;">
-									<!-- <a href="javascript:fncCheckDuplication();" id="btnCmfID">ID중복확인</a> -->
-									<span>ID중복확인</span>
-								</td>
-								<td width="4" height="21">
-									<img src="/images/ct_btng03.gif" width="4" height="21"/>
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
+	            <div class="col-12">
+	              <label for="password" class="form-label">비밀번호<span class="text-muted"></span></label>
+	              <div class="input-group has-validation">
+	             	 <input type="password" class="form-control" name="password">
+	              </div>
+	            </div>
 	
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	
-	<tr>
-		<td width="104" class="ct_write">
-			비밀번호 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<input 	type="password" name="password" class="ct_input_g" 
-							style="width:100px; height:19px"  maxLength="10" minLength="6"  />
-		</td>
-	</tr>
-	
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	
-	<tr>
-		<td width="104" class="ct_write">
-			비밀번호 확인 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<input 	type="password" name="password2" class="ct_input_g" 
-							style="width:100px; height:19px"  maxLength="10" minLength="6"  />
-		</td>
-	</tr>
-	
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	
-	<tr>
-		<td width="104" class="ct_write">
-			이름 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<input 	type="text" name="userName" class="ct_input_g" 
-							style="width:100px; height:19px"  maxLength="50" />
-		</td>
-	</tr>
-	
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	
-	<tr>
-		<td width="104" class="ct_write">주민번호</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<!-- <input 	type="text" name="ssn" class="ct_input_g" style="width:100px; height:19px" 
-							onChange="javascript:checkSsn();"  maxLength="13" /> -->
-				 <input type="text" name="ssn" class="ct_input_g" style="width:100px; height:19px" maxLength="13" />
-			-제외, 13자리 입력
-		</td>
-	</tr>
-
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	
-	<tr>
-		<td width="104" class="ct_write">주소</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<input		type="text" name="addr" class="ct_input_g" 
-						 	style="width:370px; height:19px"  maxLength="100"/>
-		</td>
-	</tr>
-	
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	
-	<tr>
-		<td width="104" class="ct_write">휴대전화번호</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<select name="phone1" class="ct_input_g" style="width:50px; height:25px"
+	            <div class="col-12">
+	              <label for="password2" class="form-label">비밀번호 확인</label>
+	            <div class="input-group has-validation">
+	              <input type="text" class="form-control" name="password2" value="${ empty user.addr || user.addr eq 'null' ? '' : user.addr }">
+	            </div>
+	            </div>
+	            
+	            <div class="col-12">
+	              <label for="userName" class="form-label">이름</label>
+	            <div class="input-group has-validation">
+	              <input type="text" class="form-control" name="userName" value="">
+	            </div>
+	            </div>
+		        <div class="col-12">
+		          <label for="addr" class="form-label">주소</label>
+		          <div class="input-group has-validation">
+		          	<p><input type="text" class="form-control" name="addr" value=""></p>
+		          </div>
+		        </div>
+		        <div class="col-12">
+		          <div class="row">		        
+		          <label for="ssn" class="form-label">휴대전화번호</label>
+		          <select name="phone1" class="ct_input_g" style="width:50px; height:25px"
 							onChange="document.detailForm.phone2.focus();">
-				<option value="010" >010</option>
-				<option value="011" >011</option>
-				<option value="016" >016</option>
-				<option value="018" >018</option>
-				<option value="019" >019</option>
-			</select>
-			<input 	type="text" name="phone2" class="ct_input_g" 
-							style="width:100px; height:19px"  maxLength="9" />
-			- 
-			<input 	type="text" name="phone3" class="ct_input_g" 
-							style="width:100px; height:19px"  maxLength="9" />
-			<input type="hidden" name="phone" class="ct_input_g"  />
-		</td>
-	</tr>
+						<option value="010" >010</option>
+						<option value="011" >011</option>
+						<option value="016" >016</option>
+						<option value="018" >018</option>
+						<option value="019" >019</option>
+					</select>
+		          	<p><input type="text" class="form-control" name="phone2" value=""></p>
 
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
+		          	<p><input type="text" class="form-control" name="phone3" value=""></p>
+
+		          	<input type="hidden" name="phone" class="ct_input_g"  />
+		        </div>
+		        </div>
+		        <div class="col-12">
+		          <label for="ssn" class="form-label">주민번호(-제외, 13자리 입력)</label>
+		          <div class="input-group has-validation">
+		          	<p><input type="text" class="form-control" name="ssn" value=""></p>
+		          </div>
+		        </div>
+		        <div class="col-12">
+		          <label for="ssn" class="form-label">주민번호(-제외, 13자리 입력)</label>
+		          <div class="input-group has-validation">
+		          	<p><input type="text" class="form-control" name="ssn" value=""></p>
+		          </div>
+		        </div>
+	          </div>
 	
-	<tr>
-		<td width="104" class="ct_write">이메일 </td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<table border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td height="26">
-						<!-- <input 	type="text" name="email" class="ct_input_g" 
-										style="width:100px; height:19px" onChange="check_email(this.form);" /> -->
-						<input type="text" name="email" class="ct_input_g" style="width:100px; height:19px">
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	
-</table>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top:10px;">
-	<tr>
-		<td width="53%">	</td>
-
-		<td align="right">
-			<table border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="17" height="23">
-						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
-					</td>
-					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						<!-- <a href="javascript:fncAddUser();">가입</a> -->
-						<span>가입</span>
-					</td>
-					<td width="14" height="23">
-						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
-					</td>
-					<td width="30"></td>					
-					<td width="17" height="23">
-						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
-					</td>
-					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						<!-- <a href="javascript:resetData();">취소</a> -->
-						<span>취소</span>
-					</td>
-					<td width="14" height="23">
-						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-</table>
-
-</form>
-
-</body>
+	          <hr class="my-4">
+				
+	        </form>
+	      </div>
+	      </div>
+	    </div>
+	    <div class="col-md-2"></div>
+	</div>
+  </body>
 </html>

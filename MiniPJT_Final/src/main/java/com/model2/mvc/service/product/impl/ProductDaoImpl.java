@@ -1,6 +1,8 @@
 package com.model2.mvc.service.product.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -105,7 +107,11 @@ public class ProductDaoImpl implements ProductDao{
 	}
 	
 	public List<String> productAutoComplete(Search search) throws Exception{
-		return sqlSession.selectList("ProductMapper.productAutoComplete",search);
+		List<String> arr = new ArrayList<String>();
+		arr = sqlSession.selectList("ProductMapper.productAutoComplete",search);
+		HashSet<String> hash = new HashSet<String>(arr);
+		List<String> resource = new ArrayList<String>(hash);
+		return resource;
 	}
 	
 	
