@@ -25,8 +25,8 @@
 			
 			$('button:contains("LOGIN")').click(function(){
 				
-				var id = $('input[name="userId"]').val();
-				var pwd = $('input[name="password"]').val();
+				var id = $('#pageId').val();
+				var pwd = $('#pagePwd').val();
 				
 				if(id.length == 0){
 					alert("아이디를 입력해 주세요.");
@@ -83,8 +83,8 @@
 </head>
 
 <body>
-<form>
 	<jsp:include page="../header.jsp"></jsp:include>
+<form>
 	
 	<div class="container-fluid login-container">
 		<div class="row">
@@ -93,11 +93,11 @@
 				
 				  <div class="form-group">
 				    <label>ID</label>
-				    <input type="text" class="form-control" name="userId" placeholder="Id">
+				    <input id="pageId" type="text" class="form-control" name="userId" placeholder="Id">
 				  </div>
 				  <div class="form-group">
 				    <label>Password</label>
-				    <input type="password" class="form-control" name="password" placeholder="Password">
+				    <input id="pagePwd" type="password" class="form-control" name="password" placeholder="Password">
 				  </div>
 				  <div class="checkbox">
 				    <label>

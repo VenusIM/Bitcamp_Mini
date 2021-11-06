@@ -13,6 +13,7 @@ public class Product {
 	private int prodNo;
 	private String[] prodNoList;
 	private Date regDate;
+	private String regDateString;
 	private String proTranCode;
 	private int prodTotal;
 	private String[] prodTotalList;
@@ -100,8 +101,21 @@ public class Product {
 	}
 	public void setRegDate(Date regDate) {
 		this.regDate = regDate;
+		// JSON ==> Domain Object  Binding을 위해 추가된 부분
+		if(regDate != null)
+		this.setRegDateString( regDate.toString().split("-")[0]
+												+"-"+ regDate.toString().split("-")[1]
+												+ "-" +regDate.toString().split("-")[2] );
+		
+	}
+	
+	public String getRegDateString() {
+		return regDateString;
 	}
 
+	public void setRegDateString(String regDateString) {
+		this.regDateString = regDateString;
+	}
 	// Override
 	public String toString() {
 		return "Product :  [tranNo]" + tranNo + "[fileName]" + fileName + "[prodTotal]" + prodTotal

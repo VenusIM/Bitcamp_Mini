@@ -230,4 +230,5 @@
 		SELECT prod_name, price, prod_detail, image_file
 		FROM product
 	</select>
+	
 </mapper>

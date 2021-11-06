@@ -98,36 +98,6 @@ public class ProductRestController {
 		return map;
 	}
 	
-	@RequestMapping(value="rest/listProduct/option/{menu}/{searchKeyword}", method=RequestMethod.POST)
-	public Map<String,Object> listProductOption(	@RequestBody Search search,
-													@PathVariable("menu") String menu,
-													@PathVariable("searchKeyword") String searchKeyword,
-													HttpServletRequest request) throws Exception{
-		
-		System.out.println("option ½ÇÇà");
-		System.out.println(search);
-		System.out.println(request);
-		
-		if(menu != null) {
-			request.getSession().setAttribute("menu", menu);
-		}else {
-			menu = (String)request.getSession().getAttribute("menu");
-		}
-		
-		search.setSearchKeyword(searchKeyword);
-		
-		search.setPageSize(pageSize);
-		
-		Map<String , Object> map= null;
-		
-		if(menu.equals("manage")) {
-			map = productService.getProductListAdmin(search);
-		}else {
-			map = productService.getProductListUser(search);
-		}
-		
-		return map;
-	}
 	
 	@RequestMapping(value="rest/listProduct/{menu}", method=RequestMethod.POST)
 	public Map<String,Object> listProduct(	@RequestBody Search search,
@@ -144,6 +114,12 @@ public class ProductRestController {
 			request.getSession().setAttribute("menu", menu);
 		}else {
 			menu = (String)request.getSession().getAttribute("menu");
+		}
+		
+		if(search.getSearchKeyword() != null) {
+			System.out.println(search.getSearchKeyword());
+			search.setSearchCondition("1");
+//			search.setSearchKeyword(new String(search.getSearchKeyword().getBytes("8859_1"), "UTF-8"));
 		}
 		
 		search.setPageSize(pageSize);
