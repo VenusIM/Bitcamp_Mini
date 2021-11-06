@@ -214,7 +214,7 @@
 					<!-- <td class="ct_write01"> -->
 						<!-- <input type="button" value='-' onclick='count("minus",${purchase.purchaseProd.prodNo},${purchase.purchaseProd.prodTotal })'> -->
 						<input type="button" value='-'>
-						<input type="number" id="purchaseQuantity${purchase.purchaseProd.prodNo}" name="prodTotalList" value="1" style = "width:20px" >
+						<input type="text" id="purchaseQuantity${purchase.purchaseProd.prodNo}" name="prodTotalList" value="1" style = "width:20px" >
 						<!-- <input type="button" value='+' onclick='count("plus",${purchase.purchaseProd.prodNo},${purchase.purchaseProd.prodTotal })'> -->
 						<input type="button" value='+'>
 					<!-- </td> -->
