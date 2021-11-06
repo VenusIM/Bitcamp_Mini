@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=euc-kr" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+
 	<script type="text/javascript">
 		$(function(){
 			
@@ -10,8 +11,8 @@
 					
 				$('button:contains("LOGIN")').click(function(){
 						
-					var id = $('input[name="userId"]').val();
-					var pwd = $('input[name="password"]').val();
+					var id = $('#modalId').val();
+					var pwd = $('#modalPwd').val();
 						
 					if(id.length == 0){
 						alert("아이디를 입력해 주세요.");
@@ -49,42 +50,6 @@
 			});
 		});
 		
-		$(function(){
-			
-			$('a[role="button"]:contains("장바구니")').click(function(){
-				
-				var href = $(this).attr('href');
-				console.log(href);
-				
-				
-				if(${empty user.role}){
-					alert('로그인을 해주세요');
-					$(this).attr('href',"/user/loginView.jsp");
-				}else{
-					if(confirm('상품이 담겼습니다. 장바구니로 이동하시겠습니까?') == true){
-						$(this).attr('href',href);
-
-					}else{
-						$(this).attr('href','/index.jsp');
-					}					
-				}
-			});
-			
-			$("#kakao-png").on("click",function(){
-				Kakao.init('b3bed223fd618abc07f64c2103ca9659');
-				console.log(Kakao.isInitialized());
-				Kakao.Auth.login({
-				      success: function(authObj) {
-				        console.log(JSON.stringify(authObj))
-				        $(window.parent.frames.document.location).attr("href","/user/login/pass");
-				      },
-				      fail: function(err) {
-				        console.log(JSON.stringify(err))
-				      },
-				    })
-			});
-		
-		});
 		
 		$(function(){
 			$('a:contains("내정보보기")').click(function(){
@@ -93,6 +58,22 @@
 			
 			$('a:contains("구매내역조회")').click(function(){
 				$(this).attr('href',"/purchase/listPurchase");
+			});
+			
+			$("a:contains('사용자 관리')").on("click" , function() {
+		 		$(this).attr("href","/user/listUser");
+			});
+			
+			$( "a:contains('상품 등록')" ).on("click" , function() {
+		 		$(this).attr("href","/product/addProductView.jsp");
+			});
+			
+			$("a:contains('배송 관리')").on("click" , function() {
+		 		$(this).attr("href","/product/addProductView.jsp");
+			});
+			
+			$("a:contains('상품 관리')" ).on("click" , function() {
+		 		$(this).attr("href","/product/listProduct?menu=manage");
 			});
 		});
 		
@@ -156,7 +137,8 @@
 							<li class="dropdown-header">사용자</li>
 							<li><a>사용자 관리</a></li>
 							<li class="divider"></li>
-							<li class="dropdown-header">판매</li>
+							<li class="dropdown-header">관리자</li>
+							<li><a>상품 등록</a></li>
 							<li><a>상품 관리</a></li>
 							<li><a>배송 관리</a></li>				
 						</ul>
@@ -180,8 +162,8 @@
 						</a>
 						<ul class="dropdown-menu">
 							<li class="dropdown-header">정보</li>
-							<li><a href="">내정보보기</a></li>
-							<li><a href="">구매내역조회</a></li>		
+							<li><a>내정보보기</a></li>
+							<li><a>구매내역조회</a></li>		
 						</ul>
 					</li>
 					<li>
@@ -210,11 +192,11 @@
 					<form id="loginForm">
 									  <div class="form-group">
 									    <label>ID</label>
-									    <input type="text" class="form-control" name="userId" placeholder="Id">
+									    <input id="modalId" type="text" class="form-control" name="userId" placeholder="Id">
 									  </div>
 									  <div class="form-group">
 									    <label>Password</label>
-									    <input type="password" class="form-control" name="password" placeholder="Password">
+									    <input id="modalPwd" type="password" class="form-control" name="password" placeholder="Password">
 									  </div>
 									  <div class="checkbox">
 									    <label>

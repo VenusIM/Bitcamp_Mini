@@ -24,6 +24,48 @@
 	
 $(function(){
 		
+	$('input[name="receiverName"]').tooltip({
+		position: {
+			        my: "left top",
+			        at: "right+5 top-5",
+			        collision: "none"
+      	}
+	});
+	
+	$('input[name="receiverPhone"]').tooltip({
+		position: {
+	        my: "left top",
+	        at: "right+5 top-5",
+	        collision: "none"
+		}
+	});
+	
+		$('button:contains("구매하기")').on("click",function(){
+	
+			if($('input[name="receiverName"]').val() == ""){
+				alert("성함을 입력하세요.");
+				return;
+			}
+			
+			if($('input[name="receiverPhone"]').val() == ""){
+				alert("연락처를 입력하세요.");
+				return;
+			}
+			
+			if($('input[name="divyAddr"]').val() == ""){
+				alert("주소를 입력하세요.");
+				return;
+			}
+			
+			if($('#total').val() == 0){
+				console.log($('#total').val());
+				alert("상품은 0개 이상 구매하셔야 합니다.");
+				return;
+			}
+			
+			$('.needs-validation').attr('method','post').attr('action','/purchase/addPurchase').submit();
+		});
+	
 		$('input:button').click(function(){
 			
 			var type = $(this).val();
@@ -40,9 +82,10 @@ $(function(){
 				if(number<=0)
 				  	number = 0;
 				}
-			// 결과 출력
-			console.log(number);
+			
 			 $('#total').val(number);
+			 $('#price').text('상품가격: '+${product.price}*number+' 원');
+			 $('#priceTotal').text('총액 : '+(${product.price} * number + 3000)+ ' 원');
 		});
 		
 		$('.btn-default:contains("장바구니")').attr('href','/purchase/addPurchaseCart?prodNo='+${product.prodNo});
@@ -53,6 +96,17 @@ $(function(){
 				maxDate: "+1M +10D",
 				dateFormat : "yy/mm/dd"
 			});
+		});
+		
+		$(document).on('click','#cart',function(){
+			
+				if(confirm('상품이 담겼습니다. 장바구니로 이동하시겠습니까?') == true){
+					$(this).attr('href','/purchase/listCart');
+
+				}else{
+					$(this).attr('href','/index.jsp');
+				}					
+			
 		});
 });
 	</script>
@@ -113,37 +167,37 @@ $(function(){
 	          <li class="list-group-item d-flex justify-content-between">
 	            <span>Price (Kor)</span></br>
 	            <c:if test="${product.price >= 30000 }">
-	            	<strong>${product.price} 원</strong>
+	            	<strong id="price">상품가격: 0 원</strong>
 	            </c:if>
 	            <c:if test="${product.price < 30000 }">
-	            	<strong>상품가격: ${product.price}</strong></br>
+	            	<strong id="price">상품가격: 0원</strong></br>
 	            	<strong>배송비 : &nbsp3000</strong></br>
-	            	<span style="color: red; font-weight: bolder;">총액 : ${product.price+3000} 원</span>
+	            	<span id="priceTotal" style="color: red; font-weight: bolder;">총액 : 3000 원</span>
 	            </c:if>
 	          </li>
 	        </ul>
 	
-	        <form class="card p-2">
+	        <form id="cart" class="card p-2">
 	          <div class="input-group">
 	            <a href="" class="btn btn-default" role="button">장바구니</a>
 	          </div>
 	        </form>
 	      </div>
 	      <div class="col-md-7 col-lg-8">
-	        <form class="needs-validation" method="POST" action="/purchase/addPurchase">
+	        <form class="needs-validation">
 	          <div class="my-3">
 				<hr class="my-4">
 	            <div class="col-12">
 	              <label for="username" class="form-label">구매자성함</label>
 	              <div class="input-group has-validation">
-	                <input type="text" class="form-control" name="receiverName" value="${user.userId}" >
+	                <input type="text" class="form-control tooltip_event" title="성함을 입력해 주세요." name="receiverName" value="${user.userId}" >
 	              </div>
 	            </div>
 	
 	            <div class="col-12">
 	              <label for="phone" class="form-label">구매자연락처<span class="text-muted"></span></label>
 	              <div class="input-group has-validation">
-	             	 <input type="number" class="form-control" name="receiverPhone" value="${ empty user.phone ? '' : user.phone  }">
+	             	 <input type="text" class="form-control tooltip_event" title="연락처를 입력해 주세요." name="receiverPhone" value="${ empty user.phone ? '' : user.phone  }">
 	              </div>
 	            </div>
 	
@@ -153,13 +207,13 @@ $(function(){
 	            </div>
 	            
 	            <div class="col-12">
-	              <label for="address" class="form-label">구매요청사항</label>
+	              <label for="address" class="form-label">구매요청사항(선택)</label>
 	              <input type="text" class="form-control" name="divyRequest" value="">
 	            </div>
 		        <div class="col-12">
-		          <label for="address" class="form-label">배송희망일</label>
+		          <label for="address" class="form-label">배송희망일(선택)</label>
 		          <div class="input-group has-validation">
-		          	<p><input type="text" id="datepicker" class="form-control" name="divyDate" value=""></p>
+		          	<p><input type="text" id="datepicker" class="form-control" name="divyDate" value="" readonly="readonly"></p>
 		          </div>
 		        </div>
 	          </div>
@@ -218,7 +272,7 @@ $(function(){
 				
 	          <hr class="my-4">
 	
-	          <button class="w-100 btn btn-default btn-lg" type="submit">구매하기</button>
+	          <button class="w-100 btn btn-default btn-lg" type="button">구매하기</button>
 			<input type="hidden" name="prodNo" value="${product.prodNo}">
 	        </form>
 	      </div>

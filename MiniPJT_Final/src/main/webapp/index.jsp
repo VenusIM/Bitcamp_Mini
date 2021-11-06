@@ -37,8 +37,7 @@
 									currentPage : 1
 								}),
 								success : function(JSONData,status){
-									console.log(JSONData);
-									
+																
 									var list = JSONData.list;
 									var str ="";
 									
@@ -49,7 +48,10 @@
 											break;
 										}
 										console.log(temp.fileName);
-										
+										var st = '<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" id="buy" class="btn btn-danger disabled" role="button">재고없음</a> <a href="/purchase/addPurchaseCart?prodNo='+temp.prodNo+'" id="cart" class="btn btn-default disabled" role="button">장바구니</a></p>';
+										if(temp.prodTotal>0){
+											st = '<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" id="buy" class="btn btn-success" role="button">구매</a> <a href="/purchase/addPurchaseCart?prodNo='+temp.prodNo+'" id="cart" class="btn btn-default" role="button">장바구니</a></p>';
+										}
 										var stringHtml = 		
 											'<div class="col-sm-6 col-md-3">'
 									    	+'<div class="thumbnail">'
@@ -58,8 +60,8 @@
 									        +'<h3 class="prodName">'+temp.prodName+'</h3>'
 									        +'<h4 class="price">'+temp.price+'</h4>'
 									        +'<p class="prodDetail">'+temp.prodDetail+'</p>'
-									        +'<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" class="btn btn-success" role="button">구매</a> <a href="/purchase/addPurchaseCart?prodNo='+temp.prodNo+'" class="btn btn-default" role="button">장바구니</a></p>'
-									      	+'</div></div></div>';
+									      	+ st
+									        +'</div></div></div>';
 									   	str += stringHtml;
 									}
 									$('#indexForm').append('<div id="productList" class="container-fluid" style="margin: 90px;"><div class="row"><div class="col-md-1"></div><div class="col-md-10"><div class="row">'
@@ -90,8 +92,7 @@
 										currentPage : page
 									}),
 									success : function(JSONData,status){
-										console.log('JSONData'+JSONData);
-
+											
 										var str = "";								
 										var list = JSONData.list;
 										for(var i=0; i<8; i++){
@@ -99,9 +100,12 @@
 											var temp = list[i];
 											console.log(temp);
 											if(list[i] == undefined){
-												console.log('실행');
 												isflag = false;
 												break;
+											}
+											var st = '<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" id="buy" class="btn btn-danger disabled" role="button">재고없음</a> <a href="/purchase/addPurchaseCart?prodNo='+temp.prodNo+'" id="cart" class="btn btn-default disabled" role="button">장바구니</a></p>';
+											if(temp.prodTotal>0){
+												st = '<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" id="buy" class="btn btn-success" role="button">구매</a> <a href="/purchase/addPurchaseCart?prodNo='+temp.prodNo+'" id="cart" class="btn btn-default" role="button">장바구니</a></p>';
 											}
 											var stringHtml = 		
 												'<div class="col-sm-6 col-md-3">'
@@ -111,11 +115,10 @@
 										        +'<h3 class="prodName">'+temp.prodName+'</h3>'
 										        +'<h4 class="price">'+temp.price+'</h4>'
 										        +'<p class="prodDetail">'+temp.prodDetail+'</p>'
-										        +'<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" class="btn btn-success" role="button">구매</a> <a href="/purchase/addPurchaseCart?prodNo='+temp.prodNo+'" class="btn btn-default" role="button">장바구니</a></p>'
-										      	+'</div></div></div>';
-										   	str += stringHtml;	
-										   	
-										   	
+										        + st
+										        +'</div></div></div>';
+										   	str += stringHtml;
+										   					   	
 										}
 										
 										$('#indexForm').append('<div id="productList" class="container-fluid" style="margin: 90px;"><div class="row"><div class="col-md-1"></div><div class="col-md-10"><div class="row">'
@@ -140,7 +143,7 @@
 						dataType:"json",
 						success : function(JSONData,status){
 							var availableTags = JSONData;
-							console.log(JSONData);
+						
 							$(function(){
 								$('input[name="searchKeyword"]').autocomplete({
 									source: availableTags
@@ -149,9 +152,7 @@
 						},
 				});
 				
-				 if(key.keyCode==13) {
-						$('#productList').remove();
-							
+				 if(key.keyCode==13) {						
 							$.ajax(
 									{
 										url : "/product/rest/listProduct/search",
@@ -167,8 +168,7 @@
 											searchKeyword : searchKeyword
 										}),
 										success : function(JSONData,status){
-											console.log(JSONData);
-											
+											$('#productList').remove();									
 											var list = JSONData.list;
 											var str ="";
 											
@@ -179,8 +179,10 @@
 													break;
 													isActive = false;
 												}
-												console.log(temp.fileName);
-												
+												var st = '<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" id="buy" class="btn btn-danger disabled" role="button">재고없음</a> <a href="/purchase/addPurchaseCart?prodNo='+temp.prodNo+'" id="cart" class="btn btn-default disabled" role="button">장바구니</a></p>';
+												if(temp.prodTotal>0){
+													st = '<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" id="buy" class="btn btn-success" role="button">구매</a> <a href="/purchase/addPurchaseCart?prodNo='+temp.prodNo+'" id="cart" class="btn btn-default" role="button">장바구니</a></p>';
+												}										
 												var stringHtml = 		
 													'<div class="col-sm-6 col-md-3">'
 											    	+'<div class="thumbnail">'
@@ -189,8 +191,8 @@
 											        +'<h3 class="prodName">'+temp.prodName+'</h3>'
 											        +'<h4 class="price">'+temp.price+'</h4>'
 											        +'<p class="prodDetail">'+temp.prodDetail+'</p>'
-											        +'<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" class="btn btn-success" role="button">구매</a> <a href="/purchase/addPurchaseCart?prodNo='+temp.prodNo+'" class="btn btn-default" role="button">장바구니</a></p>'
-											      	+'</div></div></div>';
+											        + st
+											        +'</div></div></div>';
 											   	str += stringHtml;
 											}
 											$('#indexForm').append('<div id="productList" class="container-fluid" style="margin: 90px;"><div class="row"><div class="col-md-1"></div><div class="col-md-10"><div class="row">'
@@ -198,7 +200,7 @@
 										}
 							});
 							var page=2;
-							if (isflag && $(window).scrollTop() == $(document).height() - $(window).height()) {
+							if (isActive && $(window).scrollTop() == $(document).height() - $(window).height()) {
 						    	page += 1;
 						    	console.log(page)
 						    	$.ajax(
@@ -216,8 +218,7 @@
 												searchKeyword : searchKeyword
 											}),
 											success : function(JSONData,status){
-												console.log('JSONData'+JSONData);
-
+												
 												var str = "";								
 												var list = JSONData.list;
 												for(var i=0; i<8; i++){
@@ -229,6 +230,10 @@
 														isflag = false;
 														break;
 													}
+													var st = '<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" id="buy" class="btn btn-danger disabled" role="button">재고없음</a> <a href="/purchase/addPurchaseCart?prodNo='+temp.prodNo+'" id="cart" class="btn btn-default disabled" role="button">장바구니</a></p>';
+													if(temp.prodTotal>0){
+														st = '<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" id="buy" class="btn btn-success" role="button">구매</a> <a href="/purchase/addPurchaseCart?prodNo='+temp.prodNo+'" id="cart" class="btn btn-default" role="button">장바구니</a></p>';
+													}
 													var stringHtml = 		
 														'<div class="col-sm-6 col-md-3">'
 												    	+'<div class="thumbnail">'
@@ -237,8 +242,8 @@
 												        +'<h3 class="prodName">'+temp.prodName+'</h3>'
 												        +'<h4 class="price">'+temp.price+'</h4>'
 												        +'<p class="prodDetail">'+temp.prodDetail+'</p>'
-												        +'<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" class="btn btn-success" role="button">구매</a> <a href="/purchase/addPurchaseCart?prodNo='+temp.prodNo+'" class="btn btn-default" role="button">장바구니</a></p>'
-												      	+'</div></div></div>';
+												       	+ st
+												        +'</div></div></div>';
 												   	str += stringHtml;	
 												   	
 												   	
@@ -259,6 +264,29 @@
 			
 			$('.thumbnail-container').css('margin','90px');
 			
+			$(document).on('click','#cart',function(){
+				
+				var href = $(this).attr('href');
+				
+				if(${empty user.role}){
+					alert('로그인을 해주세요');
+					$(this).attr('href',"/user/loginView.jsp");
+				}else{
+					if(confirm('상품이 담겼습니다. 장바구니로 이동하시겠습니까?') == true){
+						$(this).attr('href',href);
+
+					}else{
+						$(this).attr('href','/index.jsp');
+					}					
+				}
+			});
+			
+			$(document).on('click','#buy',function(){
+				if(${empty user.role}){
+					alert('로그인을 해주세요');
+					$(this).attr('href',"/user/loginView.jsp");
+				}
+			});
 		});
 		
 		

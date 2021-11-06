@@ -7,18 +7,40 @@
 <title>상품 목록조회</title>
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
-<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<meta charset="EUC-KR">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!-- <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script> -->
+	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+
+	<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 <script type="text/javascript">
 
 	$(function(){
 		
 		$('span:contains("구매")').click(function(){
 	        var prodNoList = $('.prodNoList:checked');
-	      
+	        
 	        if(prodNoList.length == 0){
 	            alert("구매하실 상품을 체크해 주세요.");
 	            return;
 	        }else{
+	        	
+	        	if($('#total').val() == 0){
+					console.log($('#total').val());
+					alert("상품은 0개 이상 구매하셔야 합니다.");
+					return;
+				}
+	        	
 	        	$('#currentPage').val(${resultPage.currentPage});
 				$('form').attr('method','post').attr('action','/purchase/addCartListView').submit();	        	
 	        }	
@@ -72,66 +94,19 @@
 		
 	});
 	
-	/*
-	function fncGetProductList(currentPage, number) {
-		if(number == 1){
-			document.getElementById("currentPage").value = currentPage;
-		   	document.detailForm.action="/purchase/findCartList";
-		   	document.detailForm.submit();
-		}else{
-			var isChecked = false;
-	        var prodNoList = document.getElementsByName("prodNoList");
-	        for(var i=0;i<prodNoList.length;i++){
-	            if(prodNoList[i].checked == true) {
-	                isChecked=true;
-	                break;
-	            }
-	        }
-	    
-	        if(!isChecked){
-	            alert("구매하실 상품을 체크해 주세요.");
-	            return;
-	        }else{
-				document.getElementById("currentPage").value = currentPage;
-			   	document.detailForm.action="/purchase/addCartListView";
-			   	document.detailForm.submit();	        	
-	        }
-		}
-	}
-	
-	function count(type,prodNo,total)  {
-		  // 결과를 표시할 element
-		  const name = "purchaseQuantity"+prodNo;
-		  console.log(name);
-		  const resultElement = document.getElementById(name);
-		  console.log(resultElement);
-		  const count = total;
-		  console.log(total);
-		  
-		  // 현재 화면에 표시된 값
-		  let number = resultElement.value;
-		  
-		  // 더하기/빼기
-		 if(type === 'plus') {
-		    number = parseInt(number) + 1;
-			  if(number >= total){
-				  number = total;
-			  }
-		  }else if(type === 'minus')  {
-		    number = parseInt(number) - 1;
-		    if(number<=1)
-		    	number = 1;
-		  }
-		  // 결과 출력
-		  resultElement.value = number;
-	}
-	*/
 	
 </script>
+
+<style>
+	body{
+		padding-top:70px;
+	}
+</style>
+
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
-
+	<jsp:include page="/header.jsp"></jsp:include>
 <div style="width:100%; margin-left:10px;">
 <form name="detailForm">
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
@@ -156,15 +131,7 @@
 </table>
 
 <table width="70%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px; margin: auto">
-	<tr>
-		<td colspan="11" >
-			전체  ${resultPage.totalCount} 건수,	현재 ${resultPage.currentPage } 페이지
-			[<input type="submit" name = "rowCondition" value="3개씩 보기" style='border:0px; background-color:white'>]
-			[<input type="submit" name = "rowCondition" value="5개씩 보기" style='border:0px; background-color:white'>]
-			[<input type="submit" name = "rowCondition" value="10개씩 보기" style='border:0px; background-color:white'>]
-			<input type="hidden" name = "rowCondition" value="${search.rowCondition }">
-		</td>
-	</tr>
+	
 	<tr>
 		<td class="ct_list_b" width="20">
 		선택
@@ -211,13 +178,10 @@
 					<span>남은 수량 : ${purchase.purchaseProd.prodTotal }개</span>
 				</div>
 				<div>
-					<!-- <td class="ct_write01"> -->
-						<!-- <input type="button" value='-' onclick='count("minus",${purchase.purchaseProd.prodNo},${purchase.purchaseProd.prodTotal })'> -->
 						<input type="button" value='-'>
-						<input type="text" id="purchaseQuantity${purchase.purchaseProd.prodNo}" name="prodTotalList" value="1" style = "width:20px" >
-						<!-- <input type="button" value='+' onclick='count("plus",${purchase.purchaseProd.prodNo},${purchase.purchaseProd.prodTotal })'> -->
+						<input type="text" id="purchaseQuantity${purchase.purchaseProd.prodNo}" name="prodTotalList" value="0" style = "width:20px" >
 						<input type="button" value='+'>
-					<!-- </td> -->
+					
 				</div>
 				<span hidden="">${purchase.purchaseProd.prodNo}</span>
 				<span hidden="">${purchase.purchaseProd.prodTotal }</span>

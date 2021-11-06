@@ -30,7 +30,7 @@ import com.model2.mvc.service.product.ProductService;
 @RequestMapping("/product/*")
 public class ProductController {
 	
-	private static final String FILE_SERVER_PATH = "C:\\Users\\yim33\\git\\zz_Model2_Web\\zz_Model2_Web\\src\\main\\webapp\\images\\uploadFiles";
+	private static final String FILE_SERVER_PATH = "C:\\Users\\yim33\\git\\MiniPJT_Final\\MiniPJT_Final\\src\\main\\webapp\\images\\uploadFiles";
 	
 	@Autowired
 	@Qualifier("productService")
