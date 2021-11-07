@@ -32,11 +32,24 @@
 <html>
 <head>
 <title>상품 목록조회</title>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="/resources/demos/style.css">
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
-<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+<meta charset="EUC-KR">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="/css/admin.css" type="text/css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<script type="text/javascript" src="../javascript/calendar.js"></script>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!-- <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script> -->
+	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+
+	<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 <script type="text/javascript">
 	$(function(){
 		
@@ -92,7 +105,7 @@
 											+'<img src="/images/uploadFiles/'+JSONData.fileName+'" width="300" height="300"/><br/>'
 											+"상품상세정보 : "+JSONData.prodDetail+"<br/>"
 											+"상품 가격 : "+JSONData.price+"<br/>"
-											+"등록일자 : "+JSONData.regDate+"<br/>" 
+											+"등록일자 : "+JSONData.regDateString+"<br/>" 
 											+"</h4>"
 						$('h4').remove();
 						$( "#"+prodNo+"" ).html(displayValue);					
@@ -145,10 +158,17 @@
 	}
 	*/
 </script>
+
+<style>
+	body{
+		padding-top: 70px;
+	}
+</style>
+
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
-
+<jsp:include page="../header.jsp"></jsp:include>
 <div style="width:98%; margin-left:10px;">
 
 <form name="detailForm">
@@ -177,18 +197,6 @@
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>
-		<td>
-		<c:if test="${menu ne 'manage'}">
-			<input type="submit" name = "sortCondition" value="최신 순" style='border:1px; background-color:white'>
-			|
-			<input type="submit" name = "sortCondition" value="오래된 순" style='border:1px; background-color:white'>
-			|
-			<input type="submit" name = "sortCondition" value="높은 가격 순" style='border:1px; background-color:white'>
-			|
-			<input type="submit" name = "sortCondition" value="낮은 가격 순" style='border:1px; background-color:white'>
-			<input type="hidden" name = "sortCondition" value="${search.sortCondition }">
-		</c:if>
-		</td>
 		<td align="right">
 		<div class="ui-widget">
 			<select name="searchCondition" class="ct_input_g" style="width:80px">
@@ -227,10 +235,6 @@
 		
 		<td colspan="11" >
 			전체  ${resultPage.totalCount} 건수,	현재 ${resultPage.currentPage } 페이지
-			[<input type="submit" name = "rowCondition" value="3개씩 보기" style='border:0px; background-color:white'>]
-			[<input type="submit" name = "rowCondition" value="5개씩 보기" style='border:0px; background-color:white'>]
-			[<input type="submit" name = "rowCondition" value="10개씩 보기" style='border:0px; background-color:white'>]
-			<input type="hidden" name = "rowCondition" value="${search.rowCondition }">
 		</td>
 		
 		

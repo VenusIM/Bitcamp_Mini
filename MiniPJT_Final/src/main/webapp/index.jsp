@@ -23,7 +23,8 @@
 	<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 	<script type="text/javascript">
 		$(function(){
-				var isActive = false;
+				var isActive = true;
+				 if (isActive){
 					$.ajax(
 							{
 								url : "/product/rest/listProduct/search",
@@ -45,9 +46,10 @@
 										
 										var temp = list[i];
 										if(temp == undefined){
+											isActive = false;
 											break;
 										}
-										console.log(temp.fileName);
+										
 										var st = '<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" id="buy" class="btn btn-danger disabled" role="button">재고없음</a> <a href="/purchase/addPurchaseCart?prodNo='+temp.prodNo+'" id="cart" class="btn btn-default disabled" role="button">장바구니</a></p>';
 										if(temp.prodTotal>0){
 											st = '<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" id="buy" class="btn btn-success" role="button">구매</a> <a href="/purchase/addPurchaseCart?prodNo='+temp.prodNo+'" id="cart" class="btn btn-default" role="button">장바구니</a></p>';
@@ -70,12 +72,12 @@
 								}
 							});
 					
-				var page = 2;
-				var isflag = true;
+				var page = 1;
+				
 				$(window).scroll(function() {
 					//console.log($(window).scrollTop());
 					//console.log(e);
-				    if (isflag && $(window).scrollTop() == $(document).height() - $(window).height()) {
+				    if (isActive && $(window).scrollTop() == $(document).height() - $(window).height()) {
 				    	page += 1;
 				    	console.log(page)
 				    	$.ajax(
@@ -100,7 +102,7 @@
 											var temp = list[i];
 											console.log(temp);
 											if(list[i] == undefined){
-												isflag = false;
+												isActive = false;
 												break;
 											}
 											var st = '<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" id="buy" class="btn btn-danger disabled" role="button">재고없음</a> <a href="/purchase/addPurchaseCart?prodNo='+temp.prodNo+'" id="cart" class="btn btn-default disabled" role="button">장바구니</a></p>';
@@ -126,12 +128,15 @@
 									}
 								});
 				    		}
-				    });
+					});
+				 }
+				
 			
 			$('input[name="searchKeyword"]').keyup(function(key){
 				
 				var searchKeyword = $(this).val();
-				
+				var isflag = false;
+				isActive = false;
 				$.ajax(
 					{
 						url : "/product/rest/productAutoComplete/"+searchKeyword+"/1",
@@ -152,7 +157,8 @@
 						},
 				});
 				
-				 if(key.keyCode==13) {						
+				 if(key.keyCode==13) {	
+					 $('#productList').remove();
 							$.ajax(
 									{
 										url : "/product/rest/listProduct/search",
@@ -162,13 +168,12 @@
 											"Content-Type" : "application/json"
 										},
 										dataType : "json",
-										
+										async : false,
 										data : JSON.stringify({
 											currentPage : 1,
 											searchKeyword : searchKeyword
 										}),
-										success : function(JSONData,status){
-											$('#productList').remove();									
+										success : function(JSONData,status){								
 											var list = JSONData.list;
 											var str ="";
 											
@@ -176,8 +181,8 @@
 												
 												var temp = list[i];
 												if(temp == undefined){
+													isflag = false;
 													break;
-													isActive = false;
 												}
 												var st = '<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" id="buy" class="btn btn-danger disabled" role="button">재고없음</a> <a href="/purchase/addPurchaseCart?prodNo='+temp.prodNo+'" id="cart" class="btn btn-default disabled" role="button">장바구니</a></p>';
 												if(temp.prodTotal>0){
@@ -197,66 +202,70 @@
 											}
 											$('#indexForm').append('<div id="productList" class="container-fluid" style="margin: 90px;"><div class="row"><div class="col-md-1"></div><div class="col-md-10"><div class="row">'
 													+ str + '</div></div><div class="col-md-1"></div></div></div>');
+											isflag = true;
 										}
+										
 							});
-							var page=2;
-							if (isActive && $(window).scrollTop() == $(document).height() - $(window).height()) {
-						    	page += 1;
-						    	console.log(page)
-						    	$.ajax(
-										{
-											url : "/product/rest/listProduct/search",
-											method : "POST",
-											headers : {
-												"Accept" : "application/json",
-												"Content-Type" : "application/json"
-											},
-											dataType : "json",
-											async : false,
-											data : JSON.stringify({
-												currentPage : page,
-												searchKeyword : searchKeyword
-											}),
-											success : function(JSONData,status){
-												
-												var str = "";								
-												var list = JSONData.list;
-												for(var i=0; i<8; i++){
+							$(window).scroll(function() {
+								var page=1;
+								if (isflag && $(window).scrollTop() == $(document).height() - $(window).height()) {
+							    	page += 1;
+							    	console.log(page)
+							    	$.ajax(
+											{
+												url : "/product/rest/listProduct/search",
+												method : "POST",
+												headers : {
+													"Accept" : "application/json",
+													"Content-Type" : "application/json"
+												},
+												dataType : "json",
+												async : false,
+												data : JSON.stringify({
+													currentPage : page,
+													searchKeyword : searchKeyword
+												}),
+												success : function(JSONData,status){
 													
-													var temp = list[i];
-													console.log(temp);
-													if(list[i] == undefined){
-														console.log('실행');
-														isflag = false;
-														break;
+													var str = "";								
+													var list = JSONData.list;
+													for(var i=0; i<8; i++){
+														
+														var temp = list[i];
+														console.log(temp);
+														if(list[i] == undefined){
+															console.log('실행');
+															isflag = false;
+															break;
+														}
+														var st = '<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" id="buy" class="btn btn-danger disabled" role="button">재고없음</a> <a href="/purchase/addPurchaseCart?prodNo='+temp.prodNo+'" id="cart" class="btn btn-default disabled" role="button">장바구니</a></p>';
+														if(temp.prodTotal>0){
+															st = '<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" id="buy" class="btn btn-success" role="button">구매</a> <a href="/purchase/addPurchaseCart?prodNo='+temp.prodNo+'" id="cart" class="btn btn-default" role="button">장바구니</a></p>';
+														}
+														var stringHtml = 		
+															'<div class="col-sm-6 col-md-3">'
+													    	+'<div class="thumbnail">'
+													    	+'<img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="240px" height="180px">'
+													      	+'<div class="caption">'
+													        +'<h3 class="prodName">'+temp.prodName+'</h3>'
+													        +'<h4 class="price">'+temp.price+'</h4>'
+													        +'<p class="prodDetail">'+temp.prodDetail+'</p>'
+													       	+ st
+													        +'</div></div></div>';
+													   	str += stringHtml;	
+													   	
+													   	
 													}
-													var st = '<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" id="buy" class="btn btn-danger disabled" role="button">재고없음</a> <a href="/purchase/addPurchaseCart?prodNo='+temp.prodNo+'" id="cart" class="btn btn-default disabled" role="button">장바구니</a></p>';
-													if(temp.prodTotal>0){
-														st = '<p><a href="/purchase/addPurchaseView?prodNo='+temp.prodNo+'" id="buy" class="btn btn-success" role="button">구매</a> <a href="/purchase/addPurchaseCart?prodNo='+temp.prodNo+'" id="cart" class="btn btn-default" role="button">장바구니</a></p>';
-													}
-													var stringHtml = 		
-														'<div class="col-sm-6 col-md-3">'
-												    	+'<div class="thumbnail">'
-												    	+'<img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="240px" height="180px">'
-												      	+'<div class="caption">'
-												        +'<h3 class="prodName">'+temp.prodName+'</h3>'
-												        +'<h4 class="price">'+temp.price+'</h4>'
-												        +'<p class="prodDetail">'+temp.prodDetail+'</p>'
-												       	+ st
-												        +'</div></div></div>';
-												   	str += stringHtml;	
-												   	
-												   	
+													
+													$('#indexForm').append('<div id="productList" class="container-fluid" style="margin: 90px;"><div class="row"><div class="col-md-1"></div><div class="col-md-10"><div class="row">'
+													+ str + '</div></div><div class="col-md-1"></div></div></div>');		
 												}
-												
-												$('#indexForm').append('<div id="productList" class="container-fluid" style="margin: 90px;"><div class="row"><div class="col-md-1"></div><div class="col-md-10"><div class="row">'
-												+ str + '</div></div><div class="col-md-1"></div></div></div>');		
-											}
-										});
-						    		}
-							isflag=false;
-				 }
+											});
+							    		}
+							});
+						}
 			});
+						
 					
 			$('.searchContainer').css('margin','50px');
 			

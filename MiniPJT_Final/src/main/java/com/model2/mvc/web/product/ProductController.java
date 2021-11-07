@@ -54,6 +54,7 @@ public class ProductController {
 		if(!file.getOriginalFilename().isEmpty()) {
 			file.transferTo(new File(FILE_SERVER_PATH, file.getOriginalFilename()));
 		}
+		System.out.println(file.getOriginalFilename());
 		
 		product.setFileName(file.getOriginalFilename());
 		product.setManuDate(product.getManuDate().replace("-", ""));

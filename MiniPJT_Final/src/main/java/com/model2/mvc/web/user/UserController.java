@@ -160,7 +160,7 @@ public class UserController {
 	
 	//@RequestMapping("/checkDuplication.do")
 	@RequestMapping( value="checkDuplication", method=RequestMethod.POST )
-	public String checkDuplication( @RequestParam("userId") String userId , Model model ) throws Exception{
+	public boolean checkDuplication( @RequestParam("userId") String userId , Model model ) throws Exception{
 		
 		System.out.println("/user/checkDuplication : POST");
 		//Business Logic
@@ -169,7 +169,7 @@ public class UserController {
 		model.addAttribute("result", new Boolean(result));
 		model.addAttribute("userId", userId);
 
-		return "forward:/user/checkDuplication.jsp";
+		return result;
 	}
 	
 	//@RequestMapping("/listUser.do")

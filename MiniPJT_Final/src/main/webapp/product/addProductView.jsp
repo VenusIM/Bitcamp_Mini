@@ -1,4 +1,4 @@
-r<%@ page language="java" contentType="text/html; charset=EUC-KR"
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
 
 <html>
@@ -7,8 +7,23 @@ r<%@ page language="java" contentType="text/html; charset=EUC-KR"
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
-<script type="text/javascript" src="../javascript/calendar.js"></script>
-<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<meta charset="EUC-KR">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<script type="text/javascript" src="../javascript/calendar.js"></script>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!-- <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script> -->
+	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+
+	<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 <script type="text/javascript">
 
 	$(function(){
@@ -82,9 +97,15 @@ r<%@ page language="java" contentType="text/html; charset=EUC-KR"
 	*/
 
 </script>
+
+<style type="text/css">
+	body{
+		padding-top:70px;
+	}
+</style>
 </head>
 <body bgcolor="#ffffff" text="#000000">
-
+<jsp:include page="../header.jsp"></jsp:include>
 <form name="detailForm">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
