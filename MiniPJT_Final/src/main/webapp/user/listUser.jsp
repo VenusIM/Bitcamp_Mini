@@ -1,220 +1,329 @@
 <%@ page contentType="text/html; charset=euc-kr" %>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<html>
+<!DOCTYPE html>
 <head>
-<title>회원 목록 조회</title>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="/resources/demos/style.css">
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
-<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
-<script type="text/javascript">
-	// 검색 / page 두가지 경우 모두 Form 전송을 위해 JavaScrpt 이용  
+
+<title>Model2 MVC Shop</title>
+
+<meta charset="EUC-KR">
 	
-	/*function fncGetUserList(currentPage) {
-		document.getElementById("currentPage").value = currentPage;
-	   	document.detailForm.submit();		
-	}*/
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
-	$(function(){
-		
-		$('.pageNum').on("click",function(index){
-			$('form')[0].reset();
-			$('#currentPage').val($(this).text());
-			$('form').attr('method','post').attr('action','/user/listUser').submit();
-		});
-		
-		$('#before').click(function(){
-			$('form')[0].reset();
-			$('#currentPage').val(${ resultPage.currentPage-1});
-			$('form').attr('method','post').attr('action','/user/listUser').submit();
-		});
-		
-		$('#after').click(function(){
-			$('form')[0].reset();
-			$('#currentPage').val(${resultPage.endUnitPage+1});
-			$('form').attr('method','post').attr('action','/user/listUser').submit();
-		});
-		
-		$('span:contains("검색")').click(function(){
-			$('#currentPage').val(1);
-			$('form').attr('method','post').attr('action','/user/listUser').submit();
-		});
-		
-		$('input[name="searchKeyword"]').keyup(function(){
-			var searchKeyword = $(this).val();
-			var searchCondition = $('select[name="searchCondition"]').val();
-	
-			$.ajax(
-				{
-					url : "/user/json/autoComplete/"+searchKeyword+"/"+searchCondition,
-					method : "GET",
-					headers : {
-						"Accept" : "application/json",
-						"Content-Type" : "application/json"
-					},
-					dataType:"json",
-					success : function(JSONData,status){
-						var availableTags = JSONData;
-						$(function(){
-							$('input[name="searchKeyword"]').autocomplete({
-								source: availableTags
-							});							
-						});
-					},
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!-- <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script> -->
+	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+
+	<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+	<script type="text/javascript">
+		$(function(){
+				var isActive = true;
+				 if (isActive){
+					$.ajax(
+							{
+								url : "/user/json/listUser",
+								method : "POST",
+								headers : {
+									"Accept" : "application/json",
+									"Content-Type" : "application/json"
+								},
+								dataType : "json",
+								data : JSON.stringify({
+									currentPage : 1,
+									pageSize : 12
+								}),
+								success : function(JSONData,status){
+																
+									var list = JSONData.list;
+									var str ="";
+									
+									for(var i=0; i<12; i++){
+										
+										var temp = list[i];
+										if(temp == undefined){
+											isActive = false;
+											break;
+										}
+										
+										var stringHtml = 		
+											'<div class="col-sm-6 col-md-3">'
+									    	+'<div class="thumbnail">'
+									      	+'<div class="caption">'
+									      	+'<h4 class="userId">ID : '+temp.userId+'</h4>'
+									        +'<h5 class="userName">Name : '+temp.userName+'</h5>'
+									        +'<h5 class="role">Role : '+temp.role+'</h5>'
+									        +'<h5 class="regDate">Date : '+temp.regDateString+'</h5>'
+									      	+ '<p><a href="/user/updateUser?userId='+temp.userId+'" id="get" class="btn btn-default" role="button">정보수정</a>' 
+									      	+'<a href="/user/getUser?userId='+temp.userId+'" id="update" class="btn btn-default" role="button">상세조회</a>'
+									      	+'<a href="/purchase/addPurchaseCart?prodNo='+temp.userId+'" id="cart" class="btn btn-danger" role="button">영구재제</a></p>'
+									        +'</div></div></div>';
+									   	str += stringHtml;
+									}
+									$('#indexForm').append('<div id="userList" class="container-fluid" style="margin: 90px;"><div class="row"><div class="col-md-1"></div><div class="col-md-10"><div class="row">'
+											+ str + '</div></div><div class="col-md-1"></div></div></div>');
+									isActive = true;
+								}
+							});
+					
+				var page = 1;
+				
+				$(window).scroll(function() {
+					//console.log($(window).scrollTop());
+					//console.log(e);
+				    if (isActive && $(window).scrollTop() == $(document).height() - $(window).height()) {
+				    	page += 1;
+				    	console.log(page)
+				    	$.ajax(
+								{
+									url : "/user/json/listUser",
+									method : "POST",
+									headers : {
+										"Accept" : "application/json",
+										"Content-Type" : "application/json"
+									},
+									dataType : "json",
+									async : false,
+									data : JSON.stringify({
+										currentPage : page,
+										pageSize : 12
+									}),
+									success : function(JSONData,status){
+											
+										var str = "";								
+										var list = JSONData.list;
+										for(var i=0; i<12; i++){
+											
+											var temp = list[i];
+											console.log(temp);
+											if(list[i] == undefined){
+												isActive = false;
+												break;
+											}
+											var stringHtml = 		
+												'<div class="col-sm-6 col-md-3">'
+										    	+'<div class="thumbnail">'
+										      	+'<div class="caption">'
+										      	+'<h4 class="userId">ID : '+temp.userId+'</h4>'
+										        +'<h5 class="userName">Name : '+temp.userName+'</h5>'
+										        +'<h5 class="role">Role : '+temp.role+'</h5>'
+										        +'<h5 class="regDate">Date : '+temp.regDateString+'</h5>'
+										      	+ '<p><a href="/user/updateUser?userId='+temp.userId+'" id="get" class="btn btn-default" role="button">정보수정</a>' 
+										      	+'<a href="/user/getUser?userId='+temp.userId+'" id="update" class="btn btn-default" role="button">상세조회</a>'
+										      	+'<a href="/purchase/addPurchaseCart?prodNo='+temp.userId+'" id="cart" class="btn btn-danger" role="button">영구재제</a></p>'
+										        +'</div></div></div>';
+										   	str += stringHtml;
+										   					   	
+										}
+										
+										$('#indexForm').append('<div id="userList" class="container-fluid" style="margin: 90px;"><div class="row"><div class="col-md-1"></div><div class="col-md-10"><div class="row">'
+										+ str + '</div></div><div class="col-md-1"></div></div></div>');		
+									}
+								});
+				    		}
+					});
+				 }
+				
+			
+			$('input[name="searchKeyword"]').keyup(function(key){
+				
+				var searchKeyword = $(this).val();
+				var isflag = false;
+				isActive = false;
+				$.ajax(
+					{
+						url : "/user/json/autoComplete/"+searchKeyword+"/0",
+						method : "GET",
+						headers : {
+							"Accept" : "application/json",
+							"Content-Type" : "application/json"
+						},
+						dataType:"json",
+						success : function(JSONData,status){
+							var availableTags = JSONData;
+						
+							$(function(){
+								$('input[name="searchKeyword"]').autocomplete({
+									source: availableTags
+								});							
+							});
+						},
+				});
+				
+				 if(key.keyCode==13) {	
+					 $('#userList').remove();
+							$.ajax(
+									{
+										url : "/user/json/listUser",
+										method : "POST",
+										headers : {
+											"Accept" : "application/json",
+											"Content-Type" : "application/json"
+										},
+										dataType : "json",
+										async : false,
+										data : JSON.stringify({
+											currentPage : 1,
+											searchKeyword : searchKeyword,
+											pageSize : 12
+										}),
+										success : function(JSONData,status){								
+											var list = JSONData.list;
+											var str ="";
+											
+											for(var i=0; i<12; i++){
+												
+												var temp = list[i];
+												if(temp == undefined){
+													isflag = false;
+													break;
+												}
+																					
+												var stringHtml = 		
+													'<div class="col-sm-6 col-md-3">'
+											    	+'<div class="thumbnail">'
+											      	+'<div class="caption">'
+											      	+'<h4 class="userId">ID : '+temp.userId+'</h4>'
+											        +'<h5 class="userName">Name : '+temp.userName+'</h5>'
+											        +'<h5 class="role">Role : '+temp.role+'</h5>'
+											        +'<h5 class="regDate">Date : '+temp.regDateString+'</h5>'
+											      	+ '<p><a href="/user/updateUser?userId='+temp.userId+'" id="get" class="btn btn-default" role="button">정보수정</a>' 
+											      	+'<a href="/user/getUser?userId='+temp.userId+'" id="update" class="btn btn-default" role="button">상세조회</a>'
+											      	+'<a href="/purchase/addPurchaseCart?prodNo='+temp.userId+'" id="cart" class="btn btn-danger" role="button">영구재제</a></p>'
+											        +'</div></div></div>';
+											   	str += stringHtml;
+											}
+											$('#indexForm').append('<div id="userList" class="container-fluid" style="margin: 90px;"><div class="row"><div class="col-md-1"></div><div class="col-md-10"><div class="row">'
+													+ str + '</div></div><div class="col-md-1"></div></div></div>');
+											isflag = true;
+										}
+										
+							});
+							$(window).scroll(function() {
+								var page=1;
+								if (isflag && $(window).scrollTop() == $(document).height() - $(window).height()) {
+							    	page += 1;
+							    	console.log(page)
+							    	$.ajax(
+											{
+												url : "/user/json/listUser",
+												method : "POST",
+												headers : {
+													"Accept" : "application/json",
+													"Content-Type" : "application/json"
+												},
+												dataType : "json",
+												async : false,
+												data : JSON.stringify({
+													currentPage : page,
+													searchKeyword : searchKeyword,
+													pageSize : 12
+												}),
+												success : function(JSONData,status){
+													
+													var str = "";								
+													var list = JSONData.list;
+													for(var i=0; i<12; i++){
+														
+														var temp = list[i];
+														console.log(temp);
+														if(list[i] == undefined){
+															console.log('실행');
+															isflag = false;
+															break;
+														}
+														
+														var stringHtml = 		
+															'<div class="col-sm-6 col-md-3">'
+													    	+'<div class="thumbnail">'
+													      	+'<div class="caption">'
+													      	+'<h4 class="userId">ID : '+temp.userId+'</h4>'
+													        +'<h5 class="userName">Name : '+temp.userName+'</h5>'
+													        +'<h5 class="role">Role : '+temp.role+'</h5>'
+													        +'<h5 class="regDate">Date : '+temp.regDateString+'</h5>'
+													      	+ '<p><a href="/user/updateUser?userId='+temp.userId+'" id="get" class="btn btn-default" role="button">정보수정</a>' 
+													      	+'<a href="/user/getUser?userId='+temp.userId+'" id="update" class="btn btn-default" role="button">상세조회</a>'
+													      	+'<a href="/purchase/addPurchaseCart?prodNo='+temp.userId+'" id="cart" class="btn btn-danger" role="button">영구재제</a></p>'
+													        +'</div></div></div>';
+													   	str += stringHtml;	
+													   	
+													   	
+													}
+													
+													$('#indexForm').append('<div id="userList" class="container-fluid" style="margin: 90px;"><div class="row"><div class="col-md-1"></div><div class="col-md-10"><div class="row">'
+													+ str + '</div></div><div class="col-md-1"></div></div></div>');		
+												}
+											});
+							    		}
+							});
+						}
+			});
+						
+					
+			$('.searchContainer').css('margin','50px');
+			
+			$('.search').css('display','flex');
+			
+			$('.thumbnail-container').css('margin','90px');
+			
+			$(document).on('click','#cart',function(){
+				
+				var href = $(this).attr('href');
+				
+				if(${empty user.role}){
+					alert('로그인을 해주세요');
+					$(this).attr('href',"/user/loginView.jsp");
+				}else{
+					if(confirm('상품이 담겼습니다. 장바구니로 이동하시겠습니까?') == true){
+						$(this).attr('href',href);
+
+					}else{
+						$(this).attr('href','/index.jsp');
+					}					
+				}
 			});
 			
+			$(document).on('click','#buy',function(){
+				if(${empty user.role}){
+					alert('로그인을 해주세요');
+					$(this).attr('href',"/user/loginView.jsp");
+				}
+			});
 		});
 		
-		$('.userId').click(function(){
-			var userId = $(this).text();
-			console.log(userId)
-			$.ajax(
-				{
-					url:"/user/json/getUser/"+userId,
-					method: "GET",
-					dataType:"json",
-					headers : {
-						"Accept" : "application/json",
-						"Content-Type" : "application/json"
-					},
-					success: function(JSONData,status){
-						
-						var displayValue = "<h4>"
-											+"아이디 : "+JSONData.userId+"<br/>"
-											+"이  름 : "+JSONData.userName+"<br/>"
-											+"이메일 : "+JSONData.email+"<br/>"
-											+"ROLE : "+JSONData.role+"<br/>"
-											+"등록일 : "+JSONData.regDateString+"<br/>"
-											+"</h4>";
-						$("h4").remove();
-						$( "#"+userId+"" ).html(displayValue);
-					}
-				});
-			//$(window.parent.frames["rightFrame"].document.location).attr("href","/user/getUser?userId="+userId);
-		});
 		
-	});
-</script>
-
+		
+	</script>
+	
+	<style>
+		body{
+			padding-top:70px;
+		}
+	</style>
 </head>
+<body>
 
-<body bgcolor="#ffffff" text="#000000">
-
-<div style="width:98%; margin-left:10px;">
-
-<!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////// 
-<form name="detailForm" action="/listUser.do" method="post">
-////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
-<form name="detailForm">
-
-<table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
-	<tr>
-		<td width="15" height="37">
-			<img src="/images/ct_ttl_img01.gif" width="15" height="37" />
-		</td>
-		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left:10px;">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="93%" class="ct_ttl01">회원 목록조회</td>
-				</tr>
-			</table>
-		</td>
-		<td width="12" height="37">
-			<img src="/images/ct_ttl_img03.gif" width="12" height="37"/>
-		</td>
-	</tr>
-</table>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-	<tr>
-		<td align="right">
-			<div class="ui-widget">
-				<select name="searchCondition" class="ct_input_g" style="width:80px">
-					<option value="0"  ${ ! empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>회원ID</option>
-					<option value="1"  ${ ! empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>회원명</option>
-				</select>
-				<input type="text" name="searchKeyword" 
-							value="${! empty search.searchKeyword ? search.searchKeyword : ''}"  
-							class="ct_input_g" style="width:200px; height:20px" >
-			</div> 
-		</td>
-		<td align="right" width="70">
-			<table border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="17" height="23"><img src="/images/ct_btnbg01.gif" width="17" height="23"></td>
-					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						<!-- <a href="javascript:fncGetUserList('1');">검색</a> -->
-						<span>검색</span>
-					</td>
-					<td width="14" height="23"><img src="/images/ct_btnbg03.gif" width="14" height="23"></td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-</table>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-	<tr>
-		<td colspan="11" >
-			전체  ${resultPage.totalCount } 건수, 현재 ${resultPage.currentPage}  페이지
-		</td>
-	</tr>
-	<tr>
-		<td class="ct_list_b" width="100">No</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">회원ID</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">회원명</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b">이메일</td>		
-	</tr>
-	<tr>
-		<td colspan="11" bgcolor="808285" height="1"></td>
-	</tr>
+	<div class="container-fluid searchContainer">
+		<div class="row">
+			<div class="col-md-3"></div>
+			<div class="col-md-6">
+				<div class="form-group form-group-lg search">
+					<input class="form-control" type="text" id="formGroupInputLarge" name="searchKeyword" value="" placeholder="SearchKeyword...">
+					<input type="hidden">
+				</div>
+			</div>
+			<div class="col-md-3"></div>
+		</div>
+	</div>
 	
-	<c:set var="i" value="0" />
-	<c:forEach var="user" items="${list}">
-		<c:set var="i" value="${ i+1 }" />
-		<tr class="ct_list_pop">
-			<td align="center">${ i }</td>
-			<td></td>
-			<td align="left">
-				<!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				<a href="/getUser.do?userId=${user.userId}">${user.userId}</a></td>
-               	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
-			<!-- <a href="/user/getUser?userId=${user.userId}">${user.userId}</a>-->
-			<span class="userId">${user.userId }</span>
-			</td>
-			<td></td>
-			<td align="left">${user.userName}</td>
-			<td></td>
-			<td align="left">${user.email}</td>		
-		</tr>
-		<tr>
-			<td id="${user.userId}" colspan="11" bgcolor="D6D7D6" height="1"></td>
-		</tr>
-	</c:forEach>
-</table>
-
-
-<!-- PageNavigation Start... -->
-<table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top:10px;">
-	<tr>
-		<td align="center">
-		   <input type="hidden" id="currentPage" name="currentPage" value=""/>
+	<jsp:include page="/header.jsp"></jsp:include>
 	
-			<jsp:include page="../common/pageNavigator.jsp"/>	
-			
-    	</td>
-	</tr>
-</table>
-<!-- PageNavigation End... -->
-
-</form>
-</div>
-
+	<form id="indexForm">
+	</form>
 </body>
 </html>

@@ -68,18 +68,18 @@
 		 		$(this).attr("href","/product/addProductView.jsp");
 			});
 			$("a:contains('惑前 包府')" ).on("click" , function() {
-		 		$(this).attr("href","/product/listProduct?menu=manage");
+		 		$(this).attr("href","/product/listProduct?menu=search");
 			});
 			
 			$("a:contains('硅价 包府')").on("click" , function() {
-		 		$(this).attr("href","/product/addProductView.jsp");
+		 		$(this).attr("href","/product/listProduct?menu=manage");
 			});
 			
 		});
 		
 		 $(function() {
 				//==> DOM Object GET 3啊瘤 规过 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
-				$( "button.btn.btn-primary" ).on("click" , function() {
+				$( "#addU" ).on("click" , function() {
 					fncAddUser();
 				});
 			});	
@@ -439,7 +439,7 @@
 					  
 					  <div class="form-group">
 					    <div class="col-sm-offset-4  col-sm-4 text-center">
-					      <button type="button" class="btn btn-primary"  >啊 &nbsp;涝</button>
+					      <button type="button" id="addU" class="btn btn-primary"  >啊 &nbsp;涝</button>
 						  <a class="btn btn-primary btn" href="#" role="button">秒&nbsp;家</a>
 					    </div>
 					  </div>

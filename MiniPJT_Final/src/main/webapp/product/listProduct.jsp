@@ -98,16 +98,17 @@
 					},
 					success: function(JSONData,status){
 						
-						var displayValue ="<h4>"
+						var displayValue ="<h5>"
 											+"상품번호 : "+JSONData.prodNo+"<br/>"
 											+"상품이름 : "+JSONData.prodName+"<br/>"
 											+"상품이미지 <br/>"
 											+'<img src="/images/uploadFiles/'+JSONData.fileName+'" width="300" height="300"/><br/>'
 											+"상품상세정보 : "+JSONData.prodDetail+"<br/>"
 											+"상품 가격 : "+JSONData.price+"<br/>"
-											+"등록일자 : "+JSONData.regDateString+"<br/>" 
-											+"</h4>"
-						$('h4').remove();
+											+"등록일자 : "+JSONData.regDateString+"<br/>"
+											+'<a href="/product/updateProductView?prodNo='+JSONData.prodNo+'" id="update" class="btn btn-success" role="button">상품수정</a>'
+											+"</h5>"
+						$('h5').remove();
 						$( "#"+prodNo+"" ).html(displayValue);					
 					}		
 			});
@@ -182,8 +183,7 @@
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td width="93%" class="ct_ttl01">
-					<%--<%=menu.equals("manage")? "상품관리" : "상품 목록 조회"--%>
-					${menu eq 'manage' ? "상품관리" : "상품 목록 조회"}
+					상품 관리 페이지
 					</td>
 				</tr>
 			

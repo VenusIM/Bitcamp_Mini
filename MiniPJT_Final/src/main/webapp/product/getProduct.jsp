@@ -1,209 +1,118 @@
-<%@page contentType="text/html; charset=euc-kr"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html; charset=EUC-KR" %>
+<%@ page pageEncoding="EUC-KR"%>
 
-<%--
-<%@page import="com.model2.mvc.service.domain.User"%>
-<%@page import="com.model2.mvc.service.domain.Product"%>
-	Product product = (Product)session.getAttribute("product");
-	User user=(User)session.getAttribute("user");
-	String menu = (String)session.getAttribute("menu");
+
+<!DOCTYPE html>
+
+<html lang="ko">
 	
-	String history=null;
-	Cookie[] cookies = request.getCookies();
-	if (cookies!=null && cookies.length > 0) {
-		for (int i = 0; i < cookies.length; i++) {
-			Cookie cookie = cookies[i];
-			System.out.println(cookie.getName());
-			if (cookie.getName().equals("history")) {
-				history = cookie.getValue();
-			}
-		}
-		history += ","+product.getProdNo();
-	}
-	Cookie cookie = new Cookie("history",history);
-	response.addCookie(cookie);
---%>	
-
-<html>
 <head>
-<title>상품상세조회</title>
-
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
-
+	<meta charset="EUC-KR">
+	
+	<!-- 참조 : http://getbootstrap.com/css/   참조 -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+	<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+	
+	<!-- Bootstrap Dropdown Hover CSS -->
+   <link href="/css/animate.min.css" rel="stylesheet">
+   <link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet">
+   
+    <!-- Bootstrap Dropdown Hover JS -->
+   <script src="/javascript/bootstrap-dropdownhover.min.js"></script>
+	
+	<!--  ///////////////////////// CSS ////////////////////////// -->
+	<style>
+ 		body {
+            padding-top : 50px;
+        }
+     </style>
+    
+     <!--  ///////////////////////// JavaScript ////////////////////////// -->
+	<script type="text/javascript">
+		
+		//============= 회원정보수정 Event  처리 =============	
+		 $(function() {
+			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+			 $( "button" ).on("click" , function() {
+					self.location = "/user/updateUser?userId=${user.userId}"
+				});
+		});
+		
+	</script>
+	
 </head>
 
-<body bgcolor="#ffffff" text="#000000">
+<body>
 
-<table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
-	<tr>
-		<td width="15" height="37">
-			<img src="/images/ct_ttl_img01.gif" width="15" height="37">
-		</td>
-		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left:10px;">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="93%" class="ct_ttl01">상품상세조회</td>
-					<td width="20%" align="right">&nbsp;</td>
-				</tr>
-			</table>
-		</td>
-		<td width="12" height="37"><img src="/images/ct_ttl_img03.gif" width="12" height="37"></td>
-	</tr>
-</table>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:13px;">
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">
-			상품번호 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="105">
-					<%--<%=product.getProdNo() --%>
-					${product.prodNo}
-					</td>
-					<td></td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
+	<!-- ToolBar Start /////////////////////////////////////-->
+	<jsp:include page="../header.jsp"/>
+   	<!-- ToolBar End /////////////////////////////////////-->
 	
-	<tr>
-		<td width="104" class="ct_write">
-			상품명 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-		<%--<%=product.getProdName() --%>
-		${product.prodName}
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">상품이미지</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-		<%--<%=product.getFileName() --%>
-		<img src="/images/uploadFiles/${product.fileName}" width="300" height="300"/>
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">상품상세정보</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-		<%--<%=product.getProdDetail() --%>
-		${product.prodDetail}
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">제조일자</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-		<%--<%=product.getManuDate() --%>
-		${product.manuDate}
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
+	<!--  화면구성 div Start /////////////////////////////////////-->
+	<div class="container">
 	
-	<tr>
-		<td width="104" class="ct_write">가격</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-		<%--<%=product.getPrice() --%>
-		${product.price}
-		</td>
-	</tr>
-
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
+		<div class="page-header">
+	       <h3 class=" text-info">회원정보조회</h3>
+	       <h5 class="text-muted">내 정보를 <strong class="text-danger">최신정보로 관리</strong>해 주세요.</h5>
+	    </div>
 	
-	<tr>
-		<td width="104" class="ct_write">등록일자</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-		<%--<%=product.getRegDate() --%>
-		${product.regDate}
-		</td>
-	</tr>
-
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-</table>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top:10px;">
-	<tr>
-		<td width="53%"></td>
-		<td align="right">
-			<table border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<%--<%if(user != null && user.getRole().equals("user")){ --%>
-					<c:if test="${user.role eq 'user' && product.prodTotal ne 0}">
-						<td width="17" height="23">
-						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
-					</td>
-						<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-							<!-- <a href="/addPurchaseView.do?prodNo=<%--product.getProdNo()--%>">구매</a> -->
-							<a href="/purchase/addPurchaseCart">상품 담기</a>
-							<td width="14" height="23">
-							<img src="/images/ct_btnbg03.gif" width="14" height="23">
-						</td>
-						
-						<td width="14" height="23">
-							
-					<td width="17" height="23">
-						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
-					</td>
-						<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-							<!-- <a href="/addPurchaseView.do?prodNo=<%--product.getProdNo()--%>">구매</a> -->
-							<a href="/purchase/addPurchaseView?prodNo=${product.prodNo}">구매</a>
-						</td>
-						
-						<td width="14" height="23">
-							<img src="/images/ct_btnbg03.gif" width="14" height="23">
-					</td>
-					<%--<%} --%>
-					</c:if>
-						<td width="30"></td>					
-						<td width="17" height="23">
-							<img src="/images/ct_btnbg01.gif" width="17" height="23">
-						</td>
-						<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						<a href="javascript:history.go(-1);">확인</a>
-					</td>
-					<td width="14" height="23"><img src="/images/ct_btnbg03.gif" width="14" height="23"></td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-</table>
+		<div class="row">
+	  		<div class="col-xs-4 col-md-2"><strong>아 이 디</strong></div>
+			<div class="col-xs-8 col-md-4">${user.userId}</div>
+		</div>
+		
+		<hr/>
+		
+		<div class="row">
+	  		<div class="col-xs-4 col-md-2 "><strong>이 름</strong></div>
+			<div class="col-xs-8 col-md-4">${user.userName}</div>
+		</div>
+		
+		<hr/>
+		
+		<div class="row">
+	  		<div class="col-xs-4 col-md-2 "><strong>주소</strong></div>
+			<div class="col-xs-8 col-md-4">${user.addr}</div>
+		</div>
+		
+		<hr/>
+		
+		<div class="row">
+	  		<div class="col-xs-4 col-md-2 "><strong>휴대전화번호</strong></div>
+			<div class="col-xs-8 col-md-4">${ !empty user.phone ? user.phone : ''}	</div>
+		</div>
+		
+		<hr/>
+		
+		<div class="row">
+	  		<div class="col-xs-4 col-md-2"><strong>이 메 일</strong></div>
+			<div class="col-xs-8 col-md-4">${user.email}</div>
+		</div>
+		
+		<hr/>
+		
+		<div class="row">
+	  		<div class="col-xs-4 col-md-2 "><strong>가입일자</strong></div>
+			<div class="col-xs-8 col-md-4">${user.regDate}</div>
+		</div>
+		
+		<hr/>
+		
+		<div class="row">
+	  		<div class="col-md-12 text-center ">
+	  			<button type="button" class="btn btn-primary">회원정보수정</button>
+	  		</div>
+		</div>
+		
+		<br/>
+		
+ 	</div>
+ 	<!--  화면구성 div Start /////////////////////////////////////-->
 
 </body>
+

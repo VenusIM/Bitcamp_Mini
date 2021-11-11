@@ -18,7 +18,7 @@
 
 	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-
+	<script src="https://cdn.bootpay.co.kr/js/bootpay-3.3.2.min.js" type="application/javascript"></script>
 	<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 	<script type="text/javascript">
 	
@@ -63,7 +63,62 @@ $(function(){
 				return;
 			}
 			
-			$('.needs-validation').attr('method','post').attr('action','/purchase/addPurchase').submit();
+			if($("#credit").is(":checked") == true){
+				
+				BootPay.request({
+					price: $('#priceTotal').next().text(),	
+					application_id: "618a4bac7b5ba4b3a352ae77",
+					name: '${product.prodName}',
+					show_agree_window: 1,
+					items: [
+						{
+							item_name: '${product.prodName}',
+							qty: $('#total').val(), 
+							unique: '123',
+							price: $('#priceTotal').next().text()
+						}
+					],
+					user_info: {
+						username: '${user.userName}'
+					},
+					order_id: ${product.prodNo}, //고유 주문번호로, 생성하신 값을 보내주셔야 합니다.
+					params: {callback1: '그대로 콜백받을 변수 1', callback2: '그대로 콜백받을 변수 2', customvar1234: '변수명도 마음대로'},
+					
+					extra: {
+						theme: 'red', // [ red, purple(기본), custom ]
+						custom_background: '#00a086', // [ theme가 custom 일 때 background 색상 지정 가능 ]
+						custom_font_color: '#ffffff' // [ theme가 custom 일 때 font color 색상 지정 가능 ]
+					}
+				}).error(function (data) {
+					//결제 진행시 에러가 발생하면 수행됩니다.
+					console.log(data);
+				}).cancel(function (data) {
+					//결제가 취소되면 수행됩니다.
+					console.log(data);
+				}).ready(function (data) {
+					// 가상계좌 입금 계좌번호가 발급되면 호출되는 함수입니다.
+					console.log(data);
+					$("#addP").attr("method","post").attr("action","/purchase/addPurchase").submit();
+				}).confirm(function (data) {
+					//결제가 실행되기 전에 수행되며, 주로 재고를 확인하는 로직이 들어갑니다.
+					//주의 - 카드 수기결제일 경우 이 부분이 실행되지 않습니다.
+					console.log(data);
+					var enable = true; // 재고 수량 관리 로직 혹은 다른 처리
+					if (enable) {
+						BootPay.transactionConfirm(data); // 조건이 맞으면 승인 처리를 한다.
+					} else {
+						BootPay.removePaymentWindow(); // 조건이 맞지 않으면 결제 창을 닫고 결제를 승인하지 않는다.
+					}
+				}).close(function (data) {
+				    // 결제창이 닫힐때 수행됩니다. (성공,실패,취소에 상관없이 모두 수행됨)
+				    console.log(data);
+				}).done(function (data) {
+					
+					console.log(data);
+				});
+			}else{
+				$("#addP").attr("method","post").attr("action","/purchase/addPurchase").submit();
+			}
 		});
 	
 		$('input:button').click(function(){
@@ -86,6 +141,7 @@ $(function(){
 			 $('#total').val(number);
 			 $('#price').text('상품가격: '+${product.price}*number+' 원');
 			 $('#priceTotal').text('총액 : '+(${product.price} * number + 3000)+ ' 원');
+			 $('#priceTotal').next().text(${product.price} * number + 3000);
 		});
 		
 		$('.btn-default:contains("장바구니")').attr('href','/purchase/addPurchaseCart?prodNo='+${product.prodNo});
@@ -173,9 +229,19 @@ $(function(){
 	            	<strong id="price">상품가격: 0원</strong></br>
 	            	<strong>배송비 : &nbsp3000</strong></br>
 	            	<span id="priceTotal" style="color: red; font-weight: bolder;">총액 : 3000 원</span>
+	            	<span hidden=""></span>
 	            </c:if>
 	          </li>
-	        </ul>
+	          <li class="list-group-item d-flex justify-content-between">
+	          	<hr class="my-4">
+				<label for="address" class="form-label">구매수량</label>
+				<div class="col-12">
+					<input type="button" class="btn btn-default" value='-'>
+					<input type="text" class="text-center" id='total' name="purchaseQuantity" value="0" style = "width:30px; height: 30px; border-style: hidden; font-size: 15px"  readonly="readonly">
+					<input type="button" class="btn btn-default" value='+'>
+				</div>
+	          </li>
+	         </ul>
 	
 	        <form id="cart" class="card p-2">
 	          <div class="input-group">
@@ -184,7 +250,7 @@ $(function(){
 	        </form>
 	      </div>
 	      <div class="col-md-7 col-lg-8">
-	        <form class="needs-validation">
+	        <form class="needs-validation" id="addP">
 	          <div class="my-3">
 				<hr class="my-4">
 	            <div class="col-12">
@@ -218,13 +284,7 @@ $(function(){
 		        </div>
 	          </div>
 	
-	          <hr class="my-4">
-				<label for="address" class="form-label">구매수량</label>
-				<div class="col-12">
-					<input type="button" class="btn btn-default" value='-'>
-					<input type="text" class="text-center" id='total' name="purchaseQuantity" value="0" style = "width:30px; height: 30px; border-style: hidden; font-size: 15px"  readonly="readonly">
-					<input type="button" class="btn btn-default" value='+'>
-				</div>
+	          
 				<hr class="my-4">
 				<c:if test="${product.prodTotal eq 0}">
 					<pre style="color: red">상품 재고가 모두 소진 되었습니다.</pre>
@@ -243,7 +303,7 @@ $(function(){
 	            </div>
 	            <div class="form-check">
 	              <input id="debit" name="paymentOption" type="radio" value="2" class="form-check-input1" required>
-	              <label class="form-check-label" for="debit">계좌이체</label>
+	              <label class="form-check-label" for="debit">현금</label>
 	            </div>
 	          </div>
 	          <hr class="my-4">

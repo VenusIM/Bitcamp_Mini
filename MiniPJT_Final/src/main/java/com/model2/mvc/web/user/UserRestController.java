@@ -119,7 +119,9 @@ public class UserRestController {
 		if(search.getCurrentPage() == null || search.getCurrentPage().equals("")){
 			search.setCurrentPage("1");
 		}
-		search.setPageSize(pageSize);
+		if(search.getPageSize() == 0) {
+			search.setPageSize(pageSize);
+		}
 		
 		// Business logic ผ๖วเ
 		map=userService.getUserList(search);
