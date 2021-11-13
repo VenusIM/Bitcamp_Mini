@@ -59,9 +59,9 @@
 									    	+'<div class="thumbnail">'
 									    	+'<img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="240px" height="180px">'
 									      	+'<div class="caption">'
-									        +'<h3 class="prodName">'+temp.prodName+'</h3>'
-									        +'<h4 class="price">'+temp.price+'</h4>'
-									        +'<p class="prodDetail">'+temp.prodDetail+'</p>'
+									        +'<h3 class="prodName" style="display: inline-block; width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">'+temp.prodName+'</h3>'
+									        +'<h4 class="price">'+temp.price+'원</h4>'
+									        +'<p class="prodDetail" style="display: inline-block; width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">'+temp.prodDetail+'</p>'
 									      	+ st
 									        +'</div></div></div>';
 									   	str += stringHtml;
@@ -114,9 +114,9 @@
 										    	+'<div class="thumbnail">'
 										    	+'<img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="240px" height="180px">'
 										      	+'<div class="caption">'
-										        +'<h3 class="prodName">'+temp.prodName+'</h3>'
-										        +'<h4 class="price">'+temp.price+'</h4>'
-										        +'<p class="prodDetail">'+temp.prodDetail+'</p>'
+										        +'<h3 class="prodName" style="display: inline-block; width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">'+temp.prodName+'</h3>'
+										        +'<h4 class="price">'+temp.price+'원</h4>'
+										        +'<p class="prodDetail" style="display: inline-block; width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">'+temp.prodDetail+'</p>'
 										        + st
 										        +'</div></div></div>';
 										   	str += stringHtml;
@@ -168,7 +168,6 @@
 											"Content-Type" : "application/json"
 										},
 										dataType : "json",
-										async : false,
 										data : JSON.stringify({
 											currentPage : 1,
 											searchKeyword : searchKeyword
@@ -193,9 +192,9 @@
 											    	+'<div class="thumbnail">'
 											    	+'<img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="240px" height="180px">'
 											      	+'<div class="caption">'
-											        +'<h3 class="prodName">'+temp.prodName+'</h3>'
-											        +'<h4 class="price">'+temp.price+'</h4>'
-											        +'<p class="prodDetail">'+temp.prodDetail+'</p>'
+											        +'<h3 class="prodName" style="display: inline-block; width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">'+temp.prodName+'</h3>'
+											        +'<h4 class="price">'+temp.price+'원</h4>'
+											        +'<p class="prodDetail" style="display: inline-block; width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">'+temp.prodDetail+'</p>'
 											        + st
 											        +'</div></div></div>';
 											   	str += stringHtml;
@@ -247,11 +246,12 @@
 													    	+'<div class="thumbnail">'
 													    	+'<img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="240px" height="180px">'
 													      	+'<div class="caption">'
-													        +'<h3 class="prodName">'+temp.prodName+'</h3>'
-													        +'<h4 class="price">'+temp.price+'</h4>'
-													        +'<p class="prodDetail">'+temp.prodDetail+'</p>'
+													        +'<h3 class="prodName" style="display: inline-block; width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">'+temp.prodName+'</h3>'
+													        +'<h4 class="price">'+temp.price+'원</h4>'
+													        +'<p class="prodDetail" style="display: inline-block; width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">'+temp.prodDetail+'</p>'
 													       	+ st
 													        +'</div></div></div>';
+													        +'<input type="hidden"/>'
 													   	str += stringHtml;	
 													   	
 													   	
@@ -296,6 +296,7 @@
 					$(this).attr('href',"/user/loginView.jsp");
 				}
 			});
+			
 		});
 		
 		
@@ -304,7 +305,7 @@
 	
 	<style>
 		body{
-			padding-top:70px;
+			padding-top:70px;	
 		}
 	</style>
 </head>

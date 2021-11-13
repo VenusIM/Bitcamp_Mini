@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -121,13 +122,18 @@ public class UserController {
 	
 	//@RequestMapping("/login.do")
 	@RequestMapping( value="login", method=RequestMethod.POST )
-	public String login(@ModelAttribute("user") User user , HttpSession session ) throws Exception{
+	public String login(@ModelAttribute("user") User user , HttpSession session) throws Exception{
 		System.out.println("/user/login : POST");
-		//Business Logic
-		User dbUser=userService.getUser(user.getUserId());
 		
-		if( user.getPassword().equals(dbUser.getPassword())){
+		String userId = user.getUserId();
+		
+		//Business Logic
+		User dbUser=userService.getUser(userId);
+		
+		if(user.getPassword().equals(dbUser.getPassword())){
 			session.setAttribute("user", dbUser);
+		}else {
+			return "forward:/user/addUser";
 		}
 		
 		return "redirect:/index.jsp";

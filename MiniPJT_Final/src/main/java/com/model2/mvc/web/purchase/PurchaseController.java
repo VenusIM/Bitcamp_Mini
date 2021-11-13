@@ -54,7 +54,9 @@ public class PurchaseController {
 								@ModelAttribute("product") Product product,
 								HttpSession session) throws Exception{
 		
-		purchase.setBuyer((User)session.getAttribute("user"));
+		User user = (User)session.getAttribute("user");
+		System.out.println(user);
+		purchase.setBuyer(user);
 		
 		int prodTotal = productService.getProduct(product.getProdNo()).getProdTotal();
 		prodTotal -= purchase.getPurchaseQuantity();

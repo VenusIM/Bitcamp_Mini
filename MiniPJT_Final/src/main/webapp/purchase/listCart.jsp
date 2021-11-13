@@ -39,10 +39,10 @@
 					console.log($('#total').val());
 					alert("상품은 0개 이상 구매하셔야 합니다.");
 					return;
+				}else{
+					$('#currentPage').val(${resultPage.currentPage});
+					$('form').attr('method','post').attr('action','/purchase/addCartListView').submit();	        	
 				}
-	        	
-	        	$('#currentPage').val(${resultPage.currentPage});
-				$('form').attr('method','post').attr('action','/purchase/addCartListView').submit();	        	
 	        }	
 		});
 		
@@ -109,58 +109,26 @@
 	<jsp:include page="/header.jsp"></jsp:include>
 <div style="width:100%; margin-left:10px;">
 <form name="detailForm">
-<table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
-	<tr>
-		<td width="15" height="37">
-			<img src="/images/ct_ttl_img01.gif" width="15" height="37">
-		</td>
-		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left:10px;">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="93%" class="ct_ttl01">
-					장바구니
-					</td>
-				</tr>
-			
-			</table>
-		</td>
-		<td width="12" height="37">
-			<img src="/images/ct_ttl_img03.gif" width="12" height="37">
-		</td>
-	</tr>
-</table>
-
-<table width="70%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px; margin: auto">
-	
-	<tr>
-		<td class="ct_list_b" width="20">
-		선택
-       </td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="50">상품이미지</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">상품정보</td>
-		<td class="ct_line02"></td>	
-		<td class="ct_list_b" width="40">수량</td>
-		<td class="ct_line02"></td>	
-		<td class="ct_list_b" width="40">가격</td>
-		<td class="ct_line02"></td>	
-	</tr>
-	<tr>
-		<td colspan="11" bgcolor="808285" height="1"></td>
-	</tr>
-	
+<table class="table table-striped table-bordered table-hover">
+	 <caption>장바구니</caption>
+	 <thead>
+		<tr>
+			<th width="10%">선택</th>
+			<th>상품이미지</th>
+			<th>상품정보</th>
+			<th>수량</th>
+			<th>가격</th>
+		</tr>
+	</thead>
+	<tbody>
 	<c:forEach var="purchase" items="${list}">
 		<tr class="ct_list_pop">
 			<td align="center">
 				<input type="checkbox"class="prodNoList" name="prodNoList" value="${purchase.purchaseProd.prodNo }">
-			</td>
-			<td></td>
-			
+			</td>		
 			<td align="center" width="50" height="100">
 				 	<img src="/images/uploadFiles/${purchase.purchaseProd.fileName }" width="150" height="200">
 			</td>
-			<td></td>
 			<td align="left" width="100">
 				<span>상품명</span> <br>
 				<!-- <a href="/product/getProduct?prodNo=${purchase.purchaseProd.prodNo}">${purchase.purchaseProd.prodName}</a> -->
@@ -172,28 +140,23 @@
 				<span>상품설명</span> <br>
 				${purchase.purchaseProd.prodDetail }
 			</td>
-			<td></td>
 			<td width="40" align="center">
 				<div>
 					<span>남은 수량 : ${purchase.purchaseProd.prodTotal }개</span>
 				</div>
 				<div>
-						<input type="button" value='-'>
-						<input type="text" id="purchaseQuantity${purchase.purchaseProd.prodNo}" name="prodTotalList" value="0" style = "width:20px" >
-						<input type="button" value='+'>
+						<input type="button" class="btn btn-default" value='-'>
+						<input type="text" class="text-center" id="purchaseQuantity${purchase.purchaseProd.prodNo}" name="prodTotalList" value="0" style ="border-style: hidden; width:20px" >
+						<input type="button" class="btn btn-default" value='+'>
 					
 				</div>
 				<span hidden="">${purchase.purchaseProd.prodNo}</span>
 				<span hidden="">${purchase.purchaseProd.prodTotal }</span>
 			</td>
-			<td></td>
+
 			<td width="50" align="center">
 				${purchase.purchaseProd.price}<span style="margin-left: 5px">원</span>
 			</td>
-			<td></td>
-		<tr>
-			<td colspan="11" bgcolor="D6D7D6" height="1"></td>
-		</tr>
 	</c:forEach>
 </table>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 10px;">
@@ -201,18 +164,9 @@
 		<td width="53%"></td>
 		<td align="center">
 		<table border="0" cellspacing="0" cellpadding="0">
-		<tr>	
-			<td width="17" height="23">
-				<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
-			</td>
-			<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-				<!-- <a href="javascript:fncGetProductList('${resultPage.currentPage}','2')">구매</a> -->
-				<span>구매</span>
-			</td>
-			<td width="14" height="23">
-				<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
-			</td>					
-		</tr>
+			<tr>	
+				<button class="btn btn-primary"><span>구매</span></button>
+			</tr>
 		</table>
 </table>
 

@@ -120,6 +120,12 @@ $(function(){
 				$("#addP").attr("method","post").attr("action","/purchase/addPurchase").submit();
 			}
 		});
+		
+		$('input[name="divyAddr"]').click(function(){
+			console.log("실행");
+			window.open("../juso/jusoPopup.jsp","pop","width=570,height=420, scrollbars=yes, resizable=yes"); 
+		});
+		
 	
 		$('input:button').click(function(){
 			
@@ -139,6 +145,7 @@ $(function(){
 				}
 			
 			 $('#total').val(number);
+			 $('#totals').val(number);
 			 $('#price').text('상품가격: '+${product.price}*number+' 원');
 			 $('#priceTotal').text('총액 : '+(${product.price} * number + 3000)+ ' 원');
 			 $('#priceTotal').next().text(${product.price} * number + 3000);
@@ -146,12 +153,11 @@ $(function(){
 		
 		$('.btn-default:contains("장바구니")').attr('href','/purchase/addPurchaseCart?prodNo='+${product.prodNo});
 		
-		$("#datepicker").on("click",function(){			
-			$("#datepicker").datepicker({
-				minDate: "+1D", 
-				maxDate: "+1M +10D",
-				dateFormat : "yy/mm/dd"
-			});
+				
+		$("#datepicker").datepicker({
+			minDate: "+1D", 
+			maxDate: "+1M +10D",
+			dateFormat : "yy-mm-dd"
 		});
 		
 		$(document).on('click','#cart',function(){
@@ -165,6 +171,11 @@ $(function(){
 			
 		});
 });
+
+function jusoCallBack(roadFullAddr){
+	// 팝업페이지에서 주소입력한 정보를 받아서, 현 페이지에 정보를 등록합니다.
+	$('input[name=divyAddr]').val(roadFullAddr);
+}
 	</script>
 	
 	<style>
@@ -237,7 +248,7 @@ $(function(){
 				<label for="address" class="form-label">구매수량</label>
 				<div class="col-12">
 					<input type="button" class="btn btn-default" value='-'>
-					<input type="text" class="text-center" id='total' name="purchaseQuantity" value="0" style = "width:30px; height: 30px; border-style: hidden; font-size: 15px"  readonly="readonly">
+					<input type="text" class="text-center" id='total' name="purchaseQuantity" value="0" style = "width:30px; height: 30px; border-style: hidden; font-size: 15px" >
 					<input type="button" class="btn btn-default" value='+'>
 				</div>
 	          </li>
@@ -251,6 +262,7 @@ $(function(){
 	      </div>
 	      <div class="col-md-7 col-lg-8">
 	        <form class="needs-validation" id="addP">
+	        <input type="hidden" id="totals" name="purchaseQuantity">
 	          <div class="my-3">
 				<hr class="my-4">
 	            <div class="col-12">

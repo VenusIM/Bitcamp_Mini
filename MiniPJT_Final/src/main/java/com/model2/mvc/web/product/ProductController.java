@@ -60,6 +60,7 @@ public class ProductController {
 		product.setManuDate(product.getManuDate().replace("-", ""));
 		
 		productService.addProduct(product);
+		
 		return "forward:/product/addProduct.jsp";
 	}
 	
@@ -194,9 +195,11 @@ public class ProductController {
 		System.out.println(product);
 		
 		productService.updateProduct(product);
+		product = productService.getProduct(product.getProdNo());
 		
-		product.setRegDate(productService.getProduct(product.getProdNo()).getRegDate());
+		model.addAttribute("product",product);
 		
+		System.out.println("updateProduct Á¾·á");
 		return "forward:/product/updateProduct.jsp";
 	}
 	

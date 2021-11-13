@@ -72,7 +72,7 @@
 		///////////////////////////////////////////////////////////////////////
 		function fncUpdateUser() {
 			var name=$("input[name='userName']").val();
-			
+			console.log(name);
 			if(name == null || name.length <1){
 				alert("이름은  반드시 입력하셔야 합니다.");
 				return;
@@ -90,7 +90,21 @@
 			$("input:hidden[name='phone']").val( value );
 				
 			$("form").attr("method" , "POST").attr("action" , "/user/updateUser").submit();
+			
 		}
+		
+		$(function(){
+			$("input[name='addr']").on("click",function(){
+				console.log("실행됨");
+				window.open("../juso/jusoPopup.jsp","pop","width=570,height=420, scrollbars=yes, resizable=yes"); 
+			});
+		});
+			
+		function jusoCallBack(roadFullAddr){
+			// 팝업페이지에서 주소입력한 정보를 받아서, 현 페이지에 정보를 등록합니다.
+			$("input[name='addr']").val(roadFullAddr);
+		}
+			
 	
 	</script>
 	

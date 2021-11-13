@@ -28,19 +28,33 @@
 					
 				});
 				
-
+				
 				$("#kakao-png").on("click",function(){
 					Kakao.init('b3bed223fd618abc07f64c2103ca9659');
 					console.log(Kakao.isInitialized());
 					Kakao.Auth.login({
-					      success: function(authObj) {
-					        console.log(JSON.stringify(authObj))
-					        $(window.parent.frames.document.location).attr("href","/user/login/pass");
-					      },
-					      fail: function(err) {
-					        console.log(JSON.stringify(err))
-					      },
-					    })
+					    success: function(authObj) {
+							console.log(JSON.stringify(authObj))
+						    $(self.location).attr("href","/user/login/pass");
+					    },
+						fail: function(err) {
+							console.log(JSON.stringify(err))
+						},
+					})
+				});
+				
+				$("#logout").on("click",function(){
+					$.Ajax(
+						{
+							url : "/v1/user/logout",
+							method : "post",
+							Host: "kapi.kakao.com",
+							Authorization: "Bearer {"+auth+"}",
+							success : function(authObj){
+								console.log(authObj);
+							} 
+						}		
+					)
 				});
 				
 			});
@@ -286,7 +300,7 @@
 						</a>
 					</li>
 					<li>
-						<a href="/user/logout">·Î±×¾Æ¿ô</a>
+						<a id="logout" href="/user/logout">·Î±×¾Æ¿ô</a>
 					</li>					
 					
 				</c:if>
