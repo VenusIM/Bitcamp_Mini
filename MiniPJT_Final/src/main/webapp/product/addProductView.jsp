@@ -60,7 +60,7 @@
 		
 					
 		$("#datepicker").datepicker({
-			maxDate: "+0D,
+			maxDate: "+0D",
 			dateFormat : "yy-mm-dd"
 		});
 		

@@ -77,7 +77,7 @@
 				$(window).scroll(function() {
 					//console.log($(window).scrollTop());
 					//console.log(e);
-				    if (isActive && $(window).scrollTop() == $(document).height() - $(window).height()) {
+				    if (isActive && (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
 				    	page += 1;
 				    	console.log(page)
 				    	$.ajax(
@@ -135,7 +135,6 @@
 			$('input[name="searchKeyword"]').keyup(function(key){
 				
 				var searchKeyword = $(this).val();
-				var isflag = false;
 				isActive = false;
 				$.ajax(
 					{
@@ -146,6 +145,7 @@
 							"Content-Type" : "application/json"
 						},
 						dataType:"json",
+						async : false,
 						success : function(JSONData,status){
 							var availableTags = JSONData;
 						
@@ -156,9 +156,8 @@
 							});
 						},
 				});
-				
 				 if(key.keyCode==13) {	
-					 $('#productList').remove();
+					var isflag = true;
 							$.ajax(
 									{
 										url : "/product/rest/listProduct/search",
@@ -168,11 +167,13 @@
 											"Content-Type" : "application/json"
 										},
 										dataType : "json",
+										async : false,
 										data : JSON.stringify({
 											currentPage : 1,
 											searchKeyword : searchKeyword
 										}),
-										success : function(JSONData,status){								
+										success : function(JSONData,status){
+											$('#productList').remove();
 											var list = JSONData.list;
 											var str ="";
 											
@@ -201,13 +202,12 @@
 											}
 											$('#indexForm').append('<div id="productList" class="container-fluid" style="margin: 90px;"><div class="row"><div class="col-md-1"></div><div class="col-md-10"><div class="row">'
 													+ str + '</div></div><div class="col-md-1"></div></div></div>');
-											isflag = true;
 										}
 										
 							});
 							$(window).scroll(function() {
 								var page=1;
-								if (isflag && $(window).scrollTop() == $(document).height() - $(window).height()) {
+								if (isflag && (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
 							    	page += 1;
 							    	console.log(page)
 							    	$.ajax(
@@ -285,6 +285,7 @@
 						$(this).attr('href',href);
 
 					}else{
+						
 						$(this).attr('href','/index.jsp');
 					}					
 				}

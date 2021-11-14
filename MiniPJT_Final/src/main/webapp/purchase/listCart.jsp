@@ -28,22 +28,38 @@
 	$(function(){
 		
 		$('span:contains("구매")').click(function(){
-	        var prodNoList = $('.prodNoList:checked');
 	        
+			var prodNoList = $('.prodNoList:checked');
+	        var totalList = $('.totalList');
+	        //console.log(prodNoList.parent().next().next().next().children().html());
+	        var flag = true;
+	        var isActive = false;
 	        if(prodNoList.length == 0){
-	            alert("구매하실 상품을 체크해 주세요.");
-	            return;
-	        }else{
-	        	
-	        	if($('#total').val() == 0){
-					console.log($('#total').val());
-					alert("상품은 0개 이상 구매하셔야 합니다.");
-					return;
-				}else{
-					$('#currentPage').val(${resultPage.currentPage});
-					$('form').attr('method','post').attr('action','/purchase/addCartListView').submit();	        	
-				}
-	        }	
+	        	alert("구매하실 상품을 체크해 주세요!!");
+	        	flag = false
+	        	return;
+	        }
+	       
+	        if(flag){
+	        	for(var i=0; i<prodNoList.length; i++){
+	        		var value = $(prodNoList[i]).val();
+	        		var idValue = "#purchaseQuantity" + value;
+	        		var count = $(idValue).val();
+	        		
+	        		if(count == 0){
+	        			alert("상품 수량을 확인하세요!!");
+	        			return;
+	        		}
+	        	}
+	        	isActive = true;
+	        }
+	        
+	        if(isActive){
+	        	$('form').attr('method','post').attr('action','/purchase/addCartListView').submit();
+	        }
+	        
+	        
+	  	  
 		});
 		
 		$('.prodName').click(function(){
@@ -124,7 +140,7 @@
 	<c:forEach var="purchase" items="${list}">
 		<tr class="ct_list_pop">
 			<td align="center">
-				<input type="checkbox"class="prodNoList" name="prodNoList" value="${purchase.purchaseProd.prodNo }">
+				<input type="checkbox" class="prodNoList" name="prodNoList" value="${purchase.purchaseProd.prodNo }">
 			</td>		
 			<td align="center" width="50" height="100">
 				 	<img src="/images/uploadFiles/${purchase.purchaseProd.fileName }" width="150" height="200">
@@ -146,7 +162,7 @@
 				</div>
 				<div>
 						<input type="button" class="btn btn-default" value='-'>
-						<input type="text" class="text-center" id="purchaseQuantity${purchase.purchaseProd.prodNo}" name="prodTotalList" value="0" style ="border-style: hidden; width:20px" >
+						<input type="text" class="text-center totalList" id="purchaseQuantity${purchase.purchaseProd.prodNo}" name="prodTotalList" value="0" style ="border-style: hidden; width:20px" >
 						<input type="button" class="btn btn-default" value='+'>
 					
 				</div>
@@ -165,7 +181,7 @@
 		<td align="center">
 		<table border="0" cellspacing="0" cellpadding="0">
 			<tr>	
-				<button class="btn btn-primary"><span>구매</span></button>
+				<button type="button" class="btn btn-default"><span>구매</span></button>
 			</tr>
 		</table>
 </table>

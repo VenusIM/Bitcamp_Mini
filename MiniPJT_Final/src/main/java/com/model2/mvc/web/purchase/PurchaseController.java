@@ -1,12 +1,14 @@
 package com.model2.mvc.web.purchase;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.pattern.IntegerPatternConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -295,89 +297,70 @@ public class PurchaseController {
 		
 		ModelAndView mav = new ModelAndView();
 		
-		String[] prodNoList = product.getProdNoList();
+		String[] prodList = product.getProdNoList();
 		String[] totalList = product.getProdTotalList();
-		String prodNo = "";
-		String prodName = "";
-		String prodTotal = "";
-		String total = "";
-		
-		
-		for(int i=0; i < prodNoList.length; i++) {
-			prodNo = prodNoList[i];
-			prodTotal =totalList[i];
-			if(prodNo != null && !prodNo.equals("")) {
-				prodName += "["+prodNo+"]"+(productService.getProduct(Integer.parseInt(prodNo))).getProdName();
-				total += (productService.getProduct(Integer.parseInt(prodNo))).getProdName() +" : "+prodTotal+"°³";
-			}
-			if(i < prodNoList.length-1) {
-				prodName += " / ";
-				total += " / ";
-			}
+		int totalPrice = 0;
+		int totalCount = 0;
+		String name = "";
+		int count = 0;
+
+		for(String str : totalList) {
+			System.out.println("total : "+str+"\n");
+			totalCount += Integer.parseInt(str);
 		}
 		
-		mav.setViewName("forward:/purchase/addPurchaseView.jsp");
-		mav.addObject("user",(User)session.getAttribute("user"));
-		mav.addObject("totals",total);
-		mav.addObject("prodName",prodName);	
+		List<Product> list = new ArrayList<Product>();
+		for(String str : prodList) {
+			count ++;
+			product = productService.getProduct(Integer.parseInt(str));
+			System.out.println("product : "+ product+"\n");
+			list.add(product);
+			totalPrice += product.getPrice();
+			name += product.getProdName();
+			if(count < prodList.length) {
+				name +=", ";}
+			
+		}
+				
 		
+		mav.setViewName("forward:/purchase/addPurchaseView.jsp");
+		mav.addObject("list",list);
+		mav.addObject("totalList", totalList);
+		mav.addObject("totalPrice",totalPrice);
+		mav.addObject("name",name);
+		mav.addObject("totalCount", totalCount);
 		return mav;
 	}
 	
 	@RequestMapping ("addCartList")
-	public ModelAndView addCartList(	@ModelAttribute("purchase") Purchase purchase,
-										@RequestParam("prodTotal") String prodTotal,
-										@RequestParam("prodName") String prodName,
+	public String addCartList(	@ModelAttribute("purchase") Purchase purchase,
+										@RequestParam("prodTotal") String[] prodTotal,
+										@RequestParam("prodList") Product[] prodList,
 										HttpSession session) throws Exception{
 		
 		User user = (User)session.getAttribute("user");
-		
-		ModelAndView mav = new ModelAndView();
-		
-		String[] prodTotals = prodTotal.split(" / ") ;
-		String[] prodNames = prodName.split(" / ") ;
-		
-		int prodNo = 0;
-		int length = 0;
-		int purchaseQuantity = 0;
-		String name = "";
-		String temp = "";
+		System.out.println(user);
 		
 		Product product = null;
 		
-		for(int i = 0; i<prodTotals.length; i++) {
+		int total = 0;
+		for(int i=0; i<prodList.length; i++) {
+			product = new Product();
+			purchase.setBuyer(user);
 			
-			length = prodNames[i].length();
-			name = prodNames[i].substring(7,length);
-			
-			temp = prodTotals[i].replace(name+" : ", "");
-			purchaseQuantity = Integer.parseInt(temp.replace("°³", ""));
-			
-			temp = prodNames[i].replace(name, "");
-			prodNo = Integer.parseInt(temp.substring(1,6));
-			
-			product = productService.getProduct(prodNo);
-			
-			product.setProdTotal(product.getProdTotal()-purchaseQuantity);
-			
+			total = prodList[i].getProdTotal();
+			product.setProdTotal(Integer.parseInt(prodTotal[i])-total);
 			productService.updateProduct2(product);
 			
 			purchase.setPurchaseProd(product);
 			purchase.setTranCode("1");
-			purchase.setPurchaseQuantity(purchaseQuantity);
-			purchase.setBuyer(user);
+			System.out.println(purchase);
 			
 			purchaseService.addPurchase(purchase);
-			
-			purchaseService.deleteCart(user.getUserId(), prodNo);
-			
 		}
 		
-		mav.setViewName("forward:/purchase/addPurchase.jsp");
-		mav.addObject("purchase",purchase);
-		mav.addObject("prodName", prodName);
-		mav.addObject("prodTotal",prodTotal);
 		
-		return mav;
+		
+		return "foward:/purchase/addPurchase.jsp";
 	}
 }
