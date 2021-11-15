@@ -78,7 +78,7 @@
 		FROM (		SELECT inner_table. * ,  ROWNUM AS row_seq
 					FROM (	SELECT p.prod_no, p.prod_total, p.prod_name, p.price, p.reg_date, t.tran_no, t.tran_status_code
 							FROM product p, transaction t
-							WHERE p.prod_no = t.prod_no(+)
+							WHERE p.prod_no = t.prod_no
 								<if test="searchCondition != null">
 									<if test='searchKeyword != null and !searchKeyword.equals("") and searchCondition.equals("0")'>
 										AND p.prod_no LIKE '%'||#{searchKeyword}||'%'
@@ -174,7 +174,7 @@
 		SELECT COUNT(*)
 		FROM (	SELECT p.prod_no, p.prod_total, p.prod_name, p.price, p.reg_date, t.tran_no, t.tran_status_code
 							FROM product p, transaction t
-							WHERE p.prod_no = t.prod_no(+)
+							WHERE p.prod_no = t.prod_no
 								<if test="searchCondition != null">
 									<if test='searchCondition.equals("0") and searchKeyword != null'>
 										AND p.prod_no LIKE '%'||#{searchKeyword}||'%'

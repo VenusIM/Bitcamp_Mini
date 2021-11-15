@@ -100,54 +100,26 @@
 <input type="hidden" id="tranNo" name="tranNo" />
 <input type="hidden" id="prodNo" name="prodNo" />
 
-<table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
-	<tr>
-		<td width="15" height="37"><img src="/images/ct_ttl_img01.gif"width="15" height="37"></td>
-		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left: 10px;">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="93%" class="ct_ttl01">구매 목록조회</td>
-				</tr>
-			</table>
-		</td>
-		<td width="12" height="37"><img src="/images/ct_ttl_img03.gif"	width="12" height="37"></td>
-	</tr>
-</table>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 10px;">
-	<tr>
-		<td colspan="11" >
-			전체  ${resultPage.totalCount } 건수, 현재 ${resultPage.currentPage } 페이지
-		</td>
-	</tr>
-	<tr>
-		<td class="ct_list_b" width="100">No</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">상품명</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">수령인 이름</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b">수령인 전화번호</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b">배송현황</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b">정보수정</td>
-	</tr>
-	<tr>
-		<td colspan="11" bgcolor="808285" height="1"></td>
-	</tr>
-	<%--<% 
-		for(int i=0; i<list.size(); i++) {
-			Purchase purchase = list.get(i);
-	--%>
+<table class="table table-striped table-bordered table-hover">
+	 <caption>구매 목록조회</caption>
+	 <thead>
+		<tr>
+			<th width="5%">No</th>
+			<th width="19%">상품명</th>
+			<th width="19%">수령인 이름</th>
+			<th width="19%">수령인 전화번호</th>
+			<th width="19%">배송현황</th>
+			<th width="19%">정보수정</th>
+		</tr>
+	</thead>
+	<tbody>
 	<c:set var="i" value="0"/>
 	<c:forEach var="purchase" items="${list}">
 		<c:set var="i" value="${i+1}"/>
-		<tr class="ct_list_pop">
-			<td align="center">${i}</td>
-			<td></td>
+		<tr>
+			<th>${i}</th>
 			
-			<td align="left">
+			<th>
 			<c:if test="${purchase.tranCode eq '2' }">
 				${purchase.purchaseProd.prodName}
 			</c:if>
@@ -158,19 +130,16 @@
 					<span hidden="">${purchase.tranNo}</span>
 				</div>
 			</c:if>
-			</td>
-			<td></td>
-			<td align="left">
+			</th>
+			<th>
 			<%--<%= purchase.getReceiverName() --%>
 			${empty purchase.receiverName ? '없음' : purchase.receiverName}
-			</td>
-			<td></td>
-			<td align="left">
+			</th>
+			<th>
 			<%--<%= purchase.getReceiverPhone() --%>
 			${empty purchase.receiverPhone ? '없음' : purchase.receiverPhone}
-			</td>	
-			<td></td>
-			<td align="left">
+			</th>	
+			<th>
 					<%--<%if(purchase.getTranCode().equals("1")) {--%>
 					<c:if test="${purchase.tranCode eq '1' }">
 						현재 구매완료 상태입니다.
@@ -181,10 +150,8 @@
 					<c:if test="${purchase.tranCode eq '3' }">
 						물품 수령완료 상태입니다.
 					</c:if>
-			</td>	
-			<td></td>
-			
-			<td align="left">
+			</th>
+			<th>
 				<%--<%if(purchase.getTranCode().equals("2")){ --%>
 				<c:if test="${purchase.tranCode eq '2' }">
 					<!-- <a href="javascript:fncGetPurchaseList2('${resultPage.currentPage }','${purchase.tranNo}','${purchase.purchaseProd.prodNo }')" onClick = "confirm('물품을 수령 하셨습니까?')">물품도착</a> -->
@@ -200,57 +167,13 @@
 					물품수령
 				<%--<%} --%>
 				</c:if>
-			</td>	
-		<tr>
-			<td colspan="11" bgcolor="D6D7D6" height="1"></td>
+			</th>	
 		</tr>
 	</c:forEach>
+	</tbody>
 </table>
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-	<tr>
-		<td align="center">
-		<%--<% if( resultPage.getCurrentPage() <= resultPage.getPageUnit() ){
-					◁ 이전
-			<% }else{ %>
-					<a href="javascript:fncGetPurchaseList('<%=resultPage.getCurrentPage()-1%>','1')">◀ 이전</a>
-			<% } %>
-
-			<%	for(int i=resultPage.getBeginUnitPage();i<= resultPage.getEndUnitPage() ;i++){	%>
-					<a href="javascript:fncGetPurchaseList('<%=i %>','1');"><%=i %></a>
-			<% 	}  %>
-	
-			<% if( resultPage.getEndUnitPage() >= resultPage.getMaxPage() ){ %>
-					이후 ▷
-			<% }else{ %>
-					<a href="javascript:fncGetPurchaseList('<%=resultPage.getEndUnitPage()+1%>','1')">이후 ▶</a>
-			<% } %> --%>
-		<!-- 
-		 
-			<c:if test="${ resultPage.currentPage <= resultPage.pageUnit }">
-					◁ 이전
-			</c:if>
-			<c:if test="${ resultPage.currentPage > resultPage.pageUnit }">
-					<a href="javascript:fncGetPurchaseList('${ resultPage.currentPage-1}','1')">◀ 이전</a>
-			</c:if>
-			
-			<c:forEach var="i"  begin="${resultPage.beginUnitPage}" end="${resultPage.endUnitPage}">
-				<a href="javascript:fncGetPurchaseList('${i}','1');">${ i }</a>
-			</c:forEach>
-			
-			<c:if test="${ resultPage.endUnitPage >= resultPage.maxPage }">
-					이후 ▷
-			</c:if>
-			<c:if test="${ resultPage.endUnitPage < resultPage.maxPage }">
-					<a href="javascript:fncGetPurchaseList('${resultPage.endUnitPage+1}','1')">이후 ▶</a>
-			</c:if>
-			 -->
-			 
-			 <input type="hidden" id="currentPage" name="currentPage"/>
-			 <jsp:include page="../common/pageNavigator.jsp"/>
-    	</td>
-	</tr>
-</table>
+<jsp:include page="../common/pageNavigator_new.jsp"/>
 
 <!--  페이지 Navigator 끝 -->
 </form>

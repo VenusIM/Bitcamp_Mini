@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -315,16 +316,17 @@ public class PurchaseController {
 			product = productService.getProduct(Integer.parseInt(str));
 			System.out.println("product : "+ product+"\n");
 			list.add(product);
-			totalPrice += product.getPrice();
+			totalPrice += product.getPrice()*Integer.parseInt(totalList[count-1]);
 			name += product.getProdName();
 			if(count < prodList.length) {
 				name +=", ";}
 			
 		}
-				
+		session.setAttribute("list", list);
 		
 		mav.setViewName("forward:/purchase/addPurchaseView.jsp");
 		mav.addObject("list",list);
+		mav.addObject("prodList",prodList);
 		mav.addObject("totalList", totalList);
 		mav.addObject("totalPrice",totalPrice);
 		mav.addObject("name",name);
@@ -333,34 +335,37 @@ public class PurchaseController {
 	}
 	
 	@RequestMapping ("addCartList")
-	public String addCartList(	@ModelAttribute("purchase") Purchase purchase,
-										@RequestParam("prodTotal") String[] prodTotal,
-										@RequestParam("prodList") Product[] prodList,
-										HttpSession session) throws Exception{
-		
+	public String addCartList(			@RequestParam("prodTotal") String[] prodTotal,
+										HttpSession session, Model model) throws Exception{
 		User user = (User)session.getAttribute("user");
-		System.out.println(user);
+		Purchase purchase = null;
 		
-		Product product = null;
+		List<Product> prodList = (List<Product>)session.getAttribute("list");
 		
-		int total = 0;
-		for(int i=0; i<prodList.length; i++) {
-			product = new Product();
+		for(Product prod : prodList) {
+			purchase = new Purchase();
 			purchase.setBuyer(user);
-			
-			total = prodList[i].getProdTotal();
-			product.setProdTotal(Integer.parseInt(prodTotal[i])-total);
-			productService.updateProduct2(product);
-			
-			purchase.setPurchaseProd(product);
+			purchase.setPurchaseProd(prod);
 			purchase.setTranCode("1");
-			System.out.println(purchase);
-			
 			purchaseService.addPurchase(purchase);
+			
+			System.out.println(prod);
 		}
+		System.out.println("logic ¼öÇà ³¡");
 		
-		
+		model.addAttribute("list","prodList");
+		model.addAttribute("totalList",prodTotal);
 		
 		return "foward:/purchase/addPurchase.jsp";
+	}
+	
+	@RequestMapping("deleteCart/{prodNo}")
+	public String deleteCart(	@PathVariable("prodNo") int prodNo,
+								HttpSession session) throws Exception{
+		User user = (User)session.getAttribute("user");
+		
+		purchaseService.deleteCart(user.getUserId(), prodNo);
+		
+		return "forward:/purchase/findCartList";
 	}
 }

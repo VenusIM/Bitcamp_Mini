@@ -57,7 +57,7 @@
 										var stringHtml = 		
 											'<div class="col-sm-6 col-md-3">'
 									    	+'<div class="thumbnail">'
-									    	+'<img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="240px" height="180px">'
+									    	+'<div style="height: 30%; width: 100%;"><img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="80%" height="80%"></div>'
 									      	+'<div class="caption">'
 									        +'<h3 class="prodName" style="display: inline-block; width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">'+temp.prodName+'</h3>'
 									        +'<h4 class="price">'+temp.price+'원</h4>'
@@ -112,7 +112,7 @@
 											var stringHtml = 		
 												'<div class="col-sm-6 col-md-3">'
 										    	+'<div class="thumbnail">'
-										    	+'<img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="240px" height="180px">'
+										    	+'<div style="height: 30%; width: 100%;"><img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="80%" height="80%"></div>'
 										      	+'<div class="caption">'
 										        +'<h3 class="prodName" style="display: inline-block; width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">'+temp.prodName+'</h3>'
 										        +'<h4 class="price">'+temp.price+'원</h4>'
@@ -156,7 +156,8 @@
 							});
 						},
 				});
-				 if(key.keyCode==13) {	
+				
+				if(key.keyCode==13) {	
 					var isflag = true;
 							$.ajax(
 									{
@@ -191,7 +192,7 @@
 												var stringHtml = 		
 													'<div class="col-sm-6 col-md-3">'
 											    	+'<div class="thumbnail">'
-											    	+'<img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="240px" height="180px">'
+											    	+'<div style="height: 30%; width: 100%;"><img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="80%" height="80%"></div>'
 											      	+'<div class="caption">'
 											        +'<h3 class="prodName" style="display: inline-block; width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">'+temp.prodName+'</h3>'
 											        +'<h4 class="price">'+temp.price+'원</h4>'
@@ -244,7 +245,7 @@
 														var stringHtml = 		
 															'<div class="col-sm-6 col-md-3">'
 													    	+'<div class="thumbnail">'
-													    	+'<img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="240px" height="180px">'
+													    	+'<div style="height: 30%; width: 100%;"><img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="80%" height="80%"></div>'
 													      	+'<div class="caption">'
 													        +'<h3 class="prodName" style="display: inline-block; width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">'+temp.prodName+'</h3>'
 													        +'<h4 class="price">'+temp.price+'원</h4>'

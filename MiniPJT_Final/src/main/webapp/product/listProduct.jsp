@@ -124,13 +124,6 @@ function fncGetUserList(currentPage) {
 			//$(self.location).attr('href','/product/getProduct?prodNo='+prodNo+'&proTranCode='+tranCode);
 		});
 		
-		$('span:contains("배송하기")').click(function(){
-			$('#currentPage').val(1);
-			$('#tranNo').val($(this).next().text());
-			
-			$('form').attr('method','post').attr('action','/purchase/updateTranCodeByProd').submit();
-		});
-		
 		$('.pageNum').on("click",function(index){
 			$('form')[0].reset();
 			$('#currentPage').val($(this).text());
@@ -147,6 +140,16 @@ function fncGetUserList(currentPage) {
 			$('form')[0].reset();
 			$('#currentPage').val(${resultPage.endUnitPage+1});
 			$('form').attr('method','post').attr('action','/product/listProduct').submit();
+		});
+		
+		$('button:contains("배송하기")').on("click",function(){
+			if(confirm("배송하시겠습니까?")){
+				$('#currentPage').val(1);
+				$('#tranNo').val($(this).next().text());
+				$('form').attr('method','post').attr('action','/purchase/updateTranCodeByProd').submit();				
+			}else{
+				return;
+			}
 		});
 	
 	});
@@ -249,7 +252,18 @@ function fncGetUserList(currentPage) {
 			  <td align="left">${prod.price} 원</td>
 			  <td align="left">${prod.regDate}</td>
 			  <td align="left">
-					${prod.prodTotal == 0 ? '재고없음' : prod.proTranCode }
+			  <c:if test="${menu eq 'search' }">
+			  	${prod.prodTotal eq 0 ? '재고없음' : '판매중' }
+			  </c:if>
+			  <c:if test="${menu eq 'manage' }">
+				  <c:if test="${prod.proTranCode eq '구매완료' }">
+				  	<button type="button" class="btn btn-success btn-xs">배송하기</button>
+			  		<span class="prod" hidden="hidden">${prod.tranNo}</span>
+				  </c:if>
+					<c:if test="${prod.proTranCode ne '구매완료' }">
+					<button type="button" class="btn btn-primary btn-xs" disabled="disabled">${prod.proTranCode}</button>
+					</c:if>
+				</c:if> 
 			  </td>
 			 
 			  <td align="left">

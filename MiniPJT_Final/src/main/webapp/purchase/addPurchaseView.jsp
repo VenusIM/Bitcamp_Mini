@@ -376,11 +376,11 @@ $(function(){
 	          <div class="my-3">
 	            <div class="form-check">
 	              <input id="take" name="tranOption" type="radio" class="form-check-input2" checked required>
-	              <label class="form-check-label" for="take">방문수령</label>
+	              <label class="form-check-label" for="take">배송받기</label>
 	            </div>
 	            <div class="form-check">
 	              <input id="give" name="tranOption" type="radio" class="form-check-input2" required>
-	              <label class="form-check-label" for="give">배송받기</label>
+	              <label class="form-check-label" for="give">방문수령</label>
 	            </div>
 	            <div class="_1rGSKv6aq_" style="margin-top: 12px;">
 	            <div class="bd_3Uotb bd_C8Tz1">

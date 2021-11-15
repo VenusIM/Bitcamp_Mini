@@ -73,6 +73,7 @@
 			var prodNo = $(this).parent().next().text();
 			var total = $(this).parent().next().next().text();
 			var number =  $('#purchaseQuantity'+prodNo).val();
+			var price = $(this).parent().next().next().next().text();
 			
 			 if(type === '+') {
 				number = parseInt(number) + 1;
@@ -87,7 +88,7 @@
 			// 결과 출력
 			console.log(number);
 			 $('#purchaseQuantity'+prodNo).val(number);
-
+			 $('#priceView'+prodNo).text(price*number);
 		});
 		
 		$('.pageNum').on("click",function(index){
@@ -108,6 +109,11 @@
 			$('form').attr('method','post').attr('action','/product/listProduct').submit();
 		});
 		
+		$('button:contains("삭제")').click(function(){
+			var prodNo = $(this).next().text()
+			$('form').attr('method','post').attr('action','/purchase/deleteCart/'+prodNo).submit();
+		});
+		
 	});
 	
 	
@@ -123,80 +129,97 @@
 
 <body bgcolor="#ffffff" text="#000000">
 	<jsp:include page="/header.jsp"></jsp:include>
-<div style="width:100%; margin-left:10px;">
-<form name="detailForm">
-<table class="table table-striped table-bordered table-hover">
-	 <caption>장바구니</caption>
-	 <thead>
-		<tr>
-			<th width="10%">선택</th>
-			<th>상품이미지</th>
-			<th>상품정보</th>
-			<th>수량</th>
-			<th>가격</th>
-		</tr>
-	</thead>
-	<tbody>
-	<c:forEach var="purchase" items="${list}">
-		<tr class="ct_list_pop">
-			<td align="center">
-				<input type="checkbox" class="prodNoList" name="prodNoList" value="${purchase.purchaseProd.prodNo }">
-			</td>		
-			<td align="center" width="50" height="100">
-				 	<img src="/images/uploadFiles/${purchase.purchaseProd.fileName }" width="150" height="200">
-			</td>
-			<td align="left" width="100">
-				<span>상품명</span> <br>
-				<!-- <a href="/product/getProduct?prodNo=${purchase.purchaseProd.prodNo}">${purchase.purchaseProd.prodName}</a> -->
-				<div>
-					<span class='prodName'>${purchase.purchaseProd.prodName}</span>
-					<span hidden="">${purchase.purchaseProd.prodNo}</span>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-10">
+			<div style="width:100%; margin-left:10px;">
+				<form name="detailForm">
+				<table class="table table-striped table-bordered table-hover">
+					 <caption>장바구니</caption>
+					 <thead>
+						<tr>
+							<th width="10%">선택</th>
+							<th>상품이미지</th>
+							<th>상품정보</th>
+							<th>수량</th>
+							<th>가격</th>
+						</tr>
+					</thead>
+					<tbody>
+					<c:forEach var="purchase" items="${list}">
+						<tr class="ct_list_pop">
+							<td align="center">
+								<div>
+									<input type="checkbox" class="prodNoList" name="prodNoList" value="${purchase.purchaseProd.prodNo }">
+								</div>
+							</td>		
+							<td align="center" width="50" height="100">
+								 	<img src="/images/uploadFiles/${purchase.purchaseProd.fileName }" width="150" height="200">
+							</td>
+							<td align="left" width="100">
+								<span>상품명</span> <br>
+								<!-- <a href="/product/getProduct?prodNo=${purchase.purchaseProd.prodNo}">${purchase.purchaseProd.prodName}</a> -->
+								<div>
+									<span class='prodName'>${purchase.purchaseProd.prodName}</span>
+									<span hidden="">${purchase.purchaseProd.prodNo}</span>
+								</div>
+								<br><br><br>
+								<span>상품설명</span> <br>
+								${purchase.purchaseProd.prodDetail }
+							</td>
+							<td width="40" align="center">
+								<div>
+									<span>남은 수량 : ${purchase.purchaseProd.prodTotal }개</span>
+								</div>
+								<div>
+										<input type="button" class="btn btn-default" value='-'>
+										<input type="text" class="text-center totalList" id="purchaseQuantity${purchase.purchaseProd.prodNo}" name="prodTotalList" value="0" style ="border-style: hidden; width:20px" >
+										<input type="button" class="btn btn-default" value='+'>
+									
+								</div>
+								<span hidden="">${purchase.purchaseProd.prodNo}</span>
+								<span hidden="">${purchase.purchaseProd.prodTotal }</span>
+								<span hidden="">${purchase.purchaseProd.price }</span>
+							</td>
+				
+							<td width="50" align="center">
+								<span id="priceView${purchase.purchaseProd.prodNo}">${purchase.purchaseProd.price}</span><span style="margin-left: 5px">원</span>
+								<div style="margin-top: 10px;">
+									<button type="button" class="btn btn-danger btn-xs" >삭제</button>
+									<span hidden="">${purchase.purchaseProd.prodNo}</span>
+								</div>
+							</td>
+					</c:forEach>
+				</table>
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 10px;">
+					<tr>
+						<td width="53%"></td>
+						<td align="center">
+						<table border="0" cellspacing="0" cellpadding="0">
+							<tr>
+								<td>
+									<button type="button" class="btn btn-default"><span>구매</span></button>
+								</td>
+							</tr>
+						</table>
+				</table>
+				
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
+					<tr>
+						<td align="center">
+										
+							<jsp:include page="../common/pageNavigator.jsp"/>	
+							
+				    	</td>
+					</tr>
+				</table>
+				<!--  페이지 Navigator 끝 -->
+				</form>
 				</div>
-				<br><br><br>
-				<span>상품설명</span> <br>
-				${purchase.purchaseProd.prodDetail }
-			</td>
-			<td width="40" align="center">
-				<div>
-					<span>남은 수량 : ${purchase.purchaseProd.prodTotal }개</span>
-				</div>
-				<div>
-						<input type="button" class="btn btn-default" value='-'>
-						<input type="text" class="text-center totalList" id="purchaseQuantity${purchase.purchaseProd.prodNo}" name="prodTotalList" value="0" style ="border-style: hidden; width:20px" >
-						<input type="button" class="btn btn-default" value='+'>
-					
-				</div>
-				<span hidden="">${purchase.purchaseProd.prodNo}</span>
-				<span hidden="">${purchase.purchaseProd.prodTotal }</span>
-			</td>
-
-			<td width="50" align="center">
-				${purchase.purchaseProd.price}<span style="margin-left: 5px">원</span>
-			</td>
-	</c:forEach>
-</table>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 10px;">
-	<tr>
-		<td width="53%"></td>
-		<td align="center">
-		<table border="0" cellspacing="0" cellpadding="0">
-			<tr>	
-				<button type="button" class="btn btn-default"><span>구매</span></button>
-			</tr>
-		</table>
-</table>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-	<tr>
-		<td align="center">
-						
-			<jsp:include page="../common/pageNavigator.jsp"/>	
-			
-    	</td>
-	</tr>
-</table>
-<!--  페이지 Navigator 끝 -->
-</form>
+		</div>
+		<div class="col-md-1"></div>
+	</div>
 </div>
 
 </body>
