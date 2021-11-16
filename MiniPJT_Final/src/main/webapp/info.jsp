@@ -47,24 +47,28 @@
 	</div>
 </div>
 <script>
+
+
+
 $(function(){
+	
 	$('button:contains("한눈에 보기")').on("click",function(){
 		if (navigator.geolocation) { // GPS를 지원하면
 		    navigator.geolocation.getCurrentPosition(function(position) {
 		    latitude = position.coords.latitude;
 		    longitude = position.coords.longitude;
-		    
+		    var end = latitude+","+longitude;
 		    const location = { lat: position.coords.latitude, lng: position.coords.longitude };
-		    
 		    const mapOptions = { 
-		    		center : { lat :(position.coords.latitude + 37.57042513580567)/2 , lng: (position.coords.longitude + 126.98532361427617)/2},
+		    		center : { lat :(position.coords.latitude + 37.400973)/2 , lng: (position.coords.longitude + 127.104118)/2},
 		            zoom:11
 		      };
 		    var map = new google.maps.Map(document.getElementById("googleMap"), mapOptions );
-		 
+		  
 		    
 		    const marker = new google.maps.Marker({ map:map, position: location })
-		    const marker2 = new google.maps.Marker({ map:map, position: {lat : 37.57042513580567, lng : 126.98532361427617}})
+		    const marker2 = new google.maps.Marker({ map:map, position: {lat : 37.400973, lng : 127.104118}})
+		    
 		    
 		    const infowindow = new google.maps.InfoWindow({
 		        content: "<p>현재위치</p>"
@@ -72,7 +76,7 @@ $(function(){
 		      });
 		    const infowindow2 = new google.maps.InfoWindow({
 		    	content : "<p>매장위치</p><br/>"
-		    				+ "<p>번호 : 080-861-0909</p><br/>"
+		    				+ "<p>번호 : 080-123-4567</p><br/>"
 		    				+ "<p>영업시간 : 9:30 ~ 22:00</p>"
 		    });
 		    
@@ -84,7 +88,7 @@ $(function(){
 		      google.maps.event.addListener(marker2, "click", () => {
 			    infowindow2.open(map, marker2);
 			  });
-		    
+		   	
 		    }, function(error) {
 		      console.error(error);
 		    }, {
@@ -113,7 +117,7 @@ $(function(){
 		    var map = new google.maps.Map(document.getElementById("googleMap"), mapOptions );
 		    
 		    const marker = new google.maps.Marker({ map:map, position: location })
-		    const marker2 = new google.maps.Marker({ map:map, position: {lat : 37.57042513580567, lng : 126.98532361427617}})
+		    const marker2 = new google.maps.Marker({ map:map, position: {lat : 37.400973, lng : 127.104118}})
 		    
 		    const infowindow = new google.maps.InfoWindow({
 		        content: "<p>현재위치</p>"
@@ -121,7 +125,7 @@ $(function(){
 		      });
 		    const infowindow2 = new google.maps.InfoWindow({
 		    	content : "<p>매장위치</p><br/>"
-    						+ "<p>번호 : 080-861-0909</p><br/>"
+    						+ "<p>번호 : 080-123-4567</p><br/>"
     						+ "<p>영업시간 : 9:30 ~ 22:00</p>"
 		    });
 		    
@@ -166,13 +170,13 @@ function getLocation() {
 	    const location = { lat: position.coords.latitude, lng: position.coords.longitude };
 	    
 	    const mapOptions = { 
-	    		center: {lat : 37.57042513580567, lng : 126.98532361427617},
+	    		center: {lat : 37.400973, lng : 127.104118},
 	            zoom:17
 	      };
 	    var map = new google.maps.Map(document.getElementById("googleMap"), mapOptions );
 	    
 	    const marker = new google.maps.Marker({ map:map, position: location })
-	    const marker2 = new google.maps.Marker({ map:map, position: {lat : 37.57042513580567, lng : 126.98532361427617}})
+	    const marker2 = new google.maps.Marker({ map:map, position: {lat : 37.400973, lng : 127.104118}})
 	    
 	    const infowindow = new google.maps.InfoWindow({
 	        content: "<p>현재위치</p>"
@@ -180,7 +184,7 @@ function getLocation() {
 	      });
 	    const infowindow2 = new google.maps.InfoWindow({
 	    	content : "<p>매장위치</p><br/>"
-					+ "<p>번호 : 080-861-0909</p><br/>"
+					+ "<p>번호 : 080-123-4567</p><br/>"
 					+ "<p>영업시간 : 9:30 ~ 22:00</p>"
 	    });
 	    
@@ -208,7 +212,7 @@ function getLocation() {
  
       
 </script> 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2o8hbkl7NrOvFI0JOxMK0K8YdAKUEMkE&callback=myMap"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2o8hbkl7NrOvFI0JOxMK0K8YdAKUEMkE"></script>
 
 
 

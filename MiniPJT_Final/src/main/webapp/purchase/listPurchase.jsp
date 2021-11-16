@@ -32,16 +32,8 @@
 		});
 		
 		$('span:contains("물품도착")').click(function(){
-			var currentPage = $(this).next().text();
-			var prodNo = $(this).next().next().text();
-			var tranNo = $(this).next().next().next().text();
-			
-			console.log(currentPage);
-			console.log(prodNo);
-			console.log(tranNo);
-			
-			$('#currentPage').val(currentPage);
-			$('#prodNo').val(prodNo);
+		
+			var tranNo = $(this).parent().next().next().text();
 			$('#tranNo').val(tranNo);
 			
 			$('form').attr('method','post').attr('action','/purchase/updateTranCode').submit();
@@ -64,6 +56,7 @@
 			$('#currentPage').val(${resultPage.endUnitPage+1});
 			$('form').attr('method','get').attr('action','/purchase/listPurchase').submit();
 		});
+		
 	});
 
 	/*
@@ -117,9 +110,9 @@
 	<c:forEach var="purchase" items="${list}">
 		<c:set var="i" value="${i+1}"/>
 		<tr>
-			<th>${i}</th>
+			<td>${i}</td>
 			
-			<th>
+			<td>
 			<c:if test="${purchase.tranCode eq '2' }">
 				${purchase.purchaseProd.prodName}
 			</c:if>
@@ -130,16 +123,16 @@
 					<span hidden="">${purchase.tranNo}</span>
 				</div>
 			</c:if>
-			</th>
-			<th>
+			</td>
+			<td>
 			<%--<%= purchase.getReceiverName() --%>
 			${empty purchase.receiverName ? '없음' : purchase.receiverName}
-			</th>
-			<th>
+			</td>
+			<td>
 			<%--<%= purchase.getReceiverPhone() --%>
 			${empty purchase.receiverPhone ? '없음' : purchase.receiverPhone}
-			</th>	
-			<th>
+			</td>	
+			<td>
 					<%--<%if(purchase.getTranCode().equals("1")) {--%>
 					<c:if test="${purchase.tranCode eq '1' }">
 						현재 구매완료 상태입니다.
@@ -150,13 +143,13 @@
 					<c:if test="${purchase.tranCode eq '3' }">
 						물품 수령완료 상태입니다.
 					</c:if>
-			</th>
-			<th>
+			</td>
+			<td>
 				<%--<%if(purchase.getTranCode().equals("2")){ --%>
 				<c:if test="${purchase.tranCode eq '2' }">
 					<!-- <a href="javascript:fncGetPurchaseList2('${resultPage.currentPage }','${purchase.tranNo}','${purchase.purchaseProd.prodNo }')" onClick = "confirm('물품을 수령 하셨습니까?')">물품도착</a> -->
 					<div>
-						<span>물품도착</span>
+						<button class="btn btn-success btn-xs"><span>물품도착</span></button>
 						<span hidden="">${resultPage.currentPage }</span>
 						<span hidden="">${purchase.tranNo}</span>
 						<span hidden="">${purchase.purchaseProd.prodNo }</span>
@@ -164,10 +157,10 @@
 				</c:if>
 				<%--<%} else if(purchase.getTranCode().equals("3")){--%>
 				<c:if test="${purchase.tranCode eq '3' }">
-					물품수령
+					<button class="btn btn-primary btn-xs" disabled="disabled">물품수령</button>
 				<%--<%} --%>
 				</c:if>
-			</th>	
+			</td>	
 		</tr>
 	</c:forEach>
 	</tbody>

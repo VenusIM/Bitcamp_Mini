@@ -56,8 +56,9 @@
 										}
 										var stringHtml = 		
 											'<div class="col-sm-6 col-md-3">'
-									    	+'<div class="thumbnail">'
-									    	+'<div style="height: 30%; width: 100%;"><img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="80%" height="80%"></div>'
+									    	+'<div align="center" class="thumbnail">'
+									    	+'<span hidden="">'+temp.prodNo+'</span>'
+									    	+'<div style="height: 193.53px; width: 193.53px;"><img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="100%" height="100%"></div>'
 									      	+'<div class="caption">'
 									        +'<h3 class="prodName" style="display: inline-block; width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">'+temp.prodName+'</h3>'
 									        +'<h4 class="price">'+temp.price+'원</h4>'
@@ -111,8 +112,9 @@
 											}
 											var stringHtml = 		
 												'<div class="col-sm-6 col-md-3">'
-										    	+'<div class="thumbnail">'
-										    	+'<div style="height: 30%; width: 100%;"><img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="80%" height="80%"></div>'
+										    	+'<div align="center" class="thumbnail">'
+										    	+'<span hidden="">'+temp.prodNo+'</span>'
+										    	+'<div style="height: 193.53px; width: 193.53px;"><img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="100%" height="100%"></div>'
 										      	+'<div class="caption">'
 										        +'<h3 class="prodName" style="display: inline-block; width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">'+temp.prodName+'</h3>'
 										        +'<h4 class="price">'+temp.price+'원</h4>'
@@ -191,8 +193,9 @@
 												}										
 												var stringHtml = 		
 													'<div class="col-sm-6 col-md-3">'
-											    	+'<div class="thumbnail">'
-											    	+'<div style="height: 30%; width: 100%;"><img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="80%" height="80%"></div>'
+											    	+'<div align="center" class="thumbnail">'
+											    	+'<span hidden="">'+temp.prodNo+'</span>'
+											    	+'<div style="height: 193.53px; width: 193.53px;"><img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="100%" height="100%"></div>'
 											      	+'<div class="caption">'
 											        +'<h3 class="prodName" style="display: inline-block; width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">'+temp.prodName+'</h3>'
 											        +'<h4 class="price">'+temp.price+'원</h4>'
@@ -244,8 +247,9 @@
 														}
 														var stringHtml = 		
 															'<div class="col-sm-6 col-md-3">'
-													    	+'<div class="thumbnail">'
-													    	+'<div style="height: 30%; width: 100%;"><img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="80%" height="80%"></div>'
+													    	+'<div align="center" class="thumbnail">'
+													    	+'<span hidden="">'+temp.prodNo+'</span>'
+													    	+'<div style="height: 193.53px; width: 193.53px;"><img class="image" src="/images/uploadFiles/'+temp.fileName+'" border="0px" width="100%" height="100%"></div>'
 													      	+'<div class="caption">'
 													        +'<h3 class="prodName" style="display: inline-block; width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">'+temp.prodName+'</h3>'
 													        +'<h4 class="price">'+temp.price+'원</h4>'
@@ -284,7 +288,7 @@
 				}else{
 					if(confirm('상품이 담겼습니다. 장바구니로 이동하시겠습니까?') == true){
 						$(this).attr('href',href);
-
+						
 					}else{
 						
 						$(this).attr('href','/index.jsp');
@@ -296,6 +300,14 @@
 				if(${empty user.role}){
 					alert('로그인을 해주세요');
 					$(this).attr('href',"/user/loginView.jsp");
+				}
+			});
+			
+			$(document).on('click','.thumbnail',function(){
+				console.log("클릭");
+				console.log($('#modalLog').text());
+				if($('#modalLog').text() != '로그인'){
+					self.location = "/product/getProduct?prodNo="+$(this).children('span').text();					
 				}
 			});
 			
@@ -313,7 +325,7 @@
 </head>
 <body>
 
-	<div class="container-fluid searchContainer">
+	<div  class="container-fluid searchContainer">
 		<div class="row">
 			<div class="col-md-3"></div>
 			<div class="col-md-6">

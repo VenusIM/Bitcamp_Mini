@@ -31,118 +31,104 @@
 
 <jsp:include page="../header.jsp"></jsp:include>
 
-<c:if test="${!empty list }">
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-8">
-				<strong>구매완료</strong>
-				<c:forEach var="product" items="${list}" varStatus="status">
-					<pre>상품명 : ${product.prodName}<br/>개수 : ${totalList[status.index]}개<br/>가격 : ${product.price}원<br/><strong>총가격:${product.price * totalList[status.index] }원</strong></pre>
-				</c:forEach>			
-			
+				<c:if test="${!empty sessionScope.list }">
+					<strong>구매완료</strong>
+					<c:forEach var="product" items="${sessionScope.list}" varStatus="status">
+						<pre>상품명 : ${product.prodName}<br/>개수 : ${totalList[status.index]}개<br/>가격 : ${product.price}원<br/><strong>총가격:${product.price * totalList[status.index] }원</strong></pre>
+					</c:forEach>
+				</c:if>			
+				<c:if test="${empty sessionScope.list }">
+					<table class="table table-striped table-bordered table-hover">
+						<tr>
+							<c:if test="${empty prodName }">
+								<th>물품번호</th>
+								<td>
+								<%--<%=purchase.getPurchaseProd().getProdNo() --%>
+								${purchase.purchaseProd.prodNo }
+								</td>
+							</c:if>
+							<c:if test="${!empty prodName }">
+								<th>상품명</th>
+								<td>
+								<%--<%=purchase.getPurchaseProd().getProdNo() --%>
+								${prodName}
+								</td>
+							</c:if>
+							</tr>
+							<tr>
+								<th>구매자아이디</th>
+								<td>
+								<%--<%=purchase.getBuyer().getUserId() --%>
+								${ empty purchase.buyer.userId ? "없음" : purchase.buyer.userId }
+								</td>
+							</tr>
+							<tr>
+								<th>구매방법</th>
+								<td>
+								<%--<%= purchase.getPaymentOption().equals("1") ? "현금구매" : "신용구매"--%>
+								${purchase.paymentOption==1 ? "현금구매" : "신용구매"}
+								</td>
+							</tr>
+							<tr>
+								<th>구매자이름</th>
+								<td>
+								<%--<%=!purchase.getReceiverName().equals("") ? purchase.getReceiverName() : "없음" --%>
+								${ empty purchase.receiverName ? "없음" : purchase.receiverName }
+								</td>
+							</tr>
+							<tr>
+								<th>구매자연락처</th>
+								<td>
+								<%--<%=!purchase.getReceiverPhone().equals("") ? purchase.getReceiverPhone() : "없음" --%>
+								${ empty purchase.receiverPhone ? "없음" : purchase.receiverPhone }
+								</td>
+							</tr>
+							<tr>
+								<th>구매자주소</th>
+								<td>
+								<%--<%=!purchase.getDivyAddr().equals("") ? purchase.getDivyAddr() : "없음" --%>
+								${ empty purchase.divyAddr ? "없음" : purchase.divyAddr }
+								</td>
+							</tr>
+								<tr>
+								<th>구매요청사항</th>
+								<td>
+								<%--<%= purchase.getDivyRequest() == null ? purchase.getDivyRequest() : "없음" --%>
+								${ empty purchase.divyRequest ? "없음" : purchase.divyRequest }	
+								</td>
+							</tr>
+							<tr>
+								<th>배송희망일자</th>
+								<td>
+								<%--<%= purchase.getDivyDate() == null ? purchase.getDivyDate() : "없음" --%>
+								${ empty purchase.divyDate ? "없음" :  purchase.divyDate }
+								</td>
+							</tr>
+							<tr>
+							<c:if test="${empty prodTotal }">
+								<th>구매수량</th>
+								<td>
+								<%--<%=!purchase.getReceiverPhone().equals("") ? purchase.getReceiverPhone() : "없음" --%>
+								${purchase.purchaseQuantity}개
+								</td>
+							</c:if>
+							<c:if test="${!empty prodTotal }">
+								<th>구매수량</th>
+								<td>
+								<%--<%=!purchase.getReceiverPhone().equals("") ? purchase.getReceiverPhone() : "없음" --%>
+								${prodTotal}
+								</td>
+							</c:if>
+						</tr>
+					</table>
+					</c:if>
 			</div>
 			<div class="col-md-2"></div>
 		</div>
 	</div>
-</c:if>
-
-<c:if test="${empty list }">
-<table border=1>
-	<tr>
-		<c:if test="${empty prodName }">
-			<td>물품번호</td>
-			<td>
-			<%--<%=purchase.getPurchaseProd().getProdNo() --%>
-			${purchase.purchaseProd.prodNo }
-			</td>
-			<td></td>
-		</c:if>
-		<c:if test="${!empty prodName }">
-			<td>상품명</td>
-			<td>
-			<%--<%=purchase.getPurchaseProd().getProdNo() --%>
-			${prodName}
-			</td>
-			<td></td>
-		</c:if>
-		</tr>
-		<tr>
-			<td>구매자아이디</td>
-			<td>
-			<%--<%=purchase.getBuyer().getUserId() --%>
-			${ empty purchase.buyer.userId ? "없음" : purchase.buyer.userId }
-			</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>구매방법</td>
-			<td>
-			<%--<%= purchase.getPaymentOption().equals("1") ? "현금구매" : "신용구매"--%>
-			${purchase.paymentOption==1 ? "현금구매" : "신용구매"}
-			</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>구매자이름</td>
-			<td>
-			<%--<%=!purchase.getReceiverName().equals("") ? purchase.getReceiverName() : "없음" --%>
-			${ empty purchase.receiverName ? "없음" : purchase.receiverName }
-			</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>구매자연락처</td>
-			<td>
-			<%--<%=!purchase.getReceiverPhone().equals("") ? purchase.getReceiverPhone() : "없음" --%>
-			${ empty purchase.receiverPhone ? "없음" : purchase.receiverPhone }
-			</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>구매자주소</td>
-			<td>
-			<%--<%=!purchase.getDivyAddr().equals("") ? purchase.getDivyAddr() : "없음" --%>
-			${ empty purchase.divyAddr ? "없음" : purchase.divyAddr }
-			</td>
-			<td></td>
-		</tr>
-			<tr>
-			<td>구매요청사항</td>
-			<td>
-			<%--<%= purchase.getDivyRequest() == null ? purchase.getDivyRequest() : "없음" --%>
-			${ empty purchase.divyRequest ? "없음" : purchase.divyRequest }	
-			</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>배송희망일자</td>
-			<td>
-			<%--<%= purchase.getDivyDate() == null ? purchase.getDivyDate() : "없음" --%>
-			${ empty purchase.divyDate ? "없음" :  purchase.divyDate }
-			</td>
-			<td></td>
-		</tr>
-		<tr>
-		<c:if test="${empty prodTotal }">
-			<td>구매수량</td>
-			<td>
-			<%--<%=!purchase.getReceiverPhone().equals("") ? purchase.getReceiverPhone() : "없음" --%>
-			${purchase.purchaseQuantity}개
-			</td>
-			<td></td>
-		</c:if>
-		<c:if test="${!empty prodTotal }">
-			<td>구매수량</td>
-			<td>
-			<%--<%=!purchase.getReceiverPhone().equals("") ? purchase.getReceiverPhone() : "없음" --%>
-			${prodTotal}
-			</td>
-			<td></td>
-		</c:if>
-	</tr>
-</table>
-</c:if>
-
 </body>
 </html>

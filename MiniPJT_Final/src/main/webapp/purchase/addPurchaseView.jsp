@@ -73,7 +73,7 @@ $(function(){
 			if($("#credit").is(":checked") == true){
 				if(flag){
 					BootPay.request({
-						price: ${product.price},	
+						price: ${product.price}*$('#total').val()+3000,	
 						application_id: "618a4bac7b5ba4b3a352ae77",
 						name: '${product.prodName}',
 						show_agree_window: 1,
@@ -123,18 +123,19 @@ $(function(){
 						
 						console.log(data);
 					});
-				}else{
+				}
+				if(!flag){
 					BootPay.request({
-						price: ${totalPrice},	
+						price: '${totalPrice}',	
 						application_id: "618a4bac7b5ba4b3a352ae77",
 						name: '${name}',
 						show_agree_window: 1,
 						items: [
 							{
 								item_name: '${name}',
-								qty: ${totalCount}, 
+								qty: '${totalCount}', 
 								unique: '123',
-								price: ${totalPrice}
+								price: '${totalPrice}'
 							}
 						],
 						user_info: {
@@ -203,7 +204,6 @@ $(function(){
 					}
 				
 				 $('#total').val(number);
-				 $('#totals').val(number);
 				 $('#price').text('상품가격: '+${product.price}*number+' 원');
 				 $('#priceTotal').text('총액 : '+(${product.price} * number + 3000)+ ' 원');
 				 $('#priceTotal').next().text(${product.price} * number + 3000);
@@ -241,6 +241,7 @@ $(function(){
 	      <h2>구매 페이지</h2>
 	      <p class="lead">정보를 입력해 주세요.</p>
 	    </div>
+	   	<form class="needs-validation" id="addP">
 		<c:if test="${empty list && empty totalList}">
 		    <div class="row g-5">
 		      <div class="col-md-5 col-lg-4 order-md-last">
@@ -305,7 +306,7 @@ $(function(){
 		      </div>
 	      </c:if>
 	      
-        <form class="needs-validation" id="addP">
+     
 	      <c:if test="${!empty list}">
 		  	<div class="col-md-2">
 		  		<input type="hidden" name="prodList" value="${list}">
@@ -313,7 +314,6 @@ $(function(){
 		  	</div>
 		  </c:if>
 	      <div class="col-md-8">
-	        <input type="hidden" id="totals" name="purchaseQuantity">
 	          <div class="my-3">
 				<hr class="my-4">
 	            <div class="col-12">
@@ -405,7 +405,7 @@ $(function(){
 		  		<div class="col-md-2">
 		  	</div>
 		  </c:if>
-	        </form>
+	      </form>
 	      </div>
 	    </div>
 	</div>

@@ -16,6 +16,7 @@ public class User {
 	private String addr;
 	private String email;
 	private Date regDate;
+	private String userImage;
 	/////////////// EL 적용 위해 추가된 Field ///////////
 	private String phone1;
 	private String phone2;
@@ -30,6 +31,17 @@ public class User {
 	public User(){
 	}
 	
+	
+	public String getUserImage() {
+		return userImage;
+	}
+
+
+	public void setUserImage(String userImage) {
+		this.userImage = userImage;
+	}
+
+
 	///Method 
 	public String getUserId() {
 		return userId;
@@ -114,7 +126,7 @@ public class User {
 	@Override
 	public String toString() {
 		return "UserVO : [userId] "+userId+" [userName] "+userName+" [password] "+password+" [role] "+ role
-			+" [ssn] "+ssn+" [phone] "+phone+" [email] "+email+" [regDateString] "+regDateString;
+			+" [ssn] "+ssn+" [phone] "+phone+" [email] "+email+" [regDateString] "+regDateString+" [userImage] "+userImage;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////

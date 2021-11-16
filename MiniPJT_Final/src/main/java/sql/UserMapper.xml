@@ -17,20 +17,23 @@
 		<result property="addr" 				column="addr" 					jdbcType="VARCHAR" />
 		<result property="email" 			column="email" 				jdbcType="NUMERIC"  />
 		<result property="regDate" 		column="reg_date" 			jdbcType="DATE" />
+		<result property="userImage" 	column="user_image"			jdbcType="VARCHAR"/>
 	</resultMap>
 	
 	<!-- SQL : INSERT -->
 	<insert 	id="addUser"		parameterType="user" >
 	 	INSERT
-		INTO users( user_id , user_name , password , role , ssn, cell_phone, addr, email , reg_date) 
+		INTO users( user_id , user_name , password , role , ssn, cell_phone, addr, email , reg_date, USER_IMAGE) 
 		VALUES	 (	#{userId} , #{userName} , #{password} , 'user' , #{ssn:VARCHAR} , 
-							#{phone:VARCHAR} , #{addr:VARCHAR} , #{email:VARCHAR} , SYSDATE )
+							#{phone:VARCHAR} , #{addr:VARCHAR} , #{email:VARCHAR} , SYSDATE, #{userImage} )
 	 </insert>
+	 
+	 
 	 
 	 <!-- SQL : SELECT ONE -->
 	 <select 	id="getUser"	parameterType="string"	resultMap="userSelectMap">
 		SELECT
-		user_id , user_name , password , role ,  cell_phone ,  addr , email , reg_date 		
+		user_id , user_name , password , role ,  cell_phone ,  addr , email , reg_date , user_image		
 		FROM users 
 		WHERE user_id = #{value}
 	 </select>
@@ -43,6 +46,14 @@
 			cell_phone	= #{phone},
 			addr 				= #{addr} ,
 			email				=	#{email}
+	   	</set>
+	   	WHERE user_id = #{userId}
+	 </update>
+	 
+	 <update	id="blackList"	parameterType="map" >
+	   	UPDATE users
+	   	<set>
+	   		blackList = #{blackList}
 	   	</set>
 	   	WHERE user_id = #{userId}
 	 </update>

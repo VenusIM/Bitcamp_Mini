@@ -1,118 +1,106 @@
-<%@ page contentType="text/html; charset=EUC-KR" %>
-<%@ page pageEncoding="EUC-KR"%>
+<%@page contentType="text/html; charset=euc-kr"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-
-<!DOCTYPE html>
-
-<html lang="ko">
-	
+<html>
 <head>
-	<meta charset="EUC-KR">
+<title>상품상세조회</title>
+
+<meta charset="EUC-KR">
 	
-	<!-- 참조 : http://getbootstrap.com/css/   참조 -->
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
-	<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="/css/admin.css" type="text/css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<script type="text/javascript" src="../javascript/calendar.js"></script>
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
-	
-	<!-- Bootstrap Dropdown Hover CSS -->
-   <link href="/css/animate.min.css" rel="stylesheet">
-   <link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet">
-   
-    <!-- Bootstrap Dropdown Hover JS -->
-   <script src="/javascript/bootstrap-dropdownhover.min.js"></script>
-	
-	<!--  ///////////////////////// CSS ////////////////////////// -->
-	<style>
- 		body {
-            padding-top : 50px;
-        }
-     </style>
-    
-     <!--  ///////////////////////// JavaScript ////////////////////////// -->
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!-- <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script> -->
+	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+
+	<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 	<script type="text/javascript">
-		
-		//============= 회원정보수정 Event  처리 =============	
-		 $(function() {
-			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
-			 $( "button" ).on("click" , function() {
-					self.location = "/user/updateUser?userId=${user.userId}"
-				});
+		$(function(){
+			$("button:contains('구매')").on('click',function(){
+				console.log("클릭")
+				$('form').attr('method','post').attr('action','/purchase/addPurchaseView').submit();
+			});
 		});
-		
 	</script>
 	
+	<style>
+		body{
+			padding-top: 70px;
+		}
+	</style>
 </head>
 
 <body>
 
-	<!-- ToolBar Start /////////////////////////////////////-->
-	<jsp:include page="../header.jsp"/>
-   	<!-- ToolBar End /////////////////////////////////////-->
-	
-	<!--  화면구성 div Start /////////////////////////////////////-->
-	<div class="container">
-	
-		<div class="page-header">
-	       <h3 class=" text-info">회원정보조회</h3>
-	       <h5 class="text-muted">내 정보를 <strong class="text-danger">최신정보로 관리</strong>해 주세요.</h5>
-	    </div>
-	
-		<div class="row">
-	  		<div class="col-xs-4 col-md-2"><strong>아 이 디</strong></div>
-			<div class="col-xs-8 col-md-4">${user.userId}</div>
-		</div>
-		
-		<hr/>
-		
-		<div class="row">
-	  		<div class="col-xs-4 col-md-2 "><strong>이 름</strong></div>
-			<div class="col-xs-8 col-md-4">${user.userName}</div>
-		</div>
-		
-		<hr/>
-		
-		<div class="row">
-	  		<div class="col-xs-4 col-md-2 "><strong>주소</strong></div>
-			<div class="col-xs-8 col-md-4">${user.addr}</div>
-		</div>
-		
-		<hr/>
-		
-		<div class="row">
-	  		<div class="col-xs-4 col-md-2 "><strong>휴대전화번호</strong></div>
-			<div class="col-xs-8 col-md-4">${ !empty user.phone ? user.phone : ''}	</div>
-		</div>
-		
-		<hr/>
-		
-		<div class="row">
-	  		<div class="col-xs-4 col-md-2"><strong>이 메 일</strong></div>
-			<div class="col-xs-8 col-md-4">${user.email}</div>
-		</div>
-		
-		<hr/>
-		
-		<div class="row">
-	  		<div class="col-xs-4 col-md-2 "><strong>가입일자</strong></div>
-			<div class="col-xs-8 col-md-4">${user.regDate}</div>
-		</div>
-		
-		<hr/>
-		
-		<div class="row">
-	  		<div class="col-md-12 text-center ">
-	  			<button type="button" class="btn btn-primary">회원정보수정</button>
-	  		</div>
-		</div>
-		
-		<br/>
-		
- 	</div>
- 	<!--  화면구성 div Start /////////////////////////////////////-->
-
+<jsp:include page="../header.jsp"></jsp:include>
+<div class="container">
+<div class="page-header">
+	       <h3 class=" text-info">상품정보조회</h3>
+	       <h5 class="text-muted"><strong class="text-danger">상품정보</strong>입니다.</h5>
+	       </div>
+<table class="table table-hover table-striped" >
+	<tr>
+		<th>
+			상품번호
+		</th>
+		<td>
+			${product.prodNo}
+		</td>
+	<tr>
+		<th>
+			상품명
+		</th>
+		<td>
+		${product.prodName}
+		</td>
+	</tr>
+	<tr>
+		<th>상품이미지</th>
+		<td class="ct_write01">
+			<img src="/images/uploadFiles/${product.fileName}" width="300" height="300"/>
+		</td>
+	</tr>
+	<tr>
+		<th>상품상세정보</th>
+		<td>
+		${product.prodDetail}
+		</td>
+	</tr>
+	<tr>
+		<th>제조일자</th>
+		<td>
+		${product.manuDate}
+		</td>
+	</tr>
+	<tr>
+		<th>가격</th>
+		<td>
+		${product.price}
+		</td>
+	</tr>
+	<tr>
+		<th>등록일자</th>
+		<td>
+		${product.regDate}
+		</td>
+	</tr>
+</table>
+<div class="container">
+	<div class="row">
+	<form>
+		<button type="button" class="btn btn-success">구매</button>
+		<input type="hidden" name="prodNo" value="${product.prodNo}"> 
+	</form>
+	</div>
+</div>
+</div>
 </body>
-

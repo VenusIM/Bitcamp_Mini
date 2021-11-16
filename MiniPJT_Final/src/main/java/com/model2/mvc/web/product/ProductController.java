@@ -65,7 +65,7 @@ public class ProductController {
 	}
 	
 //	@RequestMapping("/getProduct.do")
-																																																																					@RequestMapping(value = "getProduct")
+	@RequestMapping(value = "getProduct")
 	public String getProduct(	@ModelAttribute("product") Product product,
 								HttpSession session,
 								HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -86,9 +86,15 @@ public class ProductController {
 				System.out.println(cookie.getName());
 				if (cookie.getName().equals("history")) {
 					history = cookie.getValue();
+					
 				}
 			}
-			history += ","+ product.getProdNo();
+			if(history == null) {
+				history += ","+ product.getProdNo();
+			}
+			if(history.indexOf(","+product.getProdNo()) == -1) {
+				history += ","+ product.getProdNo();				
+			}
 		}
 		Cookie cookie = new Cookie("history",history);
 		cookie.setPath("/");
@@ -187,9 +193,12 @@ public class ProductController {
 		
 		if(!file.getOriginalFilename().isEmpty()) {
 			file.transferTo(new File(FILE_SERVER_PATH, file.getOriginalFilename()));
+			product.setFileName(file.getOriginalFilename());
+		}else {
+			String fileName = productService.getProduct(product.getProdNo()).getFileName();
+			product.setFileName(fileName);
 		}
-		
-		product.setFileName(file.getOriginalFilename());
+
 		product.setManuDate(product.getManuDate().replace("-", ""));
 		
 		System.out.println(product);

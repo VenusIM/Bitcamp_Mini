@@ -62,68 +62,42 @@ CREATE TABLE cart (
 
 INSERT 
 INTO users ( user_id, user_name, password, role, ssn, cell_phone, addr, email, reg_date ) 
-VALUES ( 'admin', 'admin', '1234', 'admin', NULL, NULL, '서울시 서초구', 'admin@mvc.com',to_date('2012/01/14 10:48:43', 'YYYY/MM/DD HH24:MI:SS')); 
+VALUES ( 'admin', 'admin', '1234', 'admin', 001111-1010101, 010-1234-5678, '서울시 서초구', 'admin@mvc.com',to_date('2012/01/14 10:48:43', 'YYYY/MM/DD HH24:MI:SS')); 
 
 INSERT 
 INTO users ( user_id, user_name, password, role, ssn, cell_phone, addr, email, reg_date ) 
-VALUES ( 'manager', 'manager', '1234', 'admin', NULL, NULL, NULL, 'manager@mvc.com', to_date('2012/01/14 10:48:43', 'YYYY/MM/DD HH24:MI:SS'));          
+VALUES ( 'manager', 'manager', '1234', 'admin', 001111-1010101, 010-1234-5678, '서울시', 'manager@mvc.com', to_date('2012/01/14 10:48:43', 'YYYY/MM/DD HH24:MI:SS'));          
 
 INSERT INTO users 
-VALUES ( 'user01', 'SCOTT', '1111', 'user', NULL, NULL, NULL, NULL, sysdate); 
+VALUES ( 'user01', 'SCOTT', '1111', 'user', 001111-1010101, 010-1234-5678, '서울시', NULL, sysdate); 
 
 INSERT INTO users 
-VALUES ( 'user02', 'SCOTT', '2222', 'user', NULL, NULL, NULL, NULL, sysdate); 
+VALUES ( 'user02', 'SCOTT', '2222', 'user', 001111-1010101, 010-1234-5678, '서울시', NULL, sysdate); 
 
 INSERT INTO users 
-VALUES ( 'user03', 'SCOTT', '3333', 'user', NULL, NULL, NULL, NULL, sysdate); 
+VALUES ( 'user03', 'SCOTT', '3333', 'user', 001111-1010101, 010-1234-5678, '서울시', NULL, sysdate); 
 
 INSERT INTO users 
-VALUES ( 'user04', 'SCOTT', '4444', 'user', NULL, NULL, NULL, NULL, sysdate); 
+VALUES ( 'user04', 'SCOTT', '4444', 'user', 001111-1010101, 010-1234-5678, '서울시', NULL, sysdate); 
 
 INSERT INTO users 
-VALUES ( 'user05', 'SCOTT', '5555', 'user', NULL, NULL, NULL, NULL, sysdate); 
+VALUES ( 'user05', 'SCOTT', '5555', 'user', 001111-1010101, 010-1234-5678, '서울시', NULL, sysdate); 
 
 INSERT INTO users 
-VALUES ( 'user06', 'SCOTT', '6666', 'user', NULL, NULL, NULL, NULL, sysdate); 
+VALUES ( 'user06', 'SCOTT', '6666', 'user', 001111-1010101, 010-1234-5678, '서울시', NULL, sysdate); 
 
 INSERT INTO users 
-VALUES ( 'user07', 'SCOTT', '7777', 'user', NULL, NULL, NULL, NULL, sysdate); 
+VALUES ( 'user07', 'SCOTT', '7777', 'user', 001111-1010101, 010-1234-5678, '서울시', NULL, sysdate); 
 
 INSERT INTO users 
-VALUES ( 'user08', 'SCOTT', '8888', 'user', NULL, NULL, NULL, NULL, sysdate); 
+VALUES ( 'user08', 'SCOTT', '8888', 'user', 001111-1010101, 010-1234-5678, '서울시', NULL, sysdate); 
 
 INSERT INTO users 
-VALUES ( 'user09', 'SCOTT', '9999', 'user', NULL, NULL, NULL, NULL, sysdate); 
+VALUES ( 'user09', 'SCOTT', '9999', 'user', 001111-1010101, 010-1234-5678, '서울시', NULL, sysdate); 
 
 INSERT INTO users 
-VALUES ( 'user10', 'SCOTT', '1010', 'user', NULL, NULL, NULL, NULL, sysdate); 
+VALUES ( 'user10', 'SCOTT', '1010', 'user', 001111-1010101, 010-1234-5678, '서울시', NULL, sysdate); 
 
-INSERT INTO users 
-VALUES ( 'user11', 'SCOTT', '1111', 'user', NULL, NULL, NULL, NULL, sysdate);
-
-INSERT INTO users 
-VALUES ( 'user12', 'SCOTT', '1212', 'user', NULL, NULL, NULL, NULL, sysdate);
-
-INSERT INTO users 
-VALUES ( 'user13', 'SCOTT', '1313', 'user', NULL, NULL, NULL, NULL, sysdate);
-
-INSERT INTO users 
-VALUES ( 'user14', 'SCOTT', '1414', 'user', NULL, NULL, NULL, NULL, sysdate);
-
-INSERT INTO users 
-VALUES ( 'user15', 'SCOTT', '1515', 'user', NULL, NULL, NULL, NULL, sysdate);
-
-INSERT INTO users 
-VALUES ( 'user16', 'SCOTT', '1616', 'user', NULL, NULL, NULL, NULL, sysdate);
-
-INSERT INTO users 
-VALUES ( 'user17', 'SCOTT', '1717', 'user', NULL, NULL, NULL, NULL, sysdate);
-
-INSERT INTO users 
-VALUES ( 'user18', 'SCOTT', '1818', 'user', NULL, NULL, NULL, NULL, sysdate);
-
-INSERT INTO users 
-VALUES ( 'user19', 'SCOTT', '1919', 'user', NULL, NULL, NULL, NULL, sysdate);
            
            
 insert into product values (seq_product_prod_no.nextval,'vaio vgn FS70B',0,'소니 바이오 노트북 신동품','20120514',2000000, 'AHlbAAAAtBqyWAAA.jpg',to_date('2012/12/14 11:27:27', 'YYYY/MM/DD HH24:MI:SS'));

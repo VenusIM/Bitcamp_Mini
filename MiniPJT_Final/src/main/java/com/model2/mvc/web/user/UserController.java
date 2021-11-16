@@ -45,6 +45,20 @@ public class UserController {
 	int pageSize;
 	
 	
+	@RequestMapping(value="kakaoUser", method=RequestMethod.POST)
+	public String kakaoUser( @ModelAttribute("user") User user, HttpSession session) throws Exception{
+		System.out.println(user);
+		user.setUserId(user.getEmail());
+		User user2 = userService.getUser(user.getEmail());
+		if(user2 == null) {
+			return "forward:/user/addUserView.jsp";			
+		}else {
+			session.setAttribute("user", user2);
+			
+		}
+		return "redirect:/index.jsp";
+	}
+	
 	//@RequestMapping("/addUserView.do")
 	//public String addUserView() throws Exception {
 	@RequestMapping( value="addUser", method=RequestMethod.GET )

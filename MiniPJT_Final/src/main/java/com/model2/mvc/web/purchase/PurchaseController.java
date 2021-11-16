@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -184,27 +185,17 @@ public class PurchaseController {
 	}
 //	@RequestMapping("/updateTranCode.do")
 	@RequestMapping("updateTranCode")
-	public String updateTranCode(	@ModelAttribute("purchase") Purchase purchase,
-									@ModelAttribute("product") Product product,
-									@ModelAttribute("search") Search search,
-									HttpSession session,
+	public String updateTranCode(	@RequestParam("tranNo") String tranNo,
 									Model model) throws Exception{
-		User user = (User)session.getAttribute("user");
+		Purchase purchase = new Purchase();
+		
+		purchase.setTranNo(Integer.parseInt(tranNo));
 		purchase.setTranCode("3");
-		purchase.setPurchaseProd(product);
 		System.out.println(purchase);
 		
 		purchaseService.updateTranCode(purchase);
-		search.setPageSize(pageSize);
 		
-		Map<String , Object> map= purchaseService.getPurchaseList(search, user.getUserId());
-		
-		Page resultPage = new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
-		
-		model.addAttribute("resultPage", resultPage);
-		model.addAttribute("list", map.get("list"));
-		
-		return "forward:/purchase/listPurchase.jsp";
+		return "forward:/purchase/listPurchase";
 	}
 //	@RequestMapping("/updateTranCodeByProd.do")
 	@RequestMapping("updateTranCodeByProd")
@@ -249,7 +240,7 @@ public class PurchaseController {
 			purchaseService.addPurchaseCart(purchase);				
 		}
 		
-		return "forward:./findCartList";
+		return "forward:/purchase/findCartList";
 	}
 	
 	@RequestMapping("findCartList")
@@ -323,11 +314,11 @@ public class PurchaseController {
 			
 		}
 		session.setAttribute("list", list);
+		session.setAttribute("totalList", totalList);
+		session.setAttribute("prodList",prodList);
 		
 		mav.setViewName("forward:/purchase/addPurchaseView.jsp");
-		mav.addObject("list",list);
-		mav.addObject("prodList",prodList);
-		mav.addObject("totalList", totalList);
+	
 		mav.addObject("totalPrice",totalPrice);
 		mav.addObject("name",name);
 		mav.addObject("totalCount", totalCount);
@@ -335,28 +326,35 @@ public class PurchaseController {
 	}
 	
 	@RequestMapping ("addCartList")
-	public String addCartList(			@RequestParam("prodTotal") String[] prodTotal,
-										HttpSession session, Model model) throws Exception{
+	public String addCartList(	@ModelAttribute Purchase purchase,
+								HttpSession session, Model model) throws Exception{
+		
 		User user = (User)session.getAttribute("user");
-		Purchase purchase = null;
+		purchase.setBuyer(user);
 		
 		List<Product> prodList = (List<Product>)session.getAttribute("list");
+		String[] totalList = (String[])session.getAttribute("totalList");
+		
+		int prodNo = 0;
+		int count = 0;
+		int temp = 0;
 		
 		for(Product prod : prodList) {
-			purchase = new Purchase();
-			purchase.setBuyer(user);
+			count++;
+			prodNo = prod.getProdNo();
+			temp = prod.getProdTotal();
+			prod.setProdTotal(temp-Integer.parseInt(totalList[count-1]));
+			productService.updateProduct2(prod);
+			
 			purchase.setPurchaseProd(prod);
+			purchase.setPurchaseQuantity(Integer.parseInt(totalList[count-1]));
 			purchase.setTranCode("1");
 			purchaseService.addPurchase(purchase);
-			
-			System.out.println(prod);
 		}
 		System.out.println("logic ¼öÇà ³¡");
+	
 		
-		model.addAttribute("list","prodList");
-		model.addAttribute("totalList",prodTotal);
-		
-		return "foward:/purchase/addPurchase.jsp";
+		return "forward:/purchase/addPurchase.jsp";
 	}
 	
 	@RequestMapping("deleteCart/{prodNo}")
